@@ -106,10 +106,11 @@ class MainActivity : AppCompatActivity() {
                     replaceFragment(fragment)
                     true
                 }
-
-                /**
-                 * TODO: Emulator
-                 */
+                R.id.emulator -> {
+                    fragment = EmulatorFragment.newInstance()
+                    replaceFragment(fragment)
+                    true
+                }
                 R.id.settings -> {
                     fragment = SettingsFragment.newInstance()
                     replaceFragment(fragment)
