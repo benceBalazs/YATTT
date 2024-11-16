@@ -19,6 +19,7 @@ import com.example.yattt_app.helper.getUniqueDeviceId
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var nfcAdapter: NfcAdapter? = null
+    private var isDarkTheme: Boolean = true
     private lateinit var pendingIntent: PendingIntent
     private lateinit var intentFiltersArray: Array<IntentFilter>
     private lateinit var techListsArray: Array<Array<String>>
@@ -26,7 +27,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        val prefs = getSharedPreferences("ThemePrefs", MODE_PRIVATE)
+        isDarkTheme = prefs.getBoolean("isDarkTheme", false)
+        updateTheme(false)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -98,7 +101,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.item1 -> {
+                R.id.tokens -> {
                     fragment = TokenFragment.newInstance()
                     replaceFragment(fragment)
                     true
@@ -107,6 +110,11 @@ class MainActivity : AppCompatActivity() {
                 /**
                  * TODO: Emulator
                  */
+                R.id.settings -> {
+                    fragment = SettingsFragment.newInstance()
+                    replaceFragment(fragment)
+                    true
+                }
 
                 else -> false
             }
@@ -119,6 +127,22 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.replace(R.id.content, fragment, "")
         fragmentTransaction.commit()
     }
+
+    fun updateTheme(shouldRecreate: Boolean = true) {
+        if (isDarkTheme) {
+            setTheme(R.style.Theme_Yattt_app_Dark)
+        } else {
+            setTheme(R.style.Theme_Yattt_app_Light)
+        }
+        val prefs = getSharedPreferences("ThemePrefs", MODE_PRIVATE)
+        prefs.edit().putBoolean("isDarkTheme", isDarkTheme).apply()
+        isDarkTheme = !isDarkTheme
+
+        if (shouldRecreate) {
+            recreate()
+        }
+    }
+
 }
 
 private fun ByteArray.toHexString(): String {
