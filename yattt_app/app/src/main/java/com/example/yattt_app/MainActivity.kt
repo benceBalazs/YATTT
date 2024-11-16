@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.yattt_app.databinding.ActivityMainBinding
 import com.example.yattt_app.helper.getUniqueDeviceId
+import com.example.yattt_app.helper.sendTokenInfo
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -88,9 +89,7 @@ class MainActivity : AppCompatActivity() {
 
             tag?.id?.let {
                 val tagId = it.toHexString()
-                //Toast.makeText(this, "NFC tag detected: $tagId", Toast.LENGTH_SHORT).show()
-
-                // TODO: send Token to API
+                sendTokenInfo(this, binding.root, tagId, deviceId)
             }
         }
     }

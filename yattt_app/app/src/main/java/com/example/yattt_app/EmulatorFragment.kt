@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.yattt_app.databinding.FragmentEmulatorBinding
 import com.example.yattt_app.helper.getUniqueDeviceId
+import com.example.yattt_app.helper.sendTokenInfo
 
 class EmulatorFragment : Fragment() {
     private lateinit var binding: FragmentEmulatorBinding
@@ -33,13 +34,13 @@ class EmulatorFragment : Fragment() {
         binding.NFC.setOnClickListener {
             val tagId = "04d026827b4880"
             val deviceId = getUniqueDeviceId(binding.root.context.contentResolver)
-            // TODO: send Token to API
+            sendTokenInfo(requireActivity(), binding.root, tagId, deviceId)
         }
 
         binding.RFID.setOnClickListener {
             val tagId = "04db28827b4880"
             val deviceId = getUniqueDeviceId(binding.root.context.contentResolver)
-            // TODO: send Token to API
+            sendTokenInfo(requireActivity(), binding.root, tagId, deviceId)
         }
     }
 }
