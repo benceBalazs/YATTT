@@ -27,6 +27,7 @@
 		B529DC902CE764E100B91956 /* ASE-IOS-APP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ASE-IOS-APP.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B529DCA02CE764E300B91956 /* ASE-IOS-APPTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ASE-IOS-APPTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B529DCAA2CE764E300B91956 /* ASE-IOS-APPUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ASE-IOS-APPUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B5ED098C2CF1FB3E0000EB66 /* ASE-IOS-APP.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "ASE-IOS-APP.xctestplan"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +76,7 @@
 		B529DC872CE764E100B91956 = {
 			isa = PBXGroup;
 			children = (
+				B5ED098C2CF1FB3E0000EB66 /* ASE-IOS-APP.xctestplan */,
 				B529DC922CE764E100B91956 /* ASE-IOS-APP */,
 				B529DCA32CE764E300B91956 /* ASE-IOS-APPTests */,
 				B529DCAD2CE764E300B91956 /* ASE-IOS-APPUITests */,
@@ -393,9 +395,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "ASE-IOS-APP/ASE-IOS-APP.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ASE-IOS-APP/Preview Content\"";
+				DEVELOPMENT_TEAM = 8S9K4PF7D7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -421,9 +425,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "ASE-IOS-APP/ASE-IOS-APP.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ASE-IOS-APP/Preview Content\"";
+				DEVELOPMENT_TEAM = 8S9K4PF7D7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
