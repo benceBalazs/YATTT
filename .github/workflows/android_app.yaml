@@ -47,7 +47,7 @@ jobs:
           path: /home/runner/work/YATTT/YATTT/yattt_app/app/build/reports/jacoco/JacocoCodeCoverage/JacocoCodeCoverage.xml
       - name: Add coverage to PR
         id: jacoco
-        uses: madrapps/jacoco-report@v1.2
+        uses: madrapps/jacoco-report@v1.7.1
         with:
           paths: ${{ github.workspace }}/yattt_app/app/build/reports/jacoco/JacocoCodeCoverage/JacocoCodeCoverage.xml
           token: ${{ secrets.GITHUB_TOKEN }}
