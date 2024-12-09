@@ -36,19 +36,18 @@ jobs:
 
       - name: List coverage report directory
         run: ls -R app/build/reports/jacoco/
-        working-directory: ./yattt_app
 
       - name: Upload coverage reports
         uses: actions/upload-artifact@v4
         with:
           name: coverage-reports
-          path: app/build/reports/jacoco
+          path: app/build/reports/jacoco/
           if-no-files-found: ignore
       - name: Add coverage to PR
         id: jacoco
         uses: madrapps/jacoco-report@v1.2
         with:
-          paths: app/build/reports/jacoco/JacocoCodeCoverage/JacocoCodeCoverage.xml
+          paths: ${{ github.workspace }}/app/build/reports/jacoco/JacocoCodeCoverage/JacocoCodeCoverage.xml
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 0
           min-coverage-changed-files: 0
