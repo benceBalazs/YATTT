@@ -36,6 +36,8 @@ jobs:
 
       - name: Check file existence
         run: |
+          pwd
+          ls -alh
           find app/build/reports/jacoco/JacocoCodeCoverage/JacocoCodeCoverage.xml -type f
 
       - name: Upload coverage reports
