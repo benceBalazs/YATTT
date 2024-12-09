@@ -27,23 +27,45 @@
 		B529DC902CE764E100B91956 /* ASE-IOS-APP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ASE-IOS-APP.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B529DCA02CE764E300B91956 /* ASE-IOS-APPTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ASE-IOS-APPTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B529DCAA2CE764E300B91956 /* ASE-IOS-APPUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ASE-IOS-APPUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		B5ED098C2CF1FB3E0000EB66 /* ASE-IOS-APP.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "ASE-IOS-APP.xctestplan"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		B599FADC2D075EB90073F3CA /* Exceptions for "yattt_ios_app" folder in "ASE-IOS-APP" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"ASE-IOS-APP.xctestplan",
+				"ASE-IOS-APPTests/ASE_IOS_APPTests.swift",
+				"ASE-IOS-APPUITests/ASE_IOS_APPUITests.swift",
+				"ASE-IOS-APPUITests/ASE_IOS_APPUITestsLaunchTests.swift",
+			);
+			target = B529DC8F2CE764E100B91956 /* ASE-IOS-APP */;
+		};
+		B599FADD2D075EB90073F3CA /* Exceptions for "yattt_ios_app" folder in "ASE-IOS-APPTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"ASE-IOS-APPTests/ASE_IOS_APPTests.swift",
+			);
+			target = B529DC9F2CE764E300B91956 /* ASE-IOS-APPTests */;
+		};
+		B599FAE32D075EBB0073F3CA /* Exceptions for "yattt_ios_app" folder in "ASE-IOS-APPUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"ASE-IOS-APPUITests/ASE_IOS_APPUITests.swift",
+				"ASE-IOS-APPUITests/ASE_IOS_APPUITestsLaunchTests.swift",
+			);
+			target = B529DCA92CE764E300B91956 /* ASE-IOS-APPUITests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		B529DC922CE764E100B91956 /* ASE-IOS-APP */ = {
+		B599FAC92D075E920073F3CA /* yattt_ios_app */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "ASE-IOS-APP";
-			sourceTree = "<group>";
-		};
-		B529DCA32CE764E300B91956 /* ASE-IOS-APPTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "ASE-IOS-APPTests";
-			sourceTree = "<group>";
-		};
-		B529DCAD2CE764E300B91956 /* ASE-IOS-APPUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "ASE-IOS-APPUITests";
+			exceptions = (
+				B599FADC2D075EB90073F3CA /* Exceptions for "yattt_ios_app" folder in "ASE-IOS-APP" target */,
+				B599FADD2D075EB90073F3CA /* Exceptions for "yattt_ios_app" folder in "ASE-IOS-APPTests" target */,
+				B599FAE32D075EBB0073F3CA /* Exceptions for "yattt_ios_app" folder in "ASE-IOS-APPUITests" target */,
+			);
+			path = yattt_ios_app;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -76,10 +98,7 @@
 		B529DC872CE764E100B91956 = {
 			isa = PBXGroup;
 			children = (
-				B5ED098C2CF1FB3E0000EB66 /* ASE-IOS-APP.xctestplan */,
-				B529DC922CE764E100B91956 /* ASE-IOS-APP */,
-				B529DCA32CE764E300B91956 /* ASE-IOS-APPTests */,
-				B529DCAD2CE764E300B91956 /* ASE-IOS-APPUITests */,
+				B599FAC92D075E920073F3CA /* yattt_ios_app */,
 				B529DC912CE764E100B91956 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -110,7 +129,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				B529DC922CE764E100B91956 /* ASE-IOS-APP */,
+				B599FAC92D075E920073F3CA /* yattt_ios_app */,
 			);
 			name = "ASE-IOS-APP";
 			packageProductDependencies = (
@@ -132,9 +151,6 @@
 			dependencies = (
 				B529DCA22CE764E300B91956 /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				B529DCA32CE764E300B91956 /* ASE-IOS-APPTests */,
-			);
 			name = "ASE-IOS-APPTests";
 			packageProductDependencies = (
 			);
@@ -154,9 +170,6 @@
 			);
 			dependencies = (
 				B529DCAC2CE764E300B91956 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				B529DCAD2CE764E300B91956 /* ASE-IOS-APPUITests */,
 			);
 			name = "ASE-IOS-APPUITests";
 			packageProductDependencies = (
