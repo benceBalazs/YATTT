@@ -11,7 +11,8 @@ on:
       - main
     #paths:
      # - 'yattt_app/**'
-
+permissions:
+  actions: write
 jobs:
   test:
     runs-on: ubuntu-latest
