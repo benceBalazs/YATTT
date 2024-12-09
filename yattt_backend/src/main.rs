@@ -20,15 +20,13 @@ async fn main() -> Result<(), Error> {
             (name = YATTT_TAG, description = "Yet Another Time Tracking Tool API")
         )
     )]
-
     struct ApiDoc;
 
     let (router, api) = OpenApiRouter::with_openapi(ApiDoc::openapi())
         .nest(format!("/api/{API_VERSIONING}/").as_str(), yattt::router())
         .split_for_parts();
 
-    let router = router
-        .merge(Scalar::with_url("/scalar", api));
+    let router = router.merge(Scalar::with_url("/scalar", api));
 
     let address = SocketAddr::from((Ipv4Addr::LOCALHOST, 8080));
     let listener = TcpListener::bind(&address).await?;
@@ -36,7 +34,7 @@ async fn main() -> Result<(), Error> {
 }
 
 mod yattt {
-    use utoipa_axum::{router::OpenApiRouter};
+    use utoipa_axum::router::OpenApiRouter;
 
     pub(super) fn router() -> OpenApiRouter {
         OpenApiRouter::new()
