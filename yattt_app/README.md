@@ -1,2 +1,2 @@
-## To locally execute tests and generate codeCoverage:
+## To locally execute tests and generate JacococodeCoverage:
 ``gradle clean JacocoCodeCoverage``
