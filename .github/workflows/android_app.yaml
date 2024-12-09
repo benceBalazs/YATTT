@@ -22,8 +22,7 @@ jobs:
 
 
       - name: Run unit tests and generate Jacoco coverage report
-        run: ./yattt_app/gradlew
- clean JacocoCodeCoverage
+        run: ./yattt_app/gradlew clean JacocoCodeCoverage
 
       - name: Upload coverage reports
         uses: actions/upload-artifact@v4
@@ -46,8 +45,7 @@ jobs:
         run: chmod +x ./yattt_app/gradlew
 
       - name: Build APK
-        run: ./yattt_app/gradlew
- assembleRelease
+        run: ./yattt_app/gradlew assembleRelease
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
