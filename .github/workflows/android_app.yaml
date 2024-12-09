@@ -35,13 +35,13 @@ jobs:
         run: ./gradlew clean JacocoCodeCoverage
 
       - name: List coverage report directory
-        run: ls -R app/build/reports/jacoco/
+        run: ls -R yattt_app/app/build/reports/jacoco/
 
       - name: Upload coverage reports
         uses: actions/upload-artifact@v4
         with:
           name: coverage-reports
-          path: app/build/reports/jacoco/
+          path: yattt_app/app/build/reports/jacoco/
           if-no-files-found: ignore
       - name: Add coverage to PR
         id: jacoco
