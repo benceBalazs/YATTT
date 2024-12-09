@@ -11,6 +11,7 @@ use utoipa_scalar::{Scalar, Servable as ScalarServable};
 
 const YATTT_TAG: &str = "yatt";
 const API_VERSIONING: &str = "v5";
+const APPLICATION_PORT: u16 = 8080;
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
@@ -28,7 +29,7 @@ async fn main() -> Result<(), Error> {
 
     let router = router.merge(Scalar::with_url("/scalar", api));
 
-    let address = SocketAddr::from((Ipv4Addr::LOCALHOST, 8080));
+    let address = SocketAddr::from((Ipv4Addr::LOCALHOST, APPLICATION_PORT));
     let listener = TcpListener::bind(&address).await?;
     axum::serve(listener, router.into_make_service()).await
 }
