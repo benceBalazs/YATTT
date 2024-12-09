@@ -44,7 +44,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: coverage-reports
-          path: app/build/reports/jacoco/JacocoCodeCoverage/JacocoCodeCoverage.xml
+          path: /home/runner/work/YATTT/YATTT/yattt_app/app/build/reports/jacoco/JacocoCodeCoverage/JacocoCodeCoverage.xml
       - name: Add coverage to PR
         id: jacoco
         uses: madrapps/jacoco-report@v1.2
