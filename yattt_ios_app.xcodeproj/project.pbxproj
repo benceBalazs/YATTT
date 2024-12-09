@@ -26,7 +26,7 @@
 /* Begin PBXFileReference section */
 		B572C33B2D077F1900B8C96E /* yattt_ios_appTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = yattt_ios_appTests.xctest; path = "/Users/lauralikar/Documents/MA/ASE/yattt/yattt_ios_app/yattt_ios_app/build/Debug-iphoneos/yattt_ios_app.app/PlugIns/yattt_ios_appTests.xctest"; sourceTree = "<absolute>"; };
 		B572C33C2D077F1900B8C96E /* yattt_ios_appUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = yattt_ios_appUITests.xctest; path = "/Users/lauralikar/Documents/MA/ASE/yattt/yattt_ios_app/yattt_ios_app/build/Debug-iphoneos/yattt_ios_appUITests-Runner.app/PlugIns/yattt_ios_appUITests.xctest"; sourceTree = "<absolute>"; };
-		B572C33D2D07810B00B8C96E /* yattt_ios_app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = yattt_ios_app.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B572C33D2D07810B00B8C96E /* yattt_ios_app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = yattt_ios_app.app; path = "/Users/lauralikar/Documents/MA/ASE/yattt/yattt_ios_app/yattt_ios_app/build/Debug-iphoneos/yattt_ios_app.app"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -98,7 +98,6 @@
 			isa = PBXGroup;
 			children = (
 				B572C2F92D07791100B8C96E /* yattt_ios */,
-				B572C33D2D07810B00B8C96E /* yattt_ios_app.app */,
 			);
 			sourceTree = "<group>";
 		};
