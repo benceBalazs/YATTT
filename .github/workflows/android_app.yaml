@@ -36,15 +36,13 @@ jobs:
 
       - name: Check file existence
         run: |
-          find app/build/reports/jacoco/ -type f
-        working-directory: ./yattt_app
+          find app/build/reports/jacoco/JacocoCodeCoverage/JacocoCodeCoverage.xml -type f
 
       - name: Upload coverage reports
         uses: actions/upload-artifact@v4
         with:
           name: coverage-reports
           path: app/build/reports/jacoco/JacocoCodeCoverage/JacocoCodeCoverage.xml
-        working-directory: ./yattt_app
       - name: Add coverage to PR
         id: jacoco
         uses: madrapps/jacoco-report@v1.2
