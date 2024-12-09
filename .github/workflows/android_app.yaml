@@ -24,7 +24,7 @@ jobs:
         run: ./gradlew clean JacocoCodeCoverage
 
       - name: Upload coverage reports
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-reports
           path: app/build/reports/jacoco/JacocoCodeCoverage/JacocoCodeCoverage.xml
@@ -45,7 +45,7 @@ jobs:
       - name: Build APK
         run: ./gradlew assembleRelease
       - name: Upload APK
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: yattt_android_app
           path: app/build/outputs/apk/release/app-release.apk
