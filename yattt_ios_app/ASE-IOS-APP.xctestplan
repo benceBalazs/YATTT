@@ -1,0 +1,37 @@
+{
+  "configurations" : [
+    {
+      "id" : "F0B2FB59-B32B-48A2-87B3-8CBA42539AE3",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:ASE-IOS-APP.xcodeproj",
+      "identifier" : "B529DC9F2CE764E300B91956",
+      "name" : "ASE-IOS-APPTests"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:ASE-IOS-APP.xcodeproj",
+        "identifier" : "B529DC9F2CE764E300B91956",
+        "name" : "ASE-IOS-APPTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:ASE-IOS-APP.xcodeproj",
+        "identifier" : "B529DCA92CE764E300B91956",
+        "name" : "ASE-IOS-APPUITests"
+      }
+    }
+  ],
+  "version" : 1
+}
