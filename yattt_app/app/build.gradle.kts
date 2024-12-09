@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    jacoco
 }
 
 android {
@@ -21,8 +22,12 @@ android {
     }
 
     buildTypes {
+        debug {
+            enableUnitTestCoverage = true
+        }
         release {
             isMinifyEnabled = false
+            enableUnitTestCoverage = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -49,6 +54,42 @@ android {
         }
     }
 }
+val exclusions = listOf(
+    "**/R.class",
+    "**/R$*.class",
+    "**/BuildConfig.*",
+    "**/Manifest*.*",
+    "**/*Test*.*"
+)
+tasks.withType<Test> {
+    configure<JacocoTaskExtension> {
+        isIncludeNoLocationClasses = true
+        excludes = listOf("jdk.internal.*")
+    }
+}
+tasks.register<JacocoReport>("JacocoCodeCoverage") {
+    dependsOn(listOf("testDebugUnitTest"))
+    group = "Reporting"
+    description = "Execute UI and unit tests, generate and combine Jacoco coverage report"
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+    sourceDirectories.setFrom(layout.projectDirectory.dir("src/main"))
+    classDirectories.setFrom(files(
+        fileTree(layout.buildDirectory.dir("intermediates/javac/")) {
+            exclude(exclusions)
+        },
+        fileTree(layout.buildDirectory.dir("tmp/kotlin-classes/")) {
+            exclude(exclusions)
+        }
+    ))
+    executionData.setFrom(files(
+        fileTree(layout.buildDirectory) { include(listOf("**/*.exec", "**/*.ec")) }
+    ))
+}
+
+
 
 dependencies {
 
