@@ -16,14 +16,26 @@ use utoipa_axum::router::OpenApiRouter;
 use utoipa_scalar::{Scalar, Servable as ScalarServable};
 use tower_http::validate_request::ValidateRequestHeaderLayer;
 
-// The API key is loaded from the environment variable PYTHON_SERVICE_API_KEY
-#[allow(dead_code)]
-static PYTHON_SERVICE_API_KEY: std::sync::LazyLock<String> =
-    std::sync::LazyLock::new(|| match std::env::var("PYTHON_SERVICE_API_KEY") {
-        Ok(api_key) if !(api_key.is_empty()) => api_key,
-        _ => panic!("PYTHON_SERVICE_API_KEY must be set and cannot be empty!"),
-    });
+// macro definition to reduce repetitive code
+macro_rules! lazy_env_var {
+    ($name:ident, $env_var:expr, $default:expr) => {
+        pub static $name: std::sync::LazyLock<String> =
+            std::sync::LazyLock::new(|| match std::env::var($env_var) {
+                Ok(value) if !value.is_empty() => value,
+                _ => $default,
+            });
+    };
+}
 
+// lazy load env variables
+lazy_env_var!(
+    PYTHON_SERVICE_API_KEY,
+    "PYTHON_SERVICE_API_KEY",
+    panic!("PYTHON_SERVICE_API_KEY must be set and cannot be empty!")
+);
+lazy_env_var!(DB_USERNAME, "DB_USERNAME", "root".to_string());
+lazy_env_var!(DB_PASSWORD, "DB_PASSWORD", "root".to_string());
+lazy_env_var!(DATABASE_URL, "DATABASE_URL", "127.0.0.1:8000".to_string());
 
 const YATTT_TAG: &str = "yatt";
 
