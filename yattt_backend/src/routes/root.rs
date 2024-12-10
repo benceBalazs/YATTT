@@ -9,8 +9,10 @@ pub struct RootApiResponse {
 }
 
 pub async fn root_handler() -> Json<RootApiResponse> {
-    let version = crate::API_VERSION.to_string(); // Define your API version here
-    let local_time = Local::now().to_rfc3339(); // Get the current local time in ISO 8601 format
+    // Define your API version here
+    let version = crate::API_VERSION.to_string();
+    // Get the current local time in ISO 8601 format
+    let local_time = Local::now().to_rfc3339();
 
     Json(RootApiResponse { version, local_time })
 }
