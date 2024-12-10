@@ -12,12 +12,11 @@ use utoipa_axum::router::OpenApiRouter;
 use utoipa_scalar::{Scalar, Servable as ScalarServable};
 
 // The API key is loaded from the environment variable PYTHON_SERVICE_API_KEY
-static PYTHON_SERVICE_API_KEY: std::sync::LazyLock<String> = std::sync::LazyLock::new(|| {
-    match std::env::var("PYTHON_SERVICE_API_KEY") {
+static PYTHON_SERVICE_API_KEY: std::sync::LazyLock<String> =
+    std::sync::LazyLock::new(|| match std::env::var("PYTHON_SERVICE_API_KEY") {
         Ok(api_key) if !(api_key.is_empty()) => api_key,
         _ => panic!("PYTHON_SERVICE_API_KEY must be set and cannot be empty!"),
-    }
-});
+    });
 
 const YATTT_TAG: &str = "yatt";
 const API_VERSIONING: &str = "v5";
@@ -26,9 +25,19 @@ const DOCS_ROUTE: &str = "/docs";
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-
     // load the env variables from .env
     dotenvy::dotenv().ok();
+
+    // set up application logger
+    use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
+
+    tracing_subscriber::registry()
+        .with(
+            tracing_subscriber::EnvFilter::try_from_default_env()
+                .unwrap_or_else(|_| format!("{}=debug", env!("CARGO_CRATE_NAME")).into()),
+        )
+        .with(tracing_subscriber::fmt::layer())
+        .init();
 
     #[derive(OpenApi)]
     #[openapi(
@@ -56,6 +65,10 @@ async fn main() -> Result<(), Error> {
 
     let address = SocketAddr::from((Ipv4Addr::LOCALHOST, APPLICATION_PORT));
     let listener = TcpListener::bind(&address).await?;
+
+    let api_adress = listener.local_addr()?;
+    tracing::info!("API running on address http://{api_adress}/api/{API_VERSION}",);
+    tracing::info!("API-Docs running on address http://{api_adress}/api/{API_VERSION}{DOCS_ROUTE}");
 
     axum::serve(listener, app.into_make_service()).await
 }
