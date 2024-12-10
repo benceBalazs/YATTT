@@ -1,6 +1,6 @@
 use axum::{
   Json,
-  extract::{Path, rejection::JsonRejection},
+  extract::{Path},
 };
 use hyper::StatusCode;
 use serde::{Serialize,Deserialize};
@@ -12,16 +12,10 @@ pub struct CardRetrieveHandlerResponse {
 }
 
 // TODO documentation
-pub async fn card_create_handler(payload: Result<Json<CardRequest>, JsonRejection>) -> Json<StatusCode> {
+pub async fn card_create_handler(Json(payload): Json<CardRequest>) -> Json<StatusCode> {
     let mut response: StatusCode = StatusCode::INTERNAL_SERVER_ERROR;
-    match payload {
-        Ok(payload) => {
-          // TODO handle card creation and set appropriate response
-        },
-        Err(_) => {
-          response = StatusCode::BAD_REQUEST;
-        }
-    }
+    // TODO handle card creation and set appropriate response
+
     Json(response)
 }
 
@@ -39,14 +33,16 @@ pub async fn card_retrieve_handler() -> Json<CardRetrieveHandlerResponse> {
 
 // TODO documentation
 pub async fn card_modify_handler(Path(CardRequest { tag_id, name }): Path<CardRequest>) -> Json<StatusCode> {
+    let mut response: StatusCode = StatusCode::INTERNAL_SERVER_ERROR;
     // TODO modify requested card & return status
     
-    Json(StatusCode::OK)
+    Json(response)
 }
 
 // TODO documentation
 pub async fn card_delete_handler(Path(CardRequest { tag_id, name }): Path<CardRequest>) -> Json<StatusCode> {
+    let mut response: StatusCode = StatusCode::INTERNAL_SERVER_ERROR;
     // TODO delete requested card & return status
 
-    Json(StatusCode::OK)
+    Json(response)
 }

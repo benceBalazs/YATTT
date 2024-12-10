@@ -1,19 +1,26 @@
 use axum::Json;
-use serde::Serialize;
+use chrono::DateTime;
+use hyper::StatusCode;
+use crate::models::attendance::AttendanceResponse;
 
-#[derive(Serialize)]
-pub struct AttendanceApiResponse {
-    test: String,
+// TODO documentation
+pub async fn attendance_create_handler(Json(payload): Json<AttendanceResponse>) -> Json<StatusCode> {
+    let mut response: StatusCode = StatusCode::INTERNAL_SERVER_ERROR;
+    // TODO create attendance by utilizing payload
+
+    Json(response)
 }
 
-pub async fn attendance_create_handler() -> Json<AttendanceApiResponse> {
-    // TODO complete path, currently test string for route
-    let test = "CREATE".to_string();
-    Json(AttendanceApiResponse { test })
-}
-
-pub async fn attendance_retrieve_handler() -> Json<AttendanceApiResponse> {
-    // TODO complete path, currently test string for route
-    let test = "RETRIEVE".to_string(); 
-    Json(AttendanceApiResponse { test })
+// TODO documentation
+pub async fn attendance_retrieve_handler() -> Json<AttendanceResponse> {
+    let testattendance= AttendanceResponse {
+      user: "user".to_string(),
+      device_id: "device_id".to_string(),
+      check_in_time: DateTime::from_timestamp_nanos(420420),
+      check_out_time: Some(DateTime::from_timestamp_nanos(420420)), 
+      duration: Some(1.0),
+    };
+    // TODO fill response with normal data
+    
+    Json(testattendance)
 }
