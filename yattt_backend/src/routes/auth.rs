@@ -170,6 +170,7 @@ pub async fn authorization_layer(mut req: Request, next: Next) -> Result<Respons
       }),
   };
   // Fetch the user details from the database
+  // TODO replace with wanted inject data for services after middleware
   let current_user = match retrieve_user_by_username(&token_data.claims.username) {
       Some(user) => user,
       None => return Err(AuthError {
