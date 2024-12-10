@@ -5,13 +5,15 @@ use std::net::{Ipv4Addr, SocketAddr};
 use std::io::Error;
 use tokio::net::TcpListener;
 use utoipa::{
-    openapi::security::{ApiKey, ApiKeyValue, SecurityScheme},
-    Modify, OpenApi,
+    // openapi::security::{ApiKey, ApiKeyValue, SecurityScheme},
+    // Modify,
+    OpenApi,
 };
 use utoipa_axum::router::OpenApiRouter;
 use utoipa_scalar::{Scalar, Servable as ScalarServable};
 
 // The API key is loaded from the environment variable PYTHON_SERVICE_API_KEY
+#[allow(dead_code)]
 static PYTHON_SERVICE_API_KEY: std::sync::LazyLock<String> =
     std::sync::LazyLock::new(|| match std::env::var("PYTHON_SERVICE_API_KEY") {
         Ok(api_key) if !(api_key.is_empty()) => api_key,
