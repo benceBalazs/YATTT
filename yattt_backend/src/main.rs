@@ -91,8 +91,9 @@ async fn main() -> Result<(), Error> {
 
     // generate auth routes
     let attendance_routes: Router = axum::Router::new()
-        .route(ATTENDANCE_CREATE_ROUTE, axum::routing::post(crate::routes::attendance::attendance_create_handler))
-        .route(ATTENDANCE_CREATE_ROUTE, axum::routing::get(crate::routes::attendance::attendance_retrieve_handler));
+        .route(ATTENDANCE_CREATE_ROUTE, axum::routing::get(crate::routes::attendance::attendance_retrieve_handler))
+         //.layer(custom_api_layer_check)
+        .route(ATTENDANCE_CREATE_ROUTE, axum::routing::post(crate::routes::attendance::attendance_create_handler));
 
     // generate auth router by merging all auth routes
     let attendance_router: Router = axum::Router::new()

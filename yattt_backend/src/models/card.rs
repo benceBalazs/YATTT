@@ -7,3 +7,9 @@ pub struct Card {
     pub tag_id: String,
     pub name: String,
 }
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct CardRequest {
+    pub tag_id: String,
+    pub name: String,
+}
