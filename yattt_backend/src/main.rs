@@ -65,7 +65,7 @@ async fn main() -> Result<(), Error> {
 
     let app = axum::Router::new().nest("/api", api_version_routes);
 
-    let address = SocketAddr::from((Ipv4Addr::LOCALHOST, APPLICATION_PORT));
+    let address = SocketAddr::from((Ipv4Addr::UNSPECIFIED, APPLICATION_PORT));
     let listener = TcpListener::bind(&address).await?;
 
     let api_adress = listener.local_addr()?;
