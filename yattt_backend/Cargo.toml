@@ -37,3 +37,11 @@ chrono = "0.4.39"
 
 # database
 surrealdb = "2.1.2"
+
+
+[profile.release]
+lto = true
+strip = true
+opt-level = 3
+panic = 'abort'
+codegen-units = 1
