@@ -19,7 +19,7 @@ static PYTHON_SERVICE_API_KEY: std::sync::LazyLock<String> =
     });
 
 const YATTT_TAG: &str = "yatt";
-const API_VERSIONING: &str = "v5";
+pub const API_VERSION: &str = "v1";
 const APPLICATION_PORT: u16 = 8080;
 const DOCS_ROUTE: &str = "/docs";
 
