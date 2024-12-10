@@ -4,11 +4,11 @@ use hyper::StatusCode;
 use crate::models::attendance::AttendanceResponse;
 
 // TODO documentation
-pub async fn attendance_create_handler(Json(payload): Json<AttendanceResponse>) -> Json<StatusCode> {
+pub async fn attendance_create_handler(Json(payload): Json<AttendanceResponse>) -> (StatusCode, String) {
     let mut response: StatusCode = StatusCode::INTERNAL_SERVER_ERROR;
     // TODO create attendance by utilizing payload
 
-    Json(response)
+    (response, "success".to_string())
 }
 
 // TODO documentation

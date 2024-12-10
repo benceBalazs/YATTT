@@ -12,11 +12,11 @@ pub struct CardRetrieveHandlerResponse {
 }
 
 // TODO documentation
-pub async fn card_create_handler(Json(payload): Json<CardRequest>) -> Json<StatusCode> {
+pub async fn card_create_handler(Json(payload): Json<CardRequest>) -> (StatusCode, String) {
     let mut response: StatusCode = StatusCode::INTERNAL_SERVER_ERROR;
     // TODO handle card creation and set appropriate response
 
-    Json(response)
+    (response, "success".to_string())
 }
 
 // TODO documentation
@@ -27,22 +27,22 @@ pub async fn card_retrieve_handler() -> Json<CardRetrieveHandlerResponse> {
     };
     let response: CardRetrieveHandlerResponse = CardRetrieveHandlerResponse { cards: vec![testcard] };
     // TODO fill response with normal data & get user info via axum extractor (see wiki)
-
-    Json(response)
-}
-
-// TODO documentation
-pub async fn card_modify_handler(Path(CardRequest { tag_id, name }): Path<CardRequest>) -> Json<StatusCode> {
-    let mut response: StatusCode = StatusCode::INTERNAL_SERVER_ERROR;
-    // TODO modify requested card & return status
     
     Json(response)
 }
 
 // TODO documentation
-pub async fn card_delete_handler(Path(CardRequest { tag_id, name }): Path<CardRequest>) -> Json<StatusCode> {
+pub async fn card_modify_handler(Path(CardRequest { tag_id, name }): Path<CardRequest>) -> (StatusCode, String) {
+    let mut response: StatusCode = StatusCode::INTERNAL_SERVER_ERROR;
+    // TODO modify requested card & return status
+    
+    (response, "success".to_string())
+}
+
+// TODO documentation
+pub async fn card_delete_handler(Path(CardRequest { tag_id, name }): Path<CardRequest>) -> (StatusCode, String) {
     let mut response: StatusCode = StatusCode::INTERNAL_SERVER_ERROR;
     // TODO delete requested card & return status
 
-    Json(response)
+    (response, "success".to_string())
 }

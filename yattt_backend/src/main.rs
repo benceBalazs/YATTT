@@ -13,6 +13,7 @@ use utoipa::{
 };
 use utoipa_axum::router::OpenApiRouter;
 use utoipa_scalar::{Scalar, Servable as ScalarServable};
+use tower_http::validate_request::ValidateRequestHeaderLayer;
 
 // The API key is loaded from the environment variable PYTHON_SERVICE_API_KEY
 #[allow(dead_code)]
@@ -91,9 +92,9 @@ async fn main() -> Result<(), Error> {
 
     // generate auth routes
     let attendance_routes: Router = axum::Router::new()
-        .route(ATTENDANCE_CREATE_ROUTE, axum::routing::get(crate::routes::attendance::attendance_retrieve_handler))
-         //.layer(custom_api_layer_check)
-        .route(ATTENDANCE_CREATE_ROUTE, axum::routing::post(crate::routes::attendance::attendance_create_handler));
+        .route(ATTENDANCE_CREATE_ROUTE, axum::routing::post(crate::routes::attendance::attendance_create_handler))
+        .layer(ValidateRequestHeaderLayer::bearer(&PYTHON_SERVICE_API_KEY))
+        .route(ATTENDANCE_CREATE_ROUTE, axum::routing::get(crate::routes::attendance::attendance_retrieve_handler));
 
     // generate auth router by merging all auth routes
     let attendance_router: Router = axum::Router::new()
