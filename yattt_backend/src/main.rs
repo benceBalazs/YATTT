@@ -3,6 +3,7 @@ mod routes;
 use std::net::{Ipv4Addr, SocketAddr};
 
 use std::io::Error;
+use axum::Router;
 use tokio::net::TcpListener;
 use utoipa::{
     // openapi::security::{ApiKey, ApiKeyValue, SecurityScheme},
@@ -21,9 +22,14 @@ static PYTHON_SERVICE_API_KEY: std::sync::LazyLock<String> =
     });
 
 const YATTT_TAG: &str = "yatt";
+
 pub const API_VERSION: &str = "v1";
 const APPLICATION_PORT: u16 = 8080;
+
 const DOCS_ROUTE: &str = "/docs";
+const AUTH_ROUTE: &str = "/auth";
+const ATTENDANCES_ROUTE: &str = "/attendances";
+const CARDS_ROUTE: &str = "/cards";
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
@@ -50,14 +56,19 @@ async fn main() -> Result<(), Error> {
     struct ApiDoc;
 
     // generate the documentation router
-    let (router, api) = OpenApiRouter::with_openapi(ApiDoc::openapi())
+    let (docs_router, api) = OpenApiRouter::with_openapi(ApiDoc::openapi())
         .nest(DOCS_ROUTE, yattt::router())
         .split_for_parts();
+
+    // generate auth router
+    let auth_router: Router = axum::Router::new()
+        .route(AUTH_ROUTE, axum::routing::get(crate::routes::auth::auth_handler));
 
     // define the `/v1` router
     let v1_routes = axum::Router::new()
         .route("/", axum::routing::get(crate::routes::root::root_handler))
-        .merge(router)
+        .merge(auth_router)
+        .merge(docs_router)
         .merge(Scalar::with_url(DOCS_ROUTE, api));
 
     // define the `/api` router and nest `/v1` under `/api`
