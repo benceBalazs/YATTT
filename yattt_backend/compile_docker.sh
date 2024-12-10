@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build -t yattt_backend .
+docker build -t rust-service:latest .
