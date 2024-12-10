@@ -1,4 +1,5 @@
 mod routes;
+mod models;
 
 use std::net::{Ipv4Addr, SocketAddr};
 
