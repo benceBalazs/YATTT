@@ -38,6 +38,10 @@ chrono = "0.4.39"
 # database
 surrealdb = "2.1.2"
 
+# encryption
+bcrypt = "0.16.0"
+jsonwebtoken = "9.3.0"
+
 
 [profile.release]
 lto = true

@@ -4,7 +4,7 @@ mod routes;
 
 use std::net::{Ipv4Addr, SocketAddr};
 
-use axum::Router;
+use axum::{middleware, Router};
 use std::io::Error;
 use tokio::net::TcpListener;
 use utoipa::{
@@ -36,6 +36,7 @@ lazy_env_var!(
 lazy_env_var!(DB_USERNAME, "DB_USERNAME", "root".to_string());
 lazy_env_var!(DB_PASSWORD, "DB_PASSWORD", "root".to_string());
 lazy_env_var!(DATABASE_URL, "DATABASE_URL", "127.0.0.1:8000".to_string());
+lazy_env_var!(JWT_SECRET, "JWT_SECRET", "superrandomdefaultsecret".to_string());
 
 const YATTT_TAG: &str = "yatt";
 
@@ -88,8 +89,9 @@ async fn main() -> Result<(), Error> {
     let auth_routes: Router = axum::Router::new()
         .route(
             AUTH_TOKEN_ROUTE,
-            axum::routing::post(crate::routes::auth::auth_token_handler),
+            axum::routing::get(crate::routes::auth::auth_token_handler),
         )
+        .layer(middleware::from_fn(crate::routes::auth::authorization_layer))
         .route(
             AUTH_LOGIN_ROUTE,
             axum::routing::post(crate::routes::auth::auth_login_handler),
@@ -119,20 +121,27 @@ async fn main() -> Result<(), Error> {
         .route(
             CARD_KEYED_ROUTE,
             axum::routing::delete(crate::routes::card::card_delete_handler),
-        );
+        )
+        .layer(middleware::from_fn(crate::routes::auth::authorization_layer));
 
     // generate auth router by merging all auth routes
     let card_router: Router = axum::Router::new().merge(card_routes);
 
     // generate auth routes
-    let attendance_routes: Router = axum::Router::new()
+    let attendance_routes_technical: Router = axum::Router::new()
         .route(ATTENDANCE_CREATE_ROUTE, axum::routing::post(crate::routes::attendance::attendance_create_handler))
-        .layer(ValidateRequestHeaderLayer::bearer(&PYTHON_SERVICE_API_KEY))
-        .route(ATTENDANCE_CREATE_ROUTE, axum::routing::get(crate::routes::attendance::attendance_retrieve_handler));
+        .layer(ValidateRequestHeaderLayer::bearer(&PYTHON_SERVICE_API_KEY));
+
+    // generate auth routes
+    let attendance_routes_user: Router = axum::Router::new()
+        .route(ATTENDANCE_CREATE_ROUTE, axum::routing::get(crate::routes::attendance::attendance_retrieve_handler))
+        .layer(middleware::from_fn(crate::routes::auth::authorization_layer));
 
 
     // generate auth router by merging all auth routes
-    let attendance_router: Router = axum::Router::new().merge(attendance_routes);
+    let attendance_router: Router = axum::Router::new()
+        .merge(attendance_routes_technical)
+        .merge(attendance_routes_user);
 
     // define the `/v1` router
     let v1_routes = axum::Router::new()
