@@ -1,3 +1,5 @@
+#![allow(dead_code, unused_imports)] //TODO for debugging purposes REMOVE LATER
+
 mod db;
 mod models;
 mod routes;
@@ -7,14 +9,10 @@ use std::net::{Ipv4Addr, SocketAddr};
 use axum::{middleware, Router};
 use std::io::Error;
 use tokio::net::TcpListener;
-use utoipa::{
-    // openapi::security::{ApiKey, ApiKeyValue, SecurityScheme},
-    // Modify,
-    OpenApi,
-};
+use tower_http::validate_request::ValidateRequestHeaderLayer;
+use utoipa::OpenApi;
 use utoipa_axum::router::OpenApiRouter;
 use utoipa_scalar::{Scalar, Servable as ScalarServable};
-use tower_http::validate_request::ValidateRequestHeaderLayer;
 
 // macro definition to reduce repetitive code
 macro_rules! lazy_env_var {
@@ -36,7 +34,11 @@ lazy_env_var!(
 lazy_env_var!(DB_USERNAME, "DB_USERNAME", "root".to_string());
 lazy_env_var!(DB_PASSWORD, "DB_PASSWORD", "root".to_string());
 lazy_env_var!(DATABASE_URL, "DATABASE_URL", "127.0.0.1:8000".to_string());
-lazy_env_var!(JWT_SECRET, "JWT_SECRET", "superrandomdefaultsecret".to_string());
+lazy_env_var!(
+    JWT_SECRET,
+    "JWT_SECRET",
+    "superrandomdefaultsecret".to_string()
+);
 
 const YATTT_TAG: &str = "yatt";
 
@@ -78,7 +80,9 @@ async fn main() -> Result<(), Error> {
         .with(tracing_subscriber::fmt::layer())
         .init();
 
-        db::surrealdb::connect(&DATABASE_URL).await.expect("Failed to connect to SurrealDB");
+    db::surrealdb::connect(&DATABASE_URL)
+        .await
+        .expect("Failed to connect to SurrealDB");
 
     // generate the documentation router
     let (docs_router, api) = OpenApiRouter::with_openapi(ApiDoc::openapi())
@@ -91,7 +95,9 @@ async fn main() -> Result<(), Error> {
             AUTH_TOKEN_ROUTE,
             axum::routing::get(crate::routes::auth::auth_token_handler),
         )
-        .layer(middleware::from_fn(crate::routes::auth::authorization_layer))
+        .layer(middleware::from_fn(
+            crate::routes::auth::authorization_layer,
+        ))
         .route(
             AUTH_LOGIN_ROUTE,
             axum::routing::post(crate::routes::auth::auth_login_handler),
@@ -122,21 +128,30 @@ async fn main() -> Result<(), Error> {
             CARD_KEYED_ROUTE,
             axum::routing::delete(crate::routes::card::card_delete_handler),
         )
-        .layer(middleware::from_fn(crate::routes::auth::authorization_layer));
+        .layer(middleware::from_fn(
+            crate::routes::auth::authorization_layer,
+        ));
 
     // generate auth router by merging all auth routes
     let card_router: Router = axum::Router::new().merge(card_routes);
 
     // generate auth routes
     let attendance_routes_technical: Router = axum::Router::new()
-        .route(ATTENDANCE_CREATE_ROUTE, axum::routing::post(crate::routes::attendance::attendance_create_handler))
+        .route(
+            ATTENDANCE_CREATE_ROUTE,
+            axum::routing::post(crate::routes::attendance::attendance_create_handler),
+        )
         .layer(ValidateRequestHeaderLayer::bearer(&PYTHON_SERVICE_API_KEY));
 
     // generate auth routes
     let attendance_routes_user: Router = axum::Router::new()
-        .route(ATTENDANCE_CREATE_ROUTE, axum::routing::get(crate::routes::attendance::attendance_retrieve_handler))
-        .layer(middleware::from_fn(crate::routes::auth::authorization_layer));
-
+        .route(
+            ATTENDANCE_CREATE_ROUTE,
+            axum::routing::get(crate::routes::attendance::attendance_retrieve_handler),
+        )
+        .layer(middleware::from_fn(
+            crate::routes::auth::authorization_layer,
+        ));
 
     // generate auth router by merging all auth routes
     let attendance_router: Router = axum::Router::new()

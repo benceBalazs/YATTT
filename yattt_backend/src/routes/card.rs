@@ -1,10 +1,10 @@
 use axum::{
   Json,
-  extract::{Path},
+  extract::Path,
 };
 use hyper::StatusCode;
 use serde::{Serialize,Deserialize};
-use crate::models::card::{Card, CardRequest};
+use crate::models::card::CardRequest;
 
 #[derive(Serialize,Deserialize)]
 pub struct CardRetrieveHandlerResponse {
@@ -13,7 +13,7 @@ pub struct CardRetrieveHandlerResponse {
 
 // TODO documentation
 pub async fn card_create_handler(Json(payload): Json<CardRequest>) -> (StatusCode, String) {
-    let mut response: StatusCode = StatusCode::INTERNAL_SERVER_ERROR;
+    let response: StatusCode = StatusCode::INTERNAL_SERVER_ERROR;
     // TODO handle card creation and set appropriate response
 
     (response, "success".to_string())
@@ -33,7 +33,7 @@ pub async fn card_retrieve_handler() -> Json<CardRetrieveHandlerResponse> {
 
 // TODO documentation
 pub async fn card_modify_handler(Path(CardRequest { tag_id, name }): Path<CardRequest>) -> (StatusCode, String) {
-    let mut response: StatusCode = StatusCode::INTERNAL_SERVER_ERROR;
+    let response: StatusCode = StatusCode::INTERNAL_SERVER_ERROR;
     // TODO modify requested card & return status
     
     (response, "success".to_string())
@@ -41,7 +41,7 @@ pub async fn card_modify_handler(Path(CardRequest { tag_id, name }): Path<CardRe
 
 // TODO documentation
 pub async fn card_delete_handler(Path(CardRequest { tag_id, name }): Path<CardRequest>) -> (StatusCode, String) {
-    let mut response: StatusCode = StatusCode::INTERNAL_SERVER_ERROR;
+    let response: StatusCode = StatusCode::INTERNAL_SERVER_ERROR;
     // TODO delete requested card & return status
 
     (response, "success".to_string())
