@@ -1,38 +1,33 @@
 <div class="menu">
-  <div>
-    <header>YATTT - yet another time tracking tool</header>
-  </div>
-  <div>
-    <mat-icon>credit_card</mat-icon>
-    <mat-icon class="settingsIcon">settings</mat-icon>
-  </div>
+  <header>YATTT - yet another time tracking tool</header>
+  <mat-icon class="settingsIcon">settings</mat-icon>
 </div>
 
 <h2>Overview</h2>
 
-<table mat-table matSort matSortDirection="asc" [dataSource]="dataSource" class="table">
+<table mat-table matSort matSortDirection="asc" matSortActive="course" matSortDisableClear (matSortChange)="sortCourse($event)" [dataSource]="dataSource" class="table">
 <ng-container matColumnDef="checkIn">
-  <th mat-header-cell *matHeaderCellDef>Check in time</th>
+  <th mat-header-cell mat-sort-header *matHeaderCellDef>Check in time</th>
   <td mat-cell *matCellDef="let element">{{element.checkIn}}</td>
 </ng-container>
 
   <ng-container matColumnDef="checkOut">
-    <th *matHeaderCellDef mat-header-cell>Check out time</th>
+    <th mat-header-cell mat-sort-header *matHeaderCellDef>Check out time</th>
     <td mat-cell *matCellDef="let element">{{element.checkOut}}</td>
   </ng-container>
 
   <ng-container matColumnDef="duration">
-    <th mat-header-cell *matHeaderCellDef>Duration</th>
+    <th mat-header-cell mat-sort-header *matHeaderCellDef>Duration</th>
     <td mat-cell *matCellDef="let element">{{element.duration}}</td>
   </ng-container>
 
   <ng-container matColumnDef="card">
-    <th mat-header-cell *matHeaderCellDef>Card</th>
+    <th mat-header-cell mat-sort-header *matHeaderCellDef>Card</th>
     <td mat-cell *matCellDef="let element">{{element.card}}</td>
   </ng-container>
 
   <ng-container matColumnDef="course">
-    <th mat-header-cell *matHeaderCellDef>Course</th>
+    <th mat-header-cell mat-sort-header *matHeaderCellDef>Course</th>
     <td mat-cell *matCellDef="let element">{{element.course}}</td>
   </ng-container>
 
@@ -40,4 +35,6 @@
   <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
 </table>
+
+<mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
 

@@ -2,11 +2,11 @@
   background-color: rgb(77, 113, 17);
   color: white;
   font-size: 20px;
-  padding: 10px;
   margin-bottom: 20px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  padding: 10px;
 }
 
 .table {
