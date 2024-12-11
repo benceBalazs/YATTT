@@ -12,6 +12,7 @@ use chrono::{Duration, Utc};
 use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, TokenData, Validation};
 use serde::{Deserialize, Serialize};
 use serde_json::json;
+use utoipa::{IntoParams, ToSchema};
 
 #[derive(Serialize)]
 pub struct TokenResponse {
@@ -28,7 +29,7 @@ pub struct Claims {
 }
 
 // Define a structure for holding sign-in data
-#[derive(Deserialize)]
+#[derive(Deserialize, IntoParams, ToSchema)]
 pub struct SignInData {
     pub username: String,
     pub password: String,
@@ -49,6 +50,20 @@ impl IntoResponse for AuthError {
     }
 }
 
+/// Search Todos by query params.
+#[utoipa::path(
+    get,
+    path = "/auth",
+    responses(
+        (status = 200, description = "Successful re-authentication by user"),
+        (status = 400, description = "Bad Request, User sent malformed request"),
+        (status = 401, description = "Unauthorized, User not authorized to use this route"),
+        (status = 500, description = "Internal Server Error, Something went wrong on the APIs side - try later again")
+    ),
+    security(
+        ("token_jwt" = [])
+    )
+)]
 pub async fn auth_token_handler(
     Extension(user_data): Extension<TokenData<Claims>>,
 ) -> Result<Json<TokenResponse>, StatusCode> {
@@ -63,6 +78,19 @@ pub async fn auth_token_handler(
     }))
 }
 
+#[utoipa::path(
+    post,
+    path = "/auth/login",
+    params(
+        SignInData
+    ),
+    responses(
+        (status = 200, description = "Successful re-authentication by user"),
+        (status = 400, description = "Bad Request, User sent malformed request"),
+        (status = 401, description = "Unauthorized, User not authorized to use this route"),
+        (status = 500, description = "Internal Server Error, Something went wrong on the APIs side - try later again")
+    )
+)]
 pub async fn auth_login_handler(
     Json(user_data): Json<SignInData>,
 ) -> Result<Json<TokenResponse>, StatusCode> {
@@ -103,8 +131,21 @@ pub async fn auth_login_handler(
     }))
 }
 
+#[utoipa::path(
+    post,
+    path = "/auth/register",
+    params(
+        SignInData
+    ),
+    responses(
+        (status = 200, description = "Successful re-authentication by user"),
+        (status = 400, description = "Bad Request, User sent malformed request"),
+        (status = 401, description = "Unauthorized, User not authorized to use this route"),
+        (status = 500, description = "Internal Server Error, Something went wrong on the APIs side - try later again")
+    )
+)]
 pub async fn auth_register_handler(
-    Json(mut user): Json<User>,
+    Json(mut user): Json<SignInData>,
 ) -> Result<Json<TokenResponse>, StatusCode> {
     // hash password
     user.password = hash_password(&user.password).map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
