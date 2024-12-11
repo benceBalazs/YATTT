@@ -29,11 +29,6 @@ pub async fn connect(url: &str) -> Result<(), Box<dyn std::error::Error>> {
 use crate::models::user::User;
 use surrealdb::opt::Resource;
 pub async fn create_user(user: User) -> Result<Option<User>, surrealdb::Error> {
-    // let result = DB.create(Resource::from("User")).content(user).await?;
-
-    // // Convert the raw result into a `User` struct
-    // let created_user = User::from_surrealdb(result).unwrap();
-
     // Insert the user into the database
     let query = format!(
         "INSERT INTO User (username, password) VALUES ('{}', '{}')",
@@ -50,27 +45,6 @@ pub async fn create_user(user: User) -> Result<Option<User>, surrealdb::Error> {
 
     Ok(res)
 }
-
-// let query_result = DB.create::<>("User").content(user).await?;
-
-// let mut response = DB.query(&query).await?.check()?;
-
-// match query_result {
-//     Ok(Some(record)) => {
-//         // Return the record if the result is Ok(Some(record))
-//         tracing::info!("User created: {:?}", record);
-
-//         Some(record)
-//     }
-//     Ok(None) => {
-//         // Handle the case where the result is Ok(None), if needed
-//         None
-//     }
-//     Err(e) => {
-//         tracing::error!("Error creating user: {}", e);
-//         None
-//     }
-// }
 
 pub async fn check_user(username: &str) -> Result<Option<User>, surrealdb::Error> {
     // Query to find a matching user
@@ -98,6 +72,3 @@ pub async fn check_user_by_id(user_id: &str) -> Result<Option<User>, surrealdb::
     Ok(None) // No matching user
 }
 
-        }
-    }
-}
