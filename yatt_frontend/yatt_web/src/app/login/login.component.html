@@ -1,21 +1,38 @@
 <div class="container">
-  <div class="screen">
-      <h1>Welcome to YATT</h1>
-    <div class="screen__content">
-       <form [formGroup]="loginForm" (ngSubmit)="login()" class="login">
-        <div class="login__field">
-          <input formControlName="username" type="text" placeholder="Enter your username" class="login__input">
-          <div *ngIf="loginForm.controls['username'].invalid"></div>
+    <div class="screen">
+        <div class="screen__content-wrapper">
+            <div class="screen__content screen__content--login">
+                <h1>Welcome to YATTT</h1>
+                <h4>Sign In</h4>
+                <form [formGroup]="loginForm" (ngSubmit)="signIn()" >
+                    <div class="login__field">
+                        <input formControlName="username" type="text" placeholder="Enter your username" class="login__input">
+                        <div *ngIf="loginForm.controls['username'].invalid"></div>
+                    </div>
+                    <div class="login__field">
+                        <input formControlName="password" type="password" placeholder="Enter your password" class="login__input">
+                        <div *ngIf="loginForm.controls['password'].invalid"></div>
+                    </div>
+                    <button type="submit" [disabled]="loginForm.invalid">Log in</button>
+                    <div *ngIf="errorMessage">
+                        <p class="errorMessage">{{ errorMessage }}</p>
+                    </div>
+                </form>
+            </div>
+
+            <div class="screen__content screen__content--signin">
+                <h1>New Here?</h1>
+                <h4>Sign Up</h4>
+                <form [formGroup]="loginForm" (ngSubmit)="signUp()">
+                    <div class="login__field">
+                        <input type="text" placeholder="Enter your username" class="login__input">
+                    </div>
+                    <div class="login__field">
+                        <input type="password" placeholder="Create a password" class="login__input">
+                    </div>
+                    <button type="submit">Sign Up</button>
+                </form>
+            </div>
         </div>
-        <div class="login__field">
-          <input formControlName="password" type="password" placeholder="Enter your password" class="login__input">
-          <div *ngIf="loginForm.controls['password'].invalid"></div>
-        </div>
-         <button type="submit" [disabled]="loginForm.invalid">Log in</button>
-         <div *ngIf="errorMessage">
-           <p style="color: red;">{{ errorMessage }}</p>
-         </div>
-       </form>
     </div>
-  </div>
 </div>

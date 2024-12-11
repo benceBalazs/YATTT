@@ -31,8 +31,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  // Login function
-  login() {
+  signIn() {
     if (this.loginForm.invalid) {
       this.errorMessage = 'Please fill all fields correctly!';
       return;
@@ -55,5 +54,9 @@ export class LoginComponent implements OnInit {
           console.error('Login error', err);
         }
       });
+  }
+
+  signUp(){
+
   }
 }
