@@ -1,0 +1,107 @@
+# SurrealDB Deployment and Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: surrealdb
+  namespace: yattt-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: surrealdb
+  template:
+    metadata:
+      labels:
+        app: surrealdb
+    spec:
+      containers:
+        - name: surrealdb
+          image: surrealdb/surrealdb:latest
+          args:
+            - "start"
+            - "--log"
+            - "debug"
+            - "--user"
+            - "$(DB_USERNAME)"
+            - "--pass"
+            - "$(DB_PASSWORD)"
+            - "memory"
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: surrealdb-credentials
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: surrealdb-credentials
+                  key: DB_PASSWORD
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: surrealdb
+  namespace: yattt-backend
+spec:
+  selector:
+    app: surrealdb
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+  type: LoadBalancer
+
+---
+# Rust REST Service Deployment and Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rust-service
+  namespace: yattt-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rust-service
+  template:
+    metadata:
+      labels:
+        app: rust-service
+    spec:
+      containers:
+        - name: rust-service
+          image: localhost:5000/rust-service:latest
+          env:
+            - name: DATABASE_URL
+              value: "surrealdb://$(DB_USERNAME):$(DB_PASSWORD)@surrealdb:8000"
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: surrealdb-credentials
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: surrealdb-credentials
+                  key: DB_PASSWORD
+          ports:
+            - containerPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rust-service
+  namespace: yattt-backend
+spec:
+  selector:
+    app: rust-service
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer
