@@ -19,9 +19,6 @@ permissions:
 jobs:
   test:
     runs-on: macos-latest
-    defaults:
-      run:
-        working-directory: yattt_ios/yattt_ios_app
         
     steps:
       - uses: actions/checkout@v4
@@ -49,9 +46,6 @@ jobs:
     runs-on: macos-latest
     needs: test
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    defaults:
-      run:
-        working-directory: yattt_ios/yattt_ios_app
 
     steps:
       - uses: actions/checkout@v4
