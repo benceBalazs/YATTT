@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use utoipa::{IntoParams, ToSchema};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Card {
@@ -8,7 +9,7 @@ pub struct Card {
     pub name: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, IntoParams, ToSchema)]
 pub struct CardRequest {
     pub tag_id: String,
     pub name: String,

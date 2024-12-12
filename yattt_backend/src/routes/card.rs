@@ -11,7 +11,22 @@ pub struct CardRetrieveHandlerResponse {
     cards: Vec<CardRequest>
 }
 
-// TODO documentation
+#[utoipa::path(
+    post,
+    path = "/cards",
+    params(
+        CardRequest
+    ),
+    responses(
+        (status = 200, description = "Successful re-authentication by user"),
+        (status = 400, description = "Bad Request, User sent malformed request"),
+        (status = 401, description = "Unauthorized, User not authorized to use this route"),
+        (status = 500, description = "Internal Server Error, Something went wrong on the APIs side - try later again")
+    ),
+    security(
+        ("token_jwt" = [])
+    )
+)]
 pub async fn card_create_handler(Json(payload): Json<CardRequest>) -> (StatusCode, String) {
     let response: StatusCode = StatusCode::INTERNAL_SERVER_ERROR;
     // TODO handle card creation and set appropriate response
@@ -19,7 +34,19 @@ pub async fn card_create_handler(Json(payload): Json<CardRequest>) -> (StatusCod
     (response, "success".to_string())
 }
 
-// TODO documentation
+#[utoipa::path(
+    get,
+    path = "/cards",
+    responses(
+        (status = 200, description = "Successful re-authentication by user"),
+        (status = 400, description = "Bad Request, User sent malformed request"),
+        (status = 401, description = "Unauthorized, User not authorized to use this route"),
+        (status = 500, description = "Internal Server Error, Something went wrong on the APIs side - try later again")
+    ),
+    security(
+        ("token_jwt" = [])
+    )
+)]
 pub async fn card_retrieve_handler() -> Json<CardRetrieveHandlerResponse> {
     let testcard: CardRequest = CardRequest {
       tag_id: "1234".to_string(),
@@ -31,7 +58,22 @@ pub async fn card_retrieve_handler() -> Json<CardRetrieveHandlerResponse> {
     Json(response)
 }
 
-// TODO documentation
+#[utoipa::path(
+    put,
+    path = "/cards/{tag_id}",
+    params(
+        CardRequest
+    ),
+    responses(
+        (status = 200, description = "Successful re-authentication by user"),
+        (status = 400, description = "Bad Request, User sent malformed request"),
+        (status = 401, description = "Unauthorized, User not authorized to use this route"),
+        (status = 500, description = "Internal Server Error, Something went wrong on the APIs side - try later again")
+    ),
+    security(
+        ("token_jwt" = [])
+    )
+)]
 pub async fn card_modify_handler(Path(CardRequest { tag_id, name }): Path<CardRequest>) -> (StatusCode, String) {
     let response: StatusCode = StatusCode::INTERNAL_SERVER_ERROR;
     // TODO modify requested card & return status
@@ -39,7 +81,19 @@ pub async fn card_modify_handler(Path(CardRequest { tag_id, name }): Path<CardRe
     (response, "success".to_string())
 }
 
-// TODO documentation
+#[utoipa::path(
+    delete,
+    path = "/cards/{tag_id}",
+    responses(
+        (status = 200, description = "Successful re-authentication by user"),
+        (status = 400, description = "Bad Request, User sent malformed request"),
+        (status = 401, description = "Unauthorized, User not authorized to use this route"),
+        (status = 500, description = "Internal Server Error, Something went wrong on the APIs side - try later again")
+    ),
+    security(
+        ("token_jwt" = [])
+    )
+)]
 pub async fn card_delete_handler(Path(CardRequest { tag_id, name }): Path<CardRequest>) -> (StatusCode, String) {
     let response: StatusCode = StatusCode::INTERNAL_SERVER_ERROR;
     // TODO delete requested card & return status

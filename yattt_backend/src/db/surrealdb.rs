@@ -52,8 +52,10 @@ pub async fn connect(url: &str) -> Result<(), Box<dyn std::error::Error>> {
 }
 
 use crate::models::user::User;
+use crate::routes::auth::SignInData;
 use surrealdb::opt::Resource;
-pub async fn create_user(user: User) -> Result<Option<User>, SurrealDbError> {
+
+pub async fn create_user(user: SignInData) -> Result<Option<User>, surrealdb::Error> {
     // Insert the user into the database
     let query = format!(
         "INSERT INTO {TABLE_USER} ({ENTRY_USERNAME}, {ENTRY_PASSWORD}) VALUES ('{}', '{}')",
