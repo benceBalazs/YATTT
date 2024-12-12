@@ -74,5 +74,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: yattt_android_app
-          path: /home/runner/work/YATTT/YATTT/yattt_app/app/build/outputs/apk/release/app-release.apk
+          path: /home/runner/work/YATTT/YATTT/yattt_app/app/build/outputs/apk/release/app-release-unsigned.apk
           if-no-files-found: error
