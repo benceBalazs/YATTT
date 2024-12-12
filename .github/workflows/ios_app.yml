@@ -63,8 +63,13 @@ jobs:
 
       - name: Build App
         run: |
-          xcodebuild -workspace yattt_ios_app.xcworkspace \
+          xcodebuild test \
+            -project yattt_ios_app.xcodeproj \
             -scheme yattt_ios_app \
+            -sdk iphonesimulator \
+            -destination "platform=iOS Simulator,name=iPhone 16,OS=latest" \
+            -enableCodeCoverage YES
+
             -sdk iphoneos \
             -configuration Release \
             -archivePath $PWD/build/yattt_ios_app.xcarchive \
