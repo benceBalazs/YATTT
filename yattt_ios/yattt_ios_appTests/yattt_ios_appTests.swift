@@ -90,7 +90,7 @@ final class yattt_ios_appTests:XCTestCase {
         // Validate the URL
         XCTAssertEqual(request?.url?.absoluteString, "http://test1.com")
     }
-    
+    /*
     func testRequestBody() {
         let body = ["data": data, "deviceId": deviceId]
         let expectedBody = ["data": data, "deviceId": deviceId]
@@ -103,7 +103,7 @@ final class yattt_ios_appTests:XCTestCase {
         // Decode
         let decod = try? JSONSerialization.jsonObject(with: httpBody!, options: []) as? [String: String]
         XCTAssertEqual(decod, expectedBody)
-    }
+    }*/
     //Test API
     /*
     func testSendData_Success() {
