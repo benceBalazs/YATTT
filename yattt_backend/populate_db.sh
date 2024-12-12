@@ -1,3 +1,4 @@
 #!/bin/bash
 
-surreal sql --file setup.surql --user root --pass root surreal://127.0.0.1:8000
+# make sure SurrealDB is running on port 127.0.0.1:8000
+cat setup.surql | surreal sql --user root --pass root
