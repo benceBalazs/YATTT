@@ -1,10 +1,9 @@
-
 name: Build, Test and Deploy the YATT iOS App
 
 on:
   push:
     branches: 
-     - main
+      - main
     paths:
       - 'yattt_ios/**'
   pull_request:
@@ -12,22 +11,24 @@ on:
       - main
     paths:
       - 'yattt_ios/**'
+
 permissions:
   contents: read
   pull-requests: write
 
 jobs:
   test:
-    build:
-      runs-on: macos-latest
-      defaults:
-        run:
-          working-directory: yattt_ios/yattt_ios_app
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: yattt_ios/yattt_ios_app
         
-      steps:
+    steps:
       - uses: actions/checkout@v4
+
       - name: Select Xcode version
         run: sudo xcode-select -s /Applications/Xcode_15.0.app/Contents/Developer
+
       - name: Run Unit Tests with Coverage
         run: |
           xcodebuild test \
@@ -43,15 +44,17 @@ jobs:
           name: coverage-reports
           path: |
             ~/Library/Developer/Xcode/DerivedData/**/Logs/Test/*.xcresult
+
   build:
     runs-on: macos-latest
     needs: test
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     defaults:
       run:
-        working-directory: yatt_ios/yattt_ios_app
+        working-directory: yattt_ios/yattt_ios_app
+
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
 
