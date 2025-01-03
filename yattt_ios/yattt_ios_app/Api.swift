@@ -16,12 +16,12 @@ struct Api {
         self.session = session
     }
     
-    func sendData(rfcData: String, deviceId: String, completion: @escaping (Result<String, Error>) -> Void) {
-        // Use ApiHelper to create a request, guard to check that the request is valid
+    func sendData(tagData: String, deviceId: String, completion: @escaping (Result<String, Error>) -> Void) {
+        // ApiHelper to create a request, guard to check that the request is valid
         guard let request = ApiHelper.createRequest(
-            url: "http://192.168.1.140/",
+            url: "http://localhost:8000/api/v1/auth-tokens/scan",
             method: "POST",
-            body: ["rfcData": rfcData, "deviceId": deviceId]
+            body: ["tag_id": tagData, "device_id": deviceId]
         ) else {
             completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
             return

@@ -11,23 +11,23 @@ struct ContentView: View {
     // Theme for dark mode
     @State private var isDarkMode = false
     
-    
     var body: some View {
         TabView {
             
-            // Home Tab
+            // Home
             HomeView()
                 .tabItem {
-                    Image(systemName: "house")
-                    Text("home")
+                    Image(systemName: "rectangle.and.text.magnifyingglass")
+                    Text("Reader")
                 }
             
-            // Settings Tab
+            // Settings
             SettingsView(isDarkMode: $isDarkMode)
                 .tabItem {
                     Image(systemName: "gear")
                     Text("Settings")
                 }
+            
         }
         //Theme
         .preferredColorScheme(isDarkMode ? .dark : .light)
@@ -36,8 +36,13 @@ struct ContentView: View {
 }
 
 struct HomeView: View {
-    @State private var rfcData: String = ""
     @State private var responseMessage: String = ""
+    @State private var defaultTagId: String = "E16EE47D"
+    //@State private var tagId: String = ""
+    @State private var defaultDeviceId: String = "065CA9D0-7703-48A2-8FC1"
+    @State private var isDefaultTagId: Bool = true
+    @State private var isDefaultDeviceId: Bool = true
+    //@State private var deviceId: String = ""
     var body: some View {
         VStack {
             Text("Reader")
@@ -46,23 +51,39 @@ struct HomeView: View {
             
             Spacer()
             
+            // tag_id
+            VStack(alignment: .leading) {
+                Text("Tag ID")
+                    .font(.headline)
+                TextField("", text: $defaultTagId, onEditingChanged: { isEditing in
+                    if isEditing {
+                        isDefaultTagId = false
+                    }
+                })
+                .foregroundColor(isDefaultTagId ? .gray : .primary)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+            }
+            
+            .padding()
+            
+            // device_id
+            VStack(alignment: .leading) {
+                Text("Device ID")
+                    .font(.headline)
+                TextField("", text: $defaultDeviceId, onEditingChanged: { isEditing in
+                    if isEditing {
+                        isDefaultDeviceId = false
+                    }
+                })
+                .foregroundColor(isDefaultDeviceId ? .gray : .primary)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+            }
+            .padding()
             
             Button(action: {
-                handleNFC()
+                sendDataToApi(tag_id: defaultTagId, device_id: defaultDeviceId)
             }) {
-                Text("NFC")
-                    .font(.headline)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-            }
-            .padding(.horizontal)
-            Button(action: {
-                handleRFID()
-            }) {
-                Text("RFID")
+                Text("SCAN")
                     .font(.headline)
                     .padding()
                     .frame(maxWidth: .infinity)
@@ -81,50 +102,35 @@ struct HomeView: View {
         .padding()
     }
     
-    //NFC
-    private func handleNFC() {
-        let nfcData = simulateData() // Simulated NFC data
-        print("NFC Emulation Data: \(nfcData)")
-        sendDataToApi(data: nfcData, emulationType: "NFC")
-    }
-    //RFC
-    private func handleRFID() {
-        let rfidData = simulateData()
-        print("RFID Emulation Data: \(rfidData)")
-        sendDataToApi(data: rfidData, emulationType: "RFID")
-    }
-    
     // Send Data to API
-    private func sendDataToApi(data: String, emulationType: String) {
+    private func sendDataToApi(tag_id: String, device_id: String) {
         // get the deviceId
-        guard let deviceId = UIDevice.current.identifierForVendor?.uuidString else {
-            responseMessage = "Error: Unable to fetch device ID"
+        /*guard let deviceId = UIDevice.current.identifierForVendor?.uuidString else {
+         responseMessage = "Error: Unable to fetch device ID"
+         return
+         }*/
+        
+        guard !defaultTagId.isEmpty, !defaultDeviceId.isEmpty else {
+            responseMessage = "Error: Please enter Tag ID and Device ID!"
             return
         }
-        print("Device ID:", deviceId)
-
-        // API call with RFID/NFC data and device ID
-        Api.shared.sendData(rfcData: data, deviceId: deviceId) { result in
+        
+        print("Tag ID: \(defaultTagId), Device ID: \(defaultDeviceId)")
+        print("Device ID:", defaultDeviceId)
+        
+        // API call with RFID data and device ID
+        Api.shared.sendData(tagData: tag_id, deviceId: defaultDeviceId) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let response):
-                    responseMessage = "\(emulationType) Success: \(response)"
+                    responseMessage = "Success: \(response)"
                 case .failure(let error):
-                    responseMessage = "\(emulationType) Error: \(error.localizedDescription)"
+                    responseMessage = "Error: \(error.localizedDescription)"
                 }
             }
         }
-        
-
     }
-
     
-    private func simulateData() -> String {
-        // Simulated random RFC data
-        let randomRFC = UUID().uuidString.prefix(8)
-        print("Generated number: ", randomRFC)
-        return String(randomRFC)
-    }
 }
 
 struct SettingsView: View {
