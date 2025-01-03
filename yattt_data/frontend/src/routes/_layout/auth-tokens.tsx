@@ -99,7 +99,7 @@ function AuthTokensTable() {
                       <Td>{auth_token.tag_id}</Td>
                       <Td>{auth_token.device_id}</Td>
                       <Td>{auth_token.scanned_in.toString()}</Td>
-                      <Td>{auth_token.scanned_out.toString()}</Td>
+                      <Td>{auth_token.scanned_out ? auth_token.scanned_out.toString(): "-"}</Td>
                       <Td color={!auth_token.description ? 'gray.400' : 'inherit'}>
                         {auth_token.description || 'N/A'}
                       </Td>

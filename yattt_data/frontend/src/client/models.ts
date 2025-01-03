@@ -21,7 +21,7 @@ export type AuthTokenPublic = {
   tag_id: string;
   device_id: string;
   scanned_in: Date;
-  scanned_out: Date;
+  scanned_out: Date | null;
   description?: (string | null);
   id: string;
 }

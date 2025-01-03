@@ -1,4 +1,5 @@
 import uuid
+from datetime import datetime, timezone
 from typing import Any
 
 from fastapi import APIRouter, HTTPException
@@ -107,23 +108,47 @@ def delete_auth_token(
     session.commit()
     return Message(message="Auth Token deleted successfully")
 
-@router.post("/scanin")
-def scan_in(session: SessionDep, tag_info: AuthTokenScanned) -> Message:
+@router.post("/scan")
+def scan(session: SessionDep, tag_info: AuthTokenScanned) -> Message:
     """
-    Scan in an auth token(create it in the db), check if is already scanned in or not allowed.
+    Handle both scanning in and scanning out of an auth token.
+    - If the token is already scanned in and not scanned out, scan it out.
+    - If the token is not scanned in, scan it in.
     """
-    # Print the received values
+    # Print the received values for debugging
     print(f"Received tagId: {tag_info.tag_id}, deviceId: {tag_info.device_id}")
 
-    db_auth_token = session.execute(select(AuthToken).where(AuthToken.tag_id == tag_info.tag_id)).first()
-    # Placeholder logic for determining response status
-    if db_auth_token:
-        return Message(status="ALREADY_SCANNED")
-    elif tag_info.device_id == "another_specific_value":
-        return Message(status="NOT_ALLOWED")
+    # Fetch the auth token from the database
+    db_auth_token = session.execute(
+        select(AuthToken)
+        .where(AuthToken.tag_id == tag_info.tag_id)
+        .where(AuthToken.device_id == tag_info.device_id)
+        .order_by(AuthToken.id.desc())
+    ).scalars().first()
+
+    if db_auth_token and db_auth_token.scanned_out is None:
+        # Token is already scanned in, perform scan out
+        db_auth_token.scanned_out = datetime.now(timezone.utc)
+        try:
+            session.add(db_auth_token)
+            session.commit()
+        except Exception as e:
+            session.rollback()
+            print(f"Error updating database: {e}")
+            raise HTTPException(status_code=500, detail="Failed to update the database.")
+
+        return Message(message="SCANNED_OUT")
+
     else:
+        # Token is not scanned in, perform scan in
         new_auth_token = AuthToken(tag_id=tag_info.tag_id, device_id=tag_info.device_id)
-        session.add(new_auth_token)
-        session.commit()
-        session.refresh(new_auth_token)
-        return Message(status="SCANNED_IN")
+        try:
+            session.add(new_auth_token)
+            session.commit()
+            session.refresh(new_auth_token)
+        except Exception as e:
+            session.rollback()
+            print(f"Error inserting into database: {e}")
+            raise HTTPException(status_code=500, detail="Failed to insert into the database.")
+
+        return Message(message="SCANNED_IN")
