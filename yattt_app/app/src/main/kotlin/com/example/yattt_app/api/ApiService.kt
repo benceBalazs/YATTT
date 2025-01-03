@@ -6,9 +6,9 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 
 data class TagInfo(val tag_id: String, val device_id: String)
-data class ResponseModel(val status: String)
+data class ResponseModel(val message: String)
 
 interface ApiService {
-    @POST("api/v1/auth-tokens/scanin")
+    @POST("api/v1/auth-tokens/scan")
     fun submitTagInfo(@Header("Authorization") authToken: String, @Body tagInfo: TagInfo): Call<ResponseModel>
 }
