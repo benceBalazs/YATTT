@@ -1,8 +1,6 @@
 use std::sync::LazyLock;
 
 use surrealdb::engine::remote::ws::{Client, Ws};
-use surrealdb::opt::auth::Root;
-use surrealdb::sql::Value;
 use surrealdb::Error as SurrealDbError;
 use surrealdb::Surreal;
 
@@ -32,72 +30,84 @@ const ENTRY_LV_NAME: &str = "lv_name";
 const ENTRY_START_TIME: &str = "start_time";
 const ENTRY_END_TIME: &str = "end_time";
 
-pub async fn connect(url: &str) -> Result<(), Box<dyn std::error::Error>> {
-    DB.connect::<Ws>(url).await?;
-
-    // Sign in with a username and password
-    DB.signin(Root {
-        username: &crate::DB_USERNAME,
-        password: &crate::DB_PASSWORD,
-    })
-    .await
-    .expect("Failed to sign in to SurrealDB");
-
-    // Select the namespace and database
-    DB.use_ns(NAMESPACE)
-        .use_db(DATABASE)
-        .await
-        .expect("Failed to select namespace and database");
-    Ok(())
+#[derive(Debug, Clone)]
+pub struct SurrealDbBackend {
+    client: Surreal<Client>,
 }
+
+impl SurrealDbBackend {
+    pub async fn new(
+        url: &str,
+        credentials: surrealdb::opt::auth::Root<'_>,
+        namespace: &str,
+        database: &str,
+    ) -> Result<Self, SurrealDbError> {
+        let client = Surreal::new::<Ws>(url).await?;
+        client
+            .signin(surrealdb::opt::auth::Root {
+                username: credentials.username,
+                password: credentials.password,
+            })
+            .await?;
+        client.use_ns(namespace).use_db(database).await?;
+        Ok(Self { client })
+    }
+}
+
+
+impl UserRepository for SurrealDbBackend {
+    type Error = SurrealDbError;
+    async fn create(&self, user: SignInData) -> Result<Option<User>, Self::Error> {
+        // Insert the user into the database
+        let query = format!(
+            "INSERT INTO {TABLE_USER} ({ENTRY_USERNAME}, {ENTRY_PASSWORD}) VALUES ('{}', '{}')",
+            user.username, user.password
+        );
+
+        let mut result = self.client.query(query).await?.check()?;
+
+        let res: Option<User> = result.take(0)?;
+
+        Ok(res)
+    }
+    async fn get_by_id(&self, id: &str) -> Result<Option<User>, Self::Error> {
+        let query = format!("SELECT * FROM {TABLE_USER} WHERE {ENTRY_USER_ID} = '{id}'");
+        let mut result = self.client.query(query).await?.check()?;
+
+        let res: Option<User> = result.take(0)?;
+
+        Ok(res)
+    }
+    async fn get_by_username(&self, username: &str) -> Result<Option<User>, Self::Error> {
+        let query = format!("SELECT * FROM {TABLE_USER} WHERE {ENTRY_USERNAME} = '{username}'");
+        let mut result = self.client.query(query).await?.check()?;
+
+        let res: Option<User> = result.take(0)?;
+
+        Ok(res)
+    }
+}
+
+
+impl From<SurrealDbError> for crate::error::AppError {
+    fn from(err: SurrealDbError) -> Self {
+        match err {
+            SurrealDbError::Api(ref api_err) => match api_err {
+                surrealdb::error::Api::Query(ref msg) if msg.contains("not found") => crate::error::AppError::NotFound,
+                _ => crate::error::AppError::DatabaseError(err.to_string()),
+            },
+            _ => crate::error::AppError::DatabaseError(err.to_string()),
+        }
+    }
+}
+
+
+
 
 use crate::models::user::User;
 use crate::routes::auth::SignInData;
-use surrealdb::opt::Resource;
 
-pub async fn create_user(user: SignInData) -> Result<Option<User>, surrealdb::Error> {
-    // Insert the user into the database
-    let query = format!(
-        "INSERT INTO {TABLE_USER} ({ENTRY_USERNAME}, {ENTRY_PASSWORD}) VALUES ('{}', '{}')",
-        user.username, user.password
-    );
+// use crate::models::attendance::{self, Attendance};
+// use crate::models::card::Card;
 
-    let mut result = DB.query(query).await?.check()?;
-
-    let res: Option<User> = result.take(0)?;
-
-    Ok(res)
-}
-
-pub async fn check_user(username: &str) -> Result<Option<User>, SurrealDbError> {
-    // Query to find a matching user
-    let query = format!(
-        "SELECT * FROM {TABLE_USER} WHERE {ENTRY_USERNAME} = '{}'",
-        username
-    );
-
-    let mut response = DB.query(&query).await?.check()?;
-
-    if response.num_statements() > 0_usize {
-        return response.take::<Option<User>>(0);
-    }
-
-    Ok(None) // No matching user
-}
-
-pub async fn check_user_by_id(user_id: &str) -> Result<Option<User>, SurrealDbError> {
-    // Query to find a matching user
-    let query = format!("SELECT * FROM ONLY {TABLE_USER}:{};", user_id);
-
-    let mut response = DB.query(&query).await?.check()?;
-
-    if response.num_statements() > 0_usize {
-        return response.take::<Option<User>>(0);
-    }
-
-    Ok(None) // No matching user
-}
-
-use crate::models::card::Card;
-
-use crate::models::attendance::{self, Attendance};
+use super::repositories::UserRepository;
