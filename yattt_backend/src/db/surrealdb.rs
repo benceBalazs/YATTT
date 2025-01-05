@@ -1,13 +1,9 @@
-use std::sync::LazyLock;
 
 
 use crate::db::db_constants::*;
 use surrealdb::engine::remote::ws::{Client, Ws};
 use surrealdb::Error as SurrealDbError;
 use surrealdb::Surreal;
-
-pub static DB: LazyLock<Surreal<Client>> = LazyLock::new(Surreal::init);
-
 
 #[derive(Debug, Clone)]
 pub struct SurrealDbBackend {

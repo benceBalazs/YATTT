@@ -1,26 +1,21 @@
-use crate::models::user::User;
 use crate::encryption::PasswordEncrypter;
 use crate::jwt::{Claims, TokenEncoder};
+use crate::models::auth::TokenResponse;
+use crate::{db::repositories::UserRepository, models::user};
+use crate::{YatttAppState, YatttEncrypter};
 use axum::{
     body::Body,
-    extract::{Json, Request},
+    extract::{Json, Request, State},
     http::{self, Response, StatusCode},
     middleware::Next,
     response::IntoResponse,
     Extension,
 };
-use bcrypt::{hash, verify, DEFAULT_COST};
 use chrono::{Duration, Utc};
 use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, TokenData, Validation};
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 use serde_json::json;
 use utoipa::{IntoParams, ToSchema};
-
-#[derive(Serialize)]
-pub struct TokenResponse {
-    access_token: String,
-    token_type: String,
-}
 
 // Define a structure for holding sign-in data
 #[derive(Deserialize, IntoParams, ToSchema)]
@@ -89,7 +84,6 @@ pub async fn auth_login_handler(
     Json(user_data): Json<SignInData>,
 ) -> Result<Json<TokenResponse>, StatusCode> {
     // Attempt to retrieve user information based on the provided user_data
-    let db_result = crate::db::surrealdb::check_user(&user_data.username).await;
 
     // Handle database errors
     let Ok(found_user) = db_result else {
@@ -102,8 +96,7 @@ pub async fn auth_login_handler(
     };
 
     // Verify the password provided against the stored hash
-    if !verify_password(&user_data.password, &correct_user.password)
-        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?
+
     // Handle bcrypt errors
     if !crate::encryption::BcryptPasswordEncrypter::verify_password(
         &user_data.password,
@@ -147,8 +140,6 @@ pub async fn auth_register_handler(
     // hash password
     user.password = hash_password(&user.password).map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
 
-    // Attempt to create the user
-    let db_result = crate::db::surrealdb::create_user(user).await;
     // Hash the password
     user.password =
         YatttEncrypter::hash_password(&user.password).ok_or(AppError::InternalServerError)?;
@@ -178,12 +169,6 @@ pub async fn auth_register_handler(
         .ok_or(AppError::InternalServerError)?;
 
     // Return the token as a JSON-wrapped string
-    Ok(Json(TokenResponse {
-        access_token: token,
-        token_type: "Bearer".to_string(),
-    }))
-}
-
     Ok((
         StatusCode::CREATED,
         Json(TokenResponse {
@@ -194,6 +179,7 @@ pub async fn auth_register_handler(
 }
 
 pub async fn authorization_layer(
+    State(state): State<crate::YatttAppState>,
     mut req: Request,
     next: Next,
 ) -> Result<Response<Body>, AuthError> {
@@ -219,7 +205,7 @@ pub async fn authorization_layer(
         })?;
 
     // Attempt to retrieve user information based on the provided user_data
-    let db_result = crate::db::surrealdb::check_user_by_id(&token_data.claims.user_id).await;
+    let db_result = state.db.get_by_id(&token_data.user_id).await;
 
     // Handle database errors
     let Ok(found_user) = db_result else {

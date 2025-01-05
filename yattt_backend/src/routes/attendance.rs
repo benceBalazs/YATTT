@@ -11,7 +11,7 @@ pub struct CurrentUser {
 
 // TODO documentation
 pub async fn attendance_create_handler(
-    Json(attendance_data): Json<AttendanceRequest>,
+    Json(_attendance_data): Json<AttendanceRequest>,
 ) -> (StatusCode, String) {
     // // Attempt to retrieve user information based on the provided user_data
     // let db_result = crate::db::surrealdb::get_user_by_tag_id(&attendance_data.tag_id).await;
