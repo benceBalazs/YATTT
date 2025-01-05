@@ -1,34 +1,13 @@
 use std::sync::LazyLock;
 
+
+use crate::db::db_constants::*;
 use surrealdb::engine::remote::ws::{Client, Ws};
 use surrealdb::Error as SurrealDbError;
 use surrealdb::Surreal;
 
 pub static DB: LazyLock<Surreal<Client>> = LazyLock::new(Surreal::init);
 
-// Database related constants
-const NAMESPACE: &str = "yattt_backend";
-const DATABASE: &str = "yattt_backend";
-
-// Table related constants
-const TABLE_USER: &str = "User";
-const TABLE_ATTENDANCE: &str = "Attendance";
-const TABLE_CARD: &str = "Card";
-const TABLE_LECTURE: &str = "Lecture";
-
-// Table entry related constants
-const ENTRY_USERNAME: &str = "username";
-const ENTRY_PASSWORD: &str = "password";
-const ENTRY_USER_ID: &str = "user_id";
-const ENTRY_DEVICE_ID: &str = "device_id";
-const ENTRY_TAG_ID: &str = "tag_id";
-const ENTRY_CARD_NAME: &str = "card_name";
-const ENTRY_CHECK_IN_TIME: &str = "check_in_time";
-const ENTRY_CHECK_OUT_TIME: &str = "check_out_time";
-const ENTRY_DURATION: &str = "duration";
-const ENTRY_LV_NAME: &str = "lv_name";
-const ENTRY_START_TIME: &str = "start_time";
-const ENTRY_END_TIME: &str = "end_time";
 
 #[derive(Debug, Clone)]
 pub struct SurrealDbBackend {
