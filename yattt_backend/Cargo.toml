@@ -3,6 +3,18 @@ name = "yattt_backend"
 version = "0.2.0"
 edition = "2021"
 
+[features]
+default = []
+test = []
+
+[lib]
+name = "yattt_backend"
+path = "src/lib.rs"
+
+[[bin]]
+name = "yattt_backend_bin"
+path = "src/main.rs"
+
 [dependencies]
 # web framework
 axum = "0.7"
@@ -44,6 +56,7 @@ jsonwebtoken = "9.3.0"
 
 # error handling 
 thiserror = "2.0.6"
+serial_test = "3.2.0"
 
 
 [profile.release]
@@ -52,3 +65,9 @@ strip = true
 opt-level = 3
 panic = 'abort'
 codegen-units = 1
+
+[dev-dependencies]
+pretty_assertions = "1.4.1"
+regex = "1.11.1"
+reqwest = { version = "0.12.9", features = ["json"] }
+rstest = "0.23.0"
