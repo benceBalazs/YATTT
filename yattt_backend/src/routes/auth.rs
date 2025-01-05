@@ -1,4 +1,5 @@
 use crate::encryption::PasswordEncrypter;
+use crate::error::AppError;
 use crate::jwt::{Claims, TokenEncoder};
 use crate::models::auth::TokenResponse;
 use crate::{db::repositories::UserRepository, models::user};
@@ -81,18 +82,19 @@ pub async fn auth_token_handler(
     )
 )]
 pub async fn auth_login_handler(
+    State(state): State<YatttAppState>,
     Json(user_data): Json<SignInData>,
-) -> Result<Json<TokenResponse>, StatusCode> {
+) -> Result<Json<TokenResponse>, AppError> {
     // Attempt to retrieve user information based on the provided user_data
-
-    // Handle database errors
-    let Ok(found_user) = db_result else {
-        return Err(StatusCode::INTERNAL_SERVER_ERROR);
-    };
+    let found_user = state
+        .db
+        .get_by_username(&user_data.username)
+        .await
+        .map_err(AppError::from)?;
 
     // User not found, return unauthorized status
     let Some(correct_user) = found_user else {
-        return Err(StatusCode::UNAUTHORIZED);
+        return Err(AppError::Unauthorized);
     };
 
     // Verify the password provided against the stored hash
@@ -107,7 +109,7 @@ pub async fn auth_login_handler(
 
     // user entry has no key
     let Some(user_thing) = correct_user.id else {
-        return Err(StatusCode::INTERNAL_SERVER_ERROR);
+        return Err(AppError::InternalServerError);
     };
 
     // Generate a JWT token for the authenticated user
@@ -131,37 +133,36 @@ pub async fn auth_login_handler(
         (status = 200, description = "Successful re-authentication by user"),
         (status = 400, description = "Bad Request, User sent malformed request"),
         (status = 401, description = "Unauthorized, User not authorized to use this route"),
+        (status = 415, description = "Unsupported Media Type, User sent malformed request"),
         (status = 500, description = "Internal Server Error, Something went wrong on the APIs side - try later again")
     )
 )]
 pub async fn auth_register_handler(
+    State(state): State<YatttAppState>,
     Json(mut user): Json<SignInData>,
-) -> Result<Json<TokenResponse>, StatusCode> {
-    // hash password
-    user.password = hash_password(&user.password).map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+) -> Result<(StatusCode, Json<TokenResponse>), AppError> {
+    // Verify the input length 
+    if user.password.len() < 8 || user.username.len() < 3 {
+        return Err(AppError::BadRequest);
+    };
 
     // Hash the password
     user.password =
         YatttEncrypter::hash_password(&user.password).ok_or(AppError::InternalServerError)?;
 
-    // Handle database errors
-    let Ok(created_user_maybe) = db_result else {
-        tracing::error!("Error creating user: {:?}", db_result.unwrap_err());
-        return Err(StatusCode::INTERNAL_SERVER_ERROR);
-    };
+    // Attempt to create the user
+    let possible_user = state.db.create(user).await.map_err(AppError::from)?;
 
     // User not found, return unauthorized status
-    let Some(created_user) = created_user_maybe else {
-        tracing::error!("User not created: {:?}", created_user_maybe);
-        return Err(StatusCode::INTERNAL_SERVER_ERROR);
+    let Some(created_user) = possible_user else {
+        tracing::error!("User not created: {:?}", possible_user);
+        return Err(AppError::InternalServerError);
     };
-
-    dbg!(&created_user);
 
     // user entry has no key
     let Some(user_thing) = created_user.id else {
         tracing::error!("User Entry {:?} has no key", created_user);
-        return Err(StatusCode::INTERNAL_SERVER_ERROR);
+        return Err(AppError::InternalServerError);
     };
 
     // Generate a JWT token for the authenticated user

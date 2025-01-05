@@ -77,7 +77,6 @@ pub async fn card_retrieve_handler() -> Json<CardRetrieveHandlerResponse> {
 pub async fn card_modify_handler(Path(CardRequest { tag_id, name }): Path<CardRequest>) -> (StatusCode, String) {
     let response: StatusCode = StatusCode::INTERNAL_SERVER_ERROR;
     // TODO modify requested card & return status
-    
     (response, "success".to_string())
 }
 
