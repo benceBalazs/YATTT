@@ -1,4 +1,5 @@
 use crate::models::user::User;
+use crate::encryption::PasswordEncrypter;
 use crate::jwt::{Claims, TokenEncoder};
 use axum::{
     body::Body,
@@ -104,8 +105,11 @@ pub async fn auth_login_handler(
     if !verify_password(&user_data.password, &correct_user.password)
         .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?
     // Handle bcrypt errors
-    {
-        return Err(StatusCode::UNAUTHORIZED); // Password verification failed, return unauthorized status
+    if !crate::encryption::BcryptPasswordEncrypter::verify_password(
+        &user_data.password,
+        &correct_user.password,
+    ) {
+        return Err(AppError::Unauthorized); // Password verification failed, return unauthorized status
     }
 
     // user entry has no key
@@ -114,8 +118,8 @@ pub async fn auth_login_handler(
     };
 
     // Generate a JWT token for the authenticated user
-    let token =
-        encode_jwt(user_thing.id.to_string()).map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+    let token = crate::YatttEncoder::encode_jwt(user_thing.id.to_string())
+        .ok_or(AppError::InternalServerError)?;
 
     // Return the token as a JSON-wrapped string
     Ok(Json(TokenResponse {
@@ -145,6 +149,9 @@ pub async fn auth_register_handler(
 
     // Attempt to create the user
     let db_result = crate::db::surrealdb::create_user(user).await;
+    // Hash the password
+    user.password =
+        YatttEncrypter::hash_password(&user.password).ok_or(AppError::InternalServerError)?;
 
     // Handle database errors
     let Ok(created_user_maybe) = db_result else {
@@ -175,15 +182,6 @@ pub async fn auth_register_handler(
         access_token: token,
         token_type: "Bearer".to_string(),
     }))
-}
-
-pub fn verify_password(password: &str, hash: &str) -> Result<bool, bcrypt::BcryptError> {
-    verify(password, hash)
-}
-
-pub fn hash_password(password: &str) -> Result<String, bcrypt::BcryptError> {
-    let hash = hash(password, DEFAULT_COST)?;
-    Ok(hash)
 }
 
     Ok((
