@@ -1,4 +1,5 @@
 use crate::models::user::User;
+use crate::jwt::{Claims, TokenEncoder};
 use axum::{
     body::Body,
     extract::{Json, Request},
@@ -18,14 +19,6 @@ use utoipa::{IntoParams, ToSchema};
 pub struct TokenResponse {
     access_token: String,
     token_type: String,
-}
-
-#[derive(Clone, Serialize, Deserialize)]
-// Define a structure for holding claims data used in JWT tokens
-pub struct Claims {
-    pub exp: usize,
-    pub iat: usize,
-    pub user_id: String,
 }
 
 // Define a structure for holding sign-in data
@@ -65,11 +58,11 @@ impl IntoResponse for AuthError {
     )
 )]
 pub async fn auth_token_handler(
-    Extension(user_data): Extension<TokenData<Claims>>,
+    Extension(user_data): Extension<TokenData<crate::jwt::Claims>>,
 ) -> Result<Json<TokenResponse>, StatusCode> {
     // Generate a JWT token for the authenticated user
-    let token =
-        encode_jwt(user_data.claims.user_id).map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?; // Handle JWT encoding errors
+    let token = crate::YatttEncoder::encode_jwt(user_data.claims.user_id)
+        .ok_or(StatusCode::INTERNAL_SERVER_ERROR)?; // Handle JWT encoding errors
 
     // Return the token as a JSON-wrapped string
     Ok(Json(TokenResponse {
@@ -174,8 +167,8 @@ pub async fn auth_register_handler(
     };
 
     // Generate a JWT token for the authenticated user
-    let token =
-        encode_jwt(user_thing.id.to_string()).map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+    let token = crate::YatttEncoder::encode_jwt(user_thing.id.to_string())
+        .ok_or(AppError::InternalServerError)?;
 
     // Return the token as a JSON-wrapped string
     Ok(Json(TokenResponse {
@@ -193,29 +186,13 @@ pub fn hash_password(password: &str) -> Result<String, bcrypt::BcryptError> {
     Ok(hash)
 }
 
-pub fn encode_jwt(user_id: String) -> Result<String, StatusCode> {
-    let now = Utc::now();
-    let expire: chrono::TimeDelta = Duration::hours(24);
-    let exp: usize = (now + expire).timestamp() as usize;
-    let iat: usize = now.timestamp() as usize;
-    let claim = Claims { iat, exp, user_id };
-
-    encode(
-        &Header::default(),
-        &claim,
-        &EncodingKey::from_secret(crate::JWT_SECRET.as_bytes()),
-    )
-    .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)
-}
-
-pub fn decode_jwt(token: String) -> Result<TokenData<Claims>, StatusCode> {
-    let result: Result<TokenData<Claims>, StatusCode> = decode(
-        &token,
-        &DecodingKey::from_secret(crate::JWT_SECRET.as_bytes()),
-        &Validation::default(),
-    )
-    .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR);
-    result
+    Ok((
+        StatusCode::CREATED,
+        Json(TokenResponse {
+            access_token: token,
+            token_type: "Bearer".to_string(),
+        }),
+    ))
 }
 
 pub async fn authorization_layer(
@@ -237,15 +214,11 @@ pub async fn authorization_layer(
     };
     let mut header = auth_header.split_whitespace();
     let (_bearer, token) = (header.next(), header.next());
-    let token_data = match decode_jwt(token.unwrap().to_string()) {
-        Ok(data) => data,
-        Err(_) => {
-            return Err(AuthError {
-                message: "Unable to decode token".to_string(),
-                status_code: StatusCode::UNAUTHORIZED,
-            })
-        }
-    };
+    let token_data =
+        crate::YatttEncoder::decode_jwt(token.unwrap().to_string()).ok_or(AuthError {
+            message: "Unable to decode token".to_string(),
+            status_code: StatusCode::UNAUTHORIZED,
+        })?;
 
     // Attempt to retrieve user information based on the provided user_data
     let db_result = crate::db::surrealdb::check_user_by_id(&token_data.claims.user_id).await;
