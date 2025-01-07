@@ -28,3 +28,15 @@ pub trait CardRepository {
         card_id: &str,
     ) -> Result<Option<crate::models::card::Card>, Self::Error>;
 }
+
+#[allow(async_fn_in_trait)]
+pub trait AttendanceRepository {
+    type Error;
+    async fn create(
+        &self,
+        attendance: crate::models::attendance::Attendance,
+    ) -> Result<Option<crate::models::attendance::Attendance>, Self::Error>;
+    async fn get_attendances(
+        &self,
+    ) -> Result<Vec<crate::models::attendance::Attendance>, Self::Error>;
+}
