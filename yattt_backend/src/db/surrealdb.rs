@@ -1,5 +1,3 @@
-
-
 use crate::db::db_constants::*;
 use surrealdb::engine::remote::ws::{Client, Ws};
 use surrealdb::Error as SurrealDbError;
@@ -30,7 +28,7 @@ impl SurrealDbBackend {
 }
 
 
-impl UserRepository for SurrealDbBackend {
+impl super::repositories::UserRepository for SurrealDbBackend {
     type Error = SurrealDbError;
     async fn create(&self, user: SignInData) -> Result<Option<User>, Self::Error> {
         // Insert the user into the database
@@ -63,6 +61,68 @@ impl UserRepository for SurrealDbBackend {
     }
 }
 
+impl super::repositories::CardRepository for SurrealDbBackend {
+    type Error = SurrealDbError;
+    
+    async fn create(
+        &self,
+        card: crate::models::card::Card,
+    ) -> Result<Option<crate::models::card::Card>, Self::Error> {
+        let query = format!(
+            "INSERT INTO {TABLE_CARD} ({ENTRY_USER_ID}, {ENTRY_TAG_ID}, {ENTRY_CARD_NAME}) VALUES ('{}', '{}', '{}')",
+            card.user, card.tag_id, card.name
+        );
+
+        let mut result = self.client.query(query).await?.check()?;
+
+        let res: Option<crate::models::card::Card> = result.take(0)?;
+
+        Ok(res)
+    }
+    
+    async fn get_cards(&self) -> Result<Vec<crate::models::card::Card>, Self::Error> {
+        let query = format!("SELECT * FROM {TABLE_CARD}");
+
+        let mut result = self.client.query(query).await?.check()?;
+
+        let res: Vec<crate::models::card::Card> = result.take(0)?;
+
+        Ok(res)
+    }
+    
+    async fn update_card(
+        &self,
+        card_id: &str,
+        card: crate::models::card::Card,
+    ) -> Result<Option<crate::models::card::Card>, Self::Error> {
+        let query = format!(
+            "UPDATE {TABLE_CARD} SET {ENTRY_USER_ID} = '{}', {ENTRY_TAG_ID} = '{}', {ENTRY_CARD_NAME} = '{}' WHERE id = '{}'",
+            card.user, card.tag_id, card.name, card_id
+        );
+
+        let mut result = self.client.query(query).await?.check()?;
+
+        let res: Option<crate::models::card::Card> = result.take(0)?;
+
+        Ok(res)
+    }
+    
+    async fn delete_card(
+        &self,
+        card_id: &str,
+    ) -> Result<Option<crate::models::card::Card>, Self::Error> {
+        let query = format!("DELETE FROM {TABLE_CARD} WHERE id = '{}'", card_id);
+
+        let mut result = self.client.query(query).await?.check()?;
+
+        let res: Option<crate::models::card::Card> = result.take(0)?;
+
+        Ok(res)
+    }
+    
+}
+
+
 
 impl From<SurrealDbError> for crate::error::AppError {
     fn from(err: SurrealDbError) -> Self {
@@ -85,4 +145,3 @@ use crate::routes::auth::SignInData;
 // use crate::models::attendance::{self, Attendance};
 // use crate::models::card::Card;
 
-use super::repositories::UserRepository;
