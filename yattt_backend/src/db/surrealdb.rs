@@ -27,7 +27,6 @@ impl SurrealDbBackend {
     }
 }
 
-
 impl super::repositories::UserRepository for SurrealDbBackend {
     type Error = SurrealDbError;
     async fn create(&self, user: SignInData) -> Result<Option<User>, Self::Error> {
@@ -63,7 +62,7 @@ impl super::repositories::UserRepository for SurrealDbBackend {
 
 impl super::repositories::CardRepository for SurrealDbBackend {
     type Error = SurrealDbError;
-    
+
     async fn create(
         &self,
         card: crate::models::card::Card,
@@ -79,7 +78,7 @@ impl super::repositories::CardRepository for SurrealDbBackend {
 
         Ok(res)
     }
-    
+
     async fn get_cards(&self) -> Result<Vec<crate::models::card::Card>, Self::Error> {
         let query = format!("SELECT * FROM {TABLE_CARD}");
 
@@ -89,7 +88,7 @@ impl super::repositories::CardRepository for SurrealDbBackend {
 
         Ok(res)
     }
-    
+
     async fn update_card(
         &self,
         card_id: &str,
@@ -106,7 +105,7 @@ impl super::repositories::CardRepository for SurrealDbBackend {
 
         Ok(res)
     }
-    
+
     async fn delete_card(
         &self,
         card_id: &str,
@@ -119,16 +118,47 @@ impl super::repositories::CardRepository for SurrealDbBackend {
 
         Ok(res)
     }
-    
 }
 
+impl super::repositories::AttendanceRepository for SurrealDbBackend {
+    type Error = SurrealDbError;
 
+    async fn create(
+        &self,
+        attendance: crate::models::attendance::Attendance,
+    ) -> Result<Option<crate::models::attendance::Attendance>, Self::Error> {
+        let query = format!(
+            "INSERT INTO {TABLE_ATTENDANCE} ({ENTRY_USER_ID}, {ENTRY_DEVICE_ID}, {ENTRY_CHECK_IN_TIME}, {ENTRY_CHECK_OUT_TIME}, {ENTRY_DURATION}) VALUES ({TABLE_USER}:{}, '{}', d'{}', d'{}', {})",
+            attendance.user, attendance.device_id, attendance.check_in_time, attendance.check_out_time, attendance.duration
+        );
+
+        let mut result = self.client.query(query).await?.check()?;
+
+        let res: Option<crate::models::attendance::Attendance> = result.take(0)?;
+
+        Ok(res)
+    }
+
+    async fn get_attendances(
+        &self,
+    ) -> Result<Vec<crate::models::attendance::Attendance>, Self::Error> {
+        let query = format!("SELECT * FROM {TABLE_ATTENDANCE}");
+
+        let mut result = self.client.query(query).await?.check()?;
+
+        let res: Vec<crate::models::attendance::Attendance> = result.take(0)?;
+
+        Ok(res)
+    }
+}
 
 impl From<SurrealDbError> for crate::error::AppError {
     fn from(err: SurrealDbError) -> Self {
         match err {
             SurrealDbError::Api(ref api_err) => match api_err {
-                surrealdb::error::Api::Query(ref msg) if msg.contains("not found") => crate::error::AppError::NotFound,
+                surrealdb::error::Api::Query(ref msg) if msg.contains("not found") => {
+                    crate::error::AppError::NotFound
+                }
                 _ => crate::error::AppError::DatabaseError(err.to_string()),
             },
             _ => crate::error::AppError::DatabaseError(err.to_string()),
@@ -136,12 +166,8 @@ impl From<SurrealDbError> for crate::error::AppError {
     }
 }
 
-
-
-
 use crate::models::user::User;
 use crate::routes::auth::SignInData;
 
 // use crate::models::attendance::{self, Attendance};
 // use crate::models::card::Card;
-
