@@ -22,6 +22,7 @@ pub trait CardRepository {
     async fn update_card(
         &self,
         card_id: &str,
+        card: crate::models::card::Card,
     ) -> Result<Option<crate::models::card::Card>, Self::Error>;
     async fn delete_card(
         &self,
