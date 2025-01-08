@@ -69,7 +69,7 @@ impl super::repositories::CardRepository for SurrealDbBackend {
         card: crate::models::card::Card,
     ) -> Result<Option<crate::models::card::Card>, Self::Error> {
         let query = format!(
-            "INSERT INTO {TABLE_CARD} ({ENTRY_USER_ID}, {ENTRY_TAG_ID}, {ENTRY_CARD_NAME}) VALUES ('{}', '{}', '{}')",
+            "INSERT INTO {TABLE_CARD} ({ENTRY_USER_ID}, {ENTRY_TAG_ID}, {ENTRY_CARD_NAME}) VALUES ({TABLE_USER}:{}, '{}', '{}')",
             card.user, card.tag_id, card.name
         );
 
@@ -96,7 +96,7 @@ impl super::repositories::CardRepository for SurrealDbBackend {
         card: crate::models::card::Card,
     ) -> Result<Option<crate::models::card::Card>, Self::Error> {
         let query = format!(
-            "UPDATE {TABLE_CARD} SET {ENTRY_USER_ID} = '{}', {ENTRY_TAG_ID} = '{}', {ENTRY_CARD_NAME} = '{}' WHERE id = '{}'",
+            "UPDATE {TABLE_CARD} SET {ENTRY_USER_ID} = {TABLE_USER}:{}, {ENTRY_TAG_ID} = '{}', {ENTRY_CARD_NAME} = '{}' WHERE id = '{}'",
             card.user, card.tag_id, card.name, card_id
         );
 
