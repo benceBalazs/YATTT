@@ -1,4 +1,6 @@
 use crate::db::db_constants::*;
+use crate::models::user::User;
+use crate::routes::auth::SignInData;
 use surrealdb::engine::remote::ws::{Client, Ws};
 use surrealdb::Error as SurrealDbError;
 use surrealdb::Surreal;
@@ -79,8 +81,14 @@ impl super::repositories::CardRepository for SurrealDbBackend {
         Ok(res)
     }
 
-    async fn get_cards(&self) -> Result<Vec<crate::models::card::Card>, Self::Error> {
-        let query = format!("SELECT * FROM {TABLE_CARD}");
+    async fn get_cards(
+        &self,
+        user_id: &str,
+    ) -> Result<Vec<crate::models::card::Card>, Self::Error> {
+        let query = format!(
+            "SELECT * FROM {TABLE_CARD} WHERE {ENTRY_USER_ID} = {TABLE_USER}:{USER_ID};",
+            USER_ID = user_id
+        );
 
         let mut result = self.client.query(query).await?.check()?;
 
@@ -93,10 +101,11 @@ impl super::repositories::CardRepository for SurrealDbBackend {
         &self,
         card_id: &str,
         card: crate::models::card::Card,
+        user_id: &str,
     ) -> Result<Option<crate::models::card::Card>, Self::Error> {
         let query = format!(
-            "UPDATE {TABLE_CARD} SET {ENTRY_USER_ID} = {TABLE_USER}:{}, {ENTRY_TAG_ID} = '{}', {ENTRY_CARD_NAME} = '{}' WHERE id = '{}'",
-            card.user, card.tag_id, card.name, card_id
+            "UPDATE {TABLE_CARD} SET {ENTRY_USER_ID} = {TABLE_USER}:{}, {ENTRY_TAG_ID} = '{}', {ENTRY_CARD_NAME} = '{}' WHERE id = {TABLE_CARD}:{}",
+            user_id, card.tag_id, card.name, card_id
         );
 
         let mut result = self.client.query(query).await?.check()?;
@@ -109,8 +118,9 @@ impl super::repositories::CardRepository for SurrealDbBackend {
     async fn delete_card(
         &self,
         card_id: &str,
+        user_id: &str,
     ) -> Result<Option<crate::models::card::Card>, Self::Error> {
-        let query = format!("DELETE FROM {TABLE_CARD} WHERE id = '{}'", card_id);
+        let query = format!("DELETE FROM {TABLE_CARD} WHERE id = {TABLE_CARD}:{} AND {ENTRY_USER_ID} = {TABLE_USER}:{};", card_id, user_id);
 
         let mut result = self.client.query(query).await?.check()?;
 
@@ -141,8 +151,9 @@ impl super::repositories::AttendanceRepository for SurrealDbBackend {
 
     async fn get_attendances(
         &self,
+        user_id: &str
     ) -> Result<Vec<crate::models::attendance::Attendance>, Self::Error> {
-        let query = format!("SELECT * FROM {TABLE_ATTENDANCE}");
+        let query = format!("SELECT * FROM {TABLE_ATTENDANCE} WHERE {ENTRY_USER_ID} = {TABLE_USER}:{USER_ID};", USER_ID = user_id);
 
         let mut result = self.client.query(query).await?.check()?;
 
@@ -165,9 +176,3 @@ impl From<SurrealDbError> for crate::error::AppError {
         }
     }
 }
-
-use crate::models::user::User;
-use crate::routes::auth::SignInData;
-
-// use crate::models::attendance::{self, Attendance};
-// use crate::models::card::Card;

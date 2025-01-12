@@ -18,15 +18,17 @@ pub trait CardRepository {
         &self,
         card: crate::models::card::Card,
     ) -> Result<Option<crate::models::card::Card>, Self::Error>;
-    async fn get_cards(&self) -> Result<Vec<crate::models::card::Card>, Self::Error>;
+    async fn get_cards(&self, user_id: &str) -> Result<Vec<crate::models::card::Card>, Self::Error>;
     async fn update_card(
         &self,
         card_id: &str,
         card: crate::models::card::Card,
+        user_id: &str
     ) -> Result<Option<crate::models::card::Card>, Self::Error>;
     async fn delete_card(
         &self,
         card_id: &str,
+        user_id: &str
     ) -> Result<Option<crate::models::card::Card>, Self::Error>;
 }
 
@@ -39,5 +41,6 @@ pub trait AttendanceRepository {
     ) -> Result<Option<crate::models::attendance::Attendance>, Self::Error>;
     async fn get_attendances(
         &self,
+        user_id: &str
     ) -> Result<Vec<crate::models::attendance::Attendance>, Self::Error>;
 }
