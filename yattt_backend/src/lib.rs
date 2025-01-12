@@ -30,7 +30,7 @@ pub type YatttEncrypter = crate::encryption::BcryptPasswordEncrypter;
 pub type YatttEncoder = crate::jwt::JWTEncoder;
 
 pub trait Backend {
-    type Db: db::repositories::UserRepository;
+    type Db: db::repositories::UserRepository + db::repositories::CardRepository + db::repositories::AttendanceRepository;
 }
 
 #[derive(Clone)]
