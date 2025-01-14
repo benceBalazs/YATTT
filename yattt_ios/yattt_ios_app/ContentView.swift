@@ -66,7 +66,7 @@ struct HomeView: View {
             
             .padding()
             
-            // device_id
+            // device_id, editing
             VStack(alignment: .leading) {
                 Text("Device ID")
                     .font(.headline)
