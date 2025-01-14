@@ -18,7 +18,11 @@ jobs:
         
     steps:
       - uses: actions/checkout@v4
-      
+      - name: Debug - List All Repository Files
+        run: |
+          echo "Repository File Structure:"
+          ls -R
+
       - name: Debug - Print project.pbxproj
         run: |
           echo "Printing the contents of project.pbxproj for debugging:"
