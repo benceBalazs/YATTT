@@ -114,7 +114,7 @@ struct HomeView: View {
             responseMessage = "Error: Please enter Tag ID and Device ID!"
             return
         }
-        
+        //debug
         print("Tag ID: \(defaultTagId), Device ID: \(defaultDeviceId)")
         print("Device ID:", defaultDeviceId)
         
