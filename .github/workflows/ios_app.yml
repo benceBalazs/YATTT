@@ -11,8 +11,6 @@ on:
       - main
     paths:
       - 'yattt_ios/**'
-    paths-ignore:
-      - '**/*'
 
 permissions:
   contents: read
