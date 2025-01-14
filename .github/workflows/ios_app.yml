@@ -19,20 +19,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Debug - List All Files in Repository
+      - name: Debug - Print project.pbxproj
         run: |
-          echo "Repository Files:"
-          ls -R
-      - name: Debug - Verify xcodeproj Path
-        run: |
-          echo "Checking if yattt_ios_app.xcodeproj exists in the root directory:"
-          if [ -e yattt_ios_app.xcodeproj ]; then
-            echo "Found yattt_ios_app.xcodeproj"
-          else
-            echo "Error: yattt_ios_app.xcodeproj not found"
-            exit 1
-          fi
-
+          echo "Printing the contents of project.pbxproj for debugging:"
+          cat yattt_ios_app.xcodeproj/project.pbxproj
             
       - name: Select Xcode version
         run: sudo xcode-select -s /Applications/Xcode_15.0.app/Contents/Developer
