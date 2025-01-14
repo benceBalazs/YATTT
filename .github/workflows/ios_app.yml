@@ -25,10 +25,8 @@ jobs:
           ls -R
       - name: Debug - Verify xcodeproj Path
         run: |
-          echo "Listing files in yattt_ios directory:"
-          ls -R yattt_ios
-          echo "Checking if yattt_ios_app.xcodeproj exists:"
-          if [ -e yattt_ios/yattt_ios_app.xcodeproj ]; then
+          echo "Checking if yattt_ios_app.xcodeproj exists in the root directory:"
+          if [ -e yattt_ios_app.xcodeproj ]; then
             echo "Found yattt_ios_app.xcodeproj"
           else
             echo "Error: yattt_ios_app.xcodeproj not found"
@@ -70,14 +68,9 @@ jobs:
 
       - name: Build App
         run: |
-          xcodebuild test \
+          xcodebuild clean archive \
             -project yattt_ios_app.xcodeproj \
             -scheme yattt_ios_app \
-            -sdk iphonesimulator \
-            -destination "platform=iOS Simulator,name=iPhone 16,OS=latest" \
-            -enableCodeCoverage YES
-
             -sdk iphoneos \
             -configuration Release \
-            -archivePath $PWD/build/yattt_ios_app.xcarchive \
-            archive
+            -archivePath $PWD/build/yattt_ios_app.xcarchive
