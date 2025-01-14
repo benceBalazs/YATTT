@@ -22,7 +22,24 @@ jobs:
         
     steps:
       - uses: actions/checkout@v4
+      
+      - name: Debug - List All Files in Repository
+        run: |
+          echo "Repository Files:"
+          ls -R
+      - name: Debug - Verify xcodeproj Path
+        run: |
+          echo "Listing files in yattt_ios directory:"
+          ls -R yattt_ios
+          echo "Checking if yattt_ios_app.xcodeproj exists:"
+          if [ -e yattt_ios/yattt_ios_app.xcodeproj ]; then
+            echo "Found yattt_ios_app.xcodeproj"
+          else
+            echo "Error: yattt_ios_app.xcodeproj not found"
+            exit 1
+          fi
 
+            
       - name: Select Xcode version
         run: sudo xcode-select -s /Applications/Xcode_15.0.app/Contents/Developer
 
