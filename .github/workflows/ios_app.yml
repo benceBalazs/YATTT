@@ -11,6 +11,8 @@ on:
       - main
     paths:
       - 'yattt_ios/**'
+    paths-ignore:
+      - '**/*'
 
 permissions:
   contents: read
@@ -68,16 +70,3 @@ jobs:
             -configuration Release \
             -archivePath $PWD/build/yattt_ios_app.xcarchive \
             archive
-
-      - name: Export IPA
-        run: |
-          xcodebuild -exportArchive \
-            -archivePath $PWD/build/yattt_ios_app.xcarchive \
-            -exportOptionsPlist ExportOptions.plist \
-            -exportPath $PWD/build/Export
-
-      - name: Upload IPA
-        uses: actions/upload-artifact@v4
-        with:
-          name: yattt_ios_app
-          path: $PWD/build/Export/*.ipa
