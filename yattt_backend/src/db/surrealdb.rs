@@ -31,7 +31,7 @@ impl SurrealDbBackend {
 
 impl super::repositories::UserRepository for SurrealDbBackend {
     type Error = SurrealDbError;
-    async fn create(&self, user: SignInData) -> Result<Option<User>, Self::Error> {
+    async fn create_user(&self, user: SignInData) -> Result<Option<User>, Self::Error> {
         // Insert the user into the database
         let query = format!(
             "INSERT INTO {TABLE_USER} ({ENTRY_USERNAME}, {ENTRY_PASSWORD}) VALUES ('{}', '{}')",
@@ -45,9 +45,8 @@ impl super::repositories::UserRepository for SurrealDbBackend {
         Ok(res)
     }
     async fn get_by_id(&self, id: &str) -> Result<Option<User>, Self::Error> {
-        let query = format!("SELECT * FROM {TABLE_USER} WHERE {ENTRY_USER_ID} = '{id}'");
+        let query = format!("SELECT * FROM {TABLE_USER} WHERE id = User:{id}");
         let mut result = self.client.query(query).await?.check()?;
-
         let res: Option<User> = result.take(0)?;
 
         Ok(res)
@@ -65,7 +64,7 @@ impl super::repositories::UserRepository for SurrealDbBackend {
 impl super::repositories::CardRepository for SurrealDbBackend {
     type Error = SurrealDbError;
 
-    async fn create(
+    async fn create_card(
         &self,
         card: crate::models::card::Card,
     ) -> Result<Option<crate::models::card::Card>, Self::Error> {
@@ -133,7 +132,7 @@ impl super::repositories::CardRepository for SurrealDbBackend {
 impl super::repositories::AttendanceRepository for SurrealDbBackend {
     type Error = SurrealDbError;
 
-    async fn create(
+    async fn create_attendance(
         &self,
         attendance: crate::models::attendance::Attendance,
     ) -> Result<Option<crate::models::attendance::Attendance>, Self::Error> {

@@ -1,6 +1,6 @@
 
 
-#[derive(Clone, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, serde::Serialize, serde::Deserialize, Debug)]
 // Define a structure for holding claims data used in JWT tokens
 pub struct Claims {
     pub exp: usize,

@@ -13,7 +13,7 @@ use axum::{
     Extension,
 };
 use chrono::{Duration, Utc};
-use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, TokenData, Validation};
+use jsonwebtoken::{DecodingKey, EncodingKey, Header, Validation};
 use serde::Deserialize;
 use serde_json::json;
 use utoipa::{IntoParams, ToSchema};
@@ -55,10 +55,11 @@ impl IntoResponse for AuthError {
     )
 )]
 pub async fn auth_token_handler(
-    Extension(user_data): Extension<TokenData<crate::jwt::Claims>>,
+    Extension(user_data): Extension<Claims>,
 ) -> Result<Json<TokenResponse>, StatusCode> {
     // Generate a JWT token for the authenticated user
-    let token = crate::YatttEncoder::encode_jwt(user_data.claims.user_id)
+
+    let token = crate::YatttEncoder::encode_jwt(user_data.user_id)
         .ok_or(StatusCode::INTERNAL_SERVER_ERROR)?; // Handle JWT encoding errors
 
     // Return the token as a JSON-wrapped string
@@ -151,7 +152,7 @@ pub async fn auth_register_handler(
         YatttEncrypter::hash_password(&user.password).ok_or(AppError::InternalServerError)?;
 
     // Attempt to create the user
-    let possible_user = state.db.create(user).await.map_err(AppError::from)?;
+    let possible_user = state.db.create_user(user).await.map_err(AppError::from)?;
 
     // User not found, return unauthorized status
     let Some(created_user) = possible_user else {
@@ -197,13 +198,19 @@ pub async fn authorization_layer(
             })
         }
     };
+
     let mut header = auth_header.split_whitespace();
     let (_bearer, token) = (header.next(), header.next());
+
     let token_data =
         crate::YatttEncoder::decode_jwt(token.unwrap().to_string()).ok_or(AuthError {
             message: "Unable to decode token".to_string(),
             status_code: StatusCode::UNAUTHORIZED,
         })?;
+
+    println!("{:?}", token_data);
+
+    let token_injector = token_data.clone();
 
     // Attempt to retrieve user information based on the provided user_data
     let db_result = state.db.get_by_id(&token_data.user_id).await;
@@ -224,6 +231,7 @@ pub async fn authorization_layer(
         });
     };
 
-    req.extensions_mut().insert(token_data.clone());
+    req.extensions_mut().insert(token_injector);
+
     Ok(next.run(req).await)
 }

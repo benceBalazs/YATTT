@@ -3,7 +3,7 @@ use crate::models::user::User;
 #[allow(async_fn_in_trait)]
 pub trait UserRepository {
     type Error;
-    async fn create(
+    async fn create_user(
         &self,
         user: crate::routes::auth::SignInData,
     ) -> Result<Option<User>, Self::Error>;
@@ -14,7 +14,7 @@ pub trait UserRepository {
 #[allow(async_fn_in_trait)]
 pub trait CardRepository {
     type Error;
-    async fn create(
+    async fn create_card(
         &self,
         card: crate::models::card::Card,
     ) -> Result<Option<crate::models::card::Card>, Self::Error>;
@@ -35,7 +35,7 @@ pub trait CardRepository {
 #[allow(async_fn_in_trait)]
 pub trait AttendanceRepository {
     type Error;
-    async fn create(
+    async fn create_attendance(
         &self,
         attendance: crate::models::attendance::Attendance,
     ) -> Result<Option<crate::models::attendance::Attendance>, Self::Error>;

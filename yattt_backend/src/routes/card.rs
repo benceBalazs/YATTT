@@ -1,14 +1,20 @@
+use crate::{
+    db::repositories::CardRepository,
+    error::AppError,
+    models::card::{Card, CardRequest},
+};
 use axum::{
-  Json,
-  extract::Path,
+    extract::{Path, State},
+    Extension, Json,
 };
 use hyper::StatusCode;
-use serde::{Serialize,Deserialize};
-use crate::models::card::CardRequest;
+use serde::{Deserialize, Serialize};
+use crate::db::repositories::UserRepository;
+use crate::jwt::Claims;
 
-#[derive(Serialize,Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct CardRetrieveHandlerResponse {
-    cards: Vec<CardRequest>
+    cards: Vec<Card>,
 }
 
 #[utoipa::path(
@@ -18,82 +24,126 @@ pub struct CardRetrieveHandlerResponse {
         CardRequest
     ),
     responses(
-        (status = 200, description = "Successful re-authentication by user"),
+        (status = 201, description = "Successful creation of card by user"),
         (status = 400, description = "Bad Request, User sent malformed request"),
         (status = 401, description = "Unauthorized, User not authorized to use this route"),
-        (status = 500, description = "Internal Server Error, Something went wrong on the APIs side - try later again")
+        (status = 500, description = "Internal Server Error, Something went wrong on the APIs side")
     ),
     security(
         ("token_jwt" = [])
     )
 )]
-pub async fn card_create_handler(Json(payload): Json<CardRequest>) -> (StatusCode, String) {
-    let response: StatusCode = StatusCode::INTERNAL_SERVER_ERROR;
-    // TODO handle card creation and set appropriate response
+pub async fn card_create_handler(
+    State(state): State<crate::YatttAppState>,
+    Extension(user_data): Extension<Claims>,
+    Json(payload): Json<CardRequest>,
+) -> Result<(StatusCode, Json<Card>), AppError> {
+    let user_id = user_data.user_id;
 
-    (response, "success".to_string())
+    let response = state
+        .db
+        .create_card(Card {
+            id: None,
+            user: user_id,
+            tag_id: payload.tag_id,
+            name: payload.name,
+        })
+        .await?;
+
+    let Some(response) = response else {
+        return Err(AppError::InternalServerError);
+    };
+
+    Ok((StatusCode::CREATED, Json(response)))
 }
 
 #[utoipa::path(
     get,
     path = "/cards",
     responses(
-        (status = 200, description = "Successful re-authentication by user"),
+        (status = 200, description = "Successful retrieval of card by user"),
         (status = 400, description = "Bad Request, User sent malformed request"),
         (status = 401, description = "Unauthorized, User not authorized to use this route"),
-        (status = 500, description = "Internal Server Error, Something went wrong on the APIs side - try later again")
+        (status = 500, description = "Internal Server Error, Something went wrong on the APIs side")
     ),
     security(
         ("token_jwt" = [])
     )
 )]
-pub async fn card_retrieve_handler() -> Json<CardRetrieveHandlerResponse> {
-    let testcard: CardRequest = CardRequest {
-      tag_id: "1234".to_string(),
-      name: "Default".to_string(), 
-    };
-    let response: CardRetrieveHandlerResponse = CardRetrieveHandlerResponse { cards: vec![testcard] };
-    // TODO fill response with normal data & get user info via axum extractor (see wiki)
-    
-    Json(response)
+pub async fn card_retrieve_handler(
+    State(state): State<crate::YatttAppState>,
+    Extension(user_data): Extension<Claims>,
+) -> Result<Json<CardRetrieveHandlerResponse>,AppError> {
+    let user_id = user_data.user_id;
+
+    let response = state.db.get_cards(&user_id).await?;
+
+    Ok(Json(CardRetrieveHandlerResponse { cards: response }))
 }
 
 #[utoipa::path(
     put,
-    path = "/cards/{tag_id}",
+    path = "/cards/{card_id}",
     params(
         CardRequest
     ),
     responses(
-        (status = 200, description = "Successful re-authentication by user"),
+        (status = 200, description = "Successful modification of card by user"),
         (status = 400, description = "Bad Request, User sent malformed request"),
         (status = 401, description = "Unauthorized, User not authorized to use this route"),
-        (status = 500, description = "Internal Server Error, Something went wrong on the APIs side - try later again")
+        (status = 500, description = "Internal Server Error, Something went wrong on the APIs side")
     ),
     security(
         ("token_jwt" = [])
     )
 )]
-pub async fn card_modify_handler(Path(CardRequest { tag_id, name }): Path<CardRequest>) -> (StatusCode, String) {
-    let response: StatusCode = StatusCode::INTERNAL_SERVER_ERROR;
-    // TODO modify requested card & return status
-    (response, "success".to_string())
+pub async fn card_modify_handler(
+    State(state): State<crate::YatttAppState>,
+    Extension(user_data): Extension<Claims>,
+    Path(card_id): Path<i32>,
+    Json(payload): Json<CardRequest>
+) -> Result<String,AppError> {
+    //) -> Result<(StatusCode, String), crate::error::AppError > {
+
+    let user_id = user_data.user_id;
+
+    let response = state
+        .db
+        .create_card(Card {
+            id: None,
+            user: user_id,
+            tag_id: payload.tag_id,
+            name: payload.name,
+        })
+        .await?;
+
+    //let response = state.db.update_card(tag_id.clone(),card,)
+
+
+    let Some(response) = response else {
+        return Err(AppError::InternalServerError);
+    };
+
+    //Ok((StatusCode::CREATED, Json(response)))
+    Ok("test".to_string())
 }
 
 #[utoipa::path(
     delete,
-    path = "/cards/{tag_id}",
+    path = "/cards/{card_id}",
     responses(
-        (status = 200, description = "Successful re-authentication by user"),
+        (status = 200, description = "Successful deletion of card by user"),
         (status = 400, description = "Bad Request, User sent malformed request"),
         (status = 401, description = "Unauthorized, User not authorized to use this route"),
-        (status = 500, description = "Internal Server Error, Something went wrong on the APIs side - try later again")
+        (status = 500, description = "Internal Server Error, Something went wrong on the APIs side")
     ),
     security(
         ("token_jwt" = [])
     )
 )]
-pub async fn card_delete_handler(Path(CardRequest { tag_id, name }): Path<CardRequest>) -> (StatusCode, String) {
+pub async fn card_delete_handler(
+    Path(CardRequest { tag_id, name }): Path<CardRequest>,
+) -> (StatusCode, String) {
     let response: StatusCode = StatusCode::INTERNAL_SERVER_ERROR;
     // TODO delete requested card & return status
 

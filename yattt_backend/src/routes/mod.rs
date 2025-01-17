@@ -3,7 +3,7 @@ pub mod auth;
 pub mod card;
 pub mod root;
 
-use axum::{middleware, Router};
+use axum::{middleware, Extension, Router};
 use utoipa::OpenApi;
 use utoipa_axum::router::OpenApiRouter;
 use utoipa_axum::routes;
