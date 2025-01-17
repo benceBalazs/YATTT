@@ -15,6 +15,7 @@ struct ApiHelper {
             return nil
         }
         
+        //Test
         var request = URLRequest(url: url)
         request.httpMethod = method
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
