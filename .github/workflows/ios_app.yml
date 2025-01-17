@@ -32,7 +32,7 @@ jobs:
             -project yattt_ios_app.xcodeproj \
             -scheme yattt_ios_app \
             -sdk iphonesimulator \
-            -destination "platform=iOS Simulator,name=iPhone 16,OS=18.1" \
+            -destination "platform=iOS Simulator,name=iPhone 16,OS=iOS 18.1" \
             -enableCodeCoverage YES
             
       - name: Upload Code Coverage Report
