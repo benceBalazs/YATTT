@@ -100,7 +100,7 @@ pub async fn card_retrieve_handler(
 pub async fn card_modify_handler(
     State(state): State<crate::YatttAppState>,
     Extension(user_data): Extension<Claims>,
-    Path(card_id): Path<i32>,
+    Path(card_id): Path<String>,
     Json(payload): Json<CardRequest>
 ) -> Result<String,AppError> {
     //) -> Result<(StatusCode, String), crate::error::AppError > {
@@ -142,10 +142,18 @@ pub async fn card_modify_handler(
     )
 )]
 pub async fn card_delete_handler(
-    Path(CardRequest { tag_id, name }): Path<CardRequest>,
-) -> (StatusCode, String) {
-    let response: StatusCode = StatusCode::INTERNAL_SERVER_ERROR;
-    // TODO delete requested card & return status
+    State(state): State<crate::YatttAppState>,
+    Extension(user_data): Extension<Claims>,
+    Path(card_id): Path<String>,
+) -> Result<(StatusCode, Json<Card>), crate::error::AppError > {
 
-    (response, "success".to_string())
+    let user_id = user_data.user_id;
+
+    let response = state.db.delete_card(&card_id, &user_id).await?;
+
+    let Some(response) = response else {
+        return Err(AppError::InternalServerError);
+    };
+
+    Ok((StatusCode::OK, Json(response)))
 }
