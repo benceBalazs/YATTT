@@ -4,9 +4,15 @@ on:
   push:
     branches: 
       - main
+    paths:
+      - 'yattt_ios/**'
+      - 'yattt_ios_app.xcodeproj/**'
   pull_request:
     branches: 
       - main
+    paths:
+      - 'yattt_ios/**'
+      - 'yattt_ios_app.xcodeproj/**'
 
 permissions:
   contents: read
