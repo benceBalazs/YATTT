@@ -1,0 +1,17 @@
+name: Build, Test and Deploy the YATTT Backend Service
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'yattt_backend/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'yattt_backend/**'
+permissions:
+  contents: read
+  pull-requests: write
+jobs:

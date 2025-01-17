@@ -1,14 +1,11 @@
-use crate::{
-    db::repositories::CardRepository,
-    error::AppError,
-    models::card::{Card, CardRequest},
-};
+use crate::{db, db::repositories::CardRepository, error::AppError, models::card::{Card, CardRequest}};
 use axum::{
     extract::{Path, State},
     Extension, Json,
 };
 use hyper::StatusCode;
 use serde::{Deserialize, Serialize};
+use surrealdb::sql::Thing;
 use crate::db::repositories::UserRepository;
 use crate::jwt::Claims;
 
@@ -44,9 +41,9 @@ pub async fn card_create_handler(
         .db
         .create_card(Card {
             id: None,
-            user: user_id,
+            user_id: Thing::from((db::db_constants::TABLE_USER.to_string(), user_id)),
             tag_id: payload.tag_id,
-            name: payload.name,
+            card_name: payload.name,
         })
         .await?;
 
@@ -111,9 +108,9 @@ pub async fn card_modify_handler(
         .db
         .create_card(Card {
             id: None,
-            user: user_id,
+            user_id: Thing::from((db::db_constants::TABLE_USER.to_string(), user_id)),
             tag_id: payload.tag_id,
-            name: payload.name,
+            card_name: payload.name,
         })
         .await?;
 

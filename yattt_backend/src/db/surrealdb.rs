@@ -70,7 +70,7 @@ impl super::repositories::CardRepository for SurrealDbBackend {
     ) -> Result<Option<crate::models::card::Card>, Self::Error> {
         let query = format!(
             "INSERT INTO {TABLE_CARD} ({ENTRY_USER_ID}, {ENTRY_TAG_ID}, {ENTRY_CARD_NAME}) VALUES ({TABLE_USER}:{}, '{}', '{}')",
-            card.user, card.tag_id, card.name
+            card.user_id, card.tag_id, card.card_name
         );
 
         let mut result = self.client.query(query).await?.check()?;
@@ -104,7 +104,7 @@ impl super::repositories::CardRepository for SurrealDbBackend {
     ) -> Result<Option<crate::models::card::Card>, Self::Error> {
         let query = format!(
             "UPDATE {TABLE_CARD} SET {ENTRY_USER_ID} = {TABLE_USER}:{}, {ENTRY_TAG_ID} = '{}', {ENTRY_CARD_NAME} = '{}' WHERE id = {TABLE_CARD}:{}",
-            user_id, card.tag_id, card.name, card_id
+            user_id, card.tag_id, card.card_name, card_id
         );
 
         let mut result = self.client.query(query).await?.check()?;
