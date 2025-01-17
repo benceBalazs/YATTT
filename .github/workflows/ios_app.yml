@@ -28,7 +28,6 @@ jobs:
 
       - name: Install iOS 18.2
         run: | 
-          sudo xcodes runtimes install "iOS 18.2"\
           xcodebuild -showsdks
 
       - name: Run Unit Tests with Coverage
