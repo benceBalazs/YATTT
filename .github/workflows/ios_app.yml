@@ -39,9 +39,10 @@ jobs:
           xcodebuild test \
             -project yattt_ios_app.xcodeproj \
             -scheme yattt_ios_app \
-            -sdk iphonesimulator18.2 \
-            -destination "platform=iOS Simulator,name=iPhone 16,OS=18.2" \
+            -sdk iphonesimulator18.1 \
+            -destination "platform=iOS Simulator,name=iPhone 16,OS=18.1" \
             -enableCodeCoverage YES
+
             
       - name: Upload Code Coverage Report
         uses: actions/upload-artifact@v4
