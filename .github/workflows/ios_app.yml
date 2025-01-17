@@ -26,9 +26,13 @@ jobs:
       - name: List Available Simulators
         run: xcrun simctl list
 
-      - name: Install iOS 18.2
+      - name: Install iOS 18.1
         run: | 
-          xcodebuild -showsdks
+          xcodes runtimes install "iOS 18.1"
+
+      - name: Install iOS 18.1
+        run: | 
+          xcodes runtimes list    
 
       - name: Run Unit Tests with Coverage
         run: |
@@ -36,7 +40,7 @@ jobs:
             -project yattt_ios_app.xcodeproj \
             -scheme yattt_ios_app \
             -sdk iphonesimulator \
-            -destination "platform=iOS Simulator,name=iPhone 16,OS=18.2" \
+            -destination "platform=iOS Simulator,name=iPhone 16,OS=18.1" \
             -enableCodeCoverage YES
             
       - name: Upload Code Coverage Report
