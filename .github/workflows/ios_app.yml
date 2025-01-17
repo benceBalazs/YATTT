@@ -18,15 +18,6 @@ jobs:
         
     steps:
       - uses: actions/checkout@v4
-      - name: Debug - List All Repository Files
-        run: |
-          echo "Repository File Structure:"
-          ls -R
-
-      - name: Debug - Print project.pbxproj
-        run: |
-          echo "Printing the contents of project.pbxproj for debugging:"
-          cat yattt_ios_app.xcodeproj/project.pbxproj
             
       - name: Set up Xcode
         uses: maxim-lobanov/setup-xcode@v1
@@ -60,7 +51,7 @@ jobs:
           ref: ${{ github.head_ref }}
 
       - name: Select Xcode version
-        run: sudo xcode-select -s /Applications/Xcode_15.0.app/Contents/Developer
+        run: sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
 
       - name: Build App
         run: |
