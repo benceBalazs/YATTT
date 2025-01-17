@@ -69,7 +69,7 @@ impl super::repositories::CardRepository for SurrealDbBackend {
         card: crate::models::card::Card,
     ) -> Result<Option<crate::models::card::Card>, Self::Error> {
         let query = format!(
-            "INSERT INTO {TABLE_CARD} ({ENTRY_USER_ID}, {ENTRY_TAG_ID}, {ENTRY_CARD_NAME}) VALUES ({TABLE_USER}:{}, '{}', '{}')",
+            "INSERT INTO {TABLE_CARD} ({ENTRY_USER_ID}, {ENTRY_TAG_ID}, {ENTRY_CARD_NAME}) VALUES ({}, '{}', '{}')",
             card.user_id, card.tag_id, card.card_name
         );
 
@@ -103,7 +103,7 @@ impl super::repositories::CardRepository for SurrealDbBackend {
         user_id: &str,
     ) -> Result<Option<crate::models::card::Card>, Self::Error> {
         let query = format!(
-            "UPDATE {TABLE_CARD} SET {ENTRY_USER_ID} = {TABLE_USER}:{}, {ENTRY_TAG_ID} = '{}', {ENTRY_CARD_NAME} = '{}' WHERE id = {TABLE_CARD}:{}",
+            "UPDATE {TABLE_CARD} SET {ENTRY_USER_ID} = {}, {ENTRY_TAG_ID} = '{}', {ENTRY_CARD_NAME} = '{}' WHERE id = {TABLE_CARD}:{}",
             user_id, card.tag_id, card.card_name, card_id
         );
 
@@ -118,14 +118,12 @@ impl super::repositories::CardRepository for SurrealDbBackend {
         &self,
         card_id: &str,
         user_id: &str,
-    ) -> Result<Option<crate::models::card::Card>, Self::Error> {
+    ) -> Result<(), Self::Error> {
         let query = format!("DELETE FROM {TABLE_CARD} WHERE id = {TABLE_CARD}:{} AND {ENTRY_USER_ID} = {TABLE_USER}:{};", card_id, user_id);
 
-        let mut result = self.client.query(query).await?.check()?;
+        self.client.query(query).await?.check()?;
 
-        let res: Option<crate::models::card::Card> = result.take(0)?;
-
-        Ok(res)
+        Ok(())
     }
 }
 

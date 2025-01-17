@@ -29,7 +29,7 @@ pub trait CardRepository {
         &self,
         card_id: &str,
         user_id: &str
-    ) -> Result<Option<crate::models::card::Card>, Self::Error>;
+    ) -> Result<(), Self::Error>;
 }
 
 #[allow(async_fn_in_trait)]

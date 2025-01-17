@@ -142,15 +142,11 @@ pub async fn card_delete_handler(
     State(state): State<crate::YatttAppState>,
     Extension(user_data): Extension<Claims>,
     Path(card_id): Path<String>,
-) -> Result<(StatusCode, Json<Card>), crate::error::AppError > {
+) -> Result<StatusCode, crate::error::AppError> {
 
     let user_id = user_data.user_id;
 
-    let response = state.db.delete_card(&card_id, &user_id).await?;
+    state.db.delete_card(&card_id, &user_id).await?;
 
-    let Some(response) = response else {
-        return Err(AppError::InternalServerError);
-    };
-
-    Ok((StatusCode::OK, Json(response)))
+    Ok(StatusCode::NO_CONTENT)
 }
