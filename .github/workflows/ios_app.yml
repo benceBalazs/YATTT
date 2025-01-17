@@ -32,7 +32,7 @@ jobs:
 
       - name: Install iOS 18.1
         run: | 
-          xcodes sdk   
+          xcodebuild -showsdks   
 
       - name: Run Unit Tests with Coverage
         run: |
