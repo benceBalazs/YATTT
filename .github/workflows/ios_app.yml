@@ -26,16 +26,9 @@ jobs:
       - name: List Available Simulators
         run: xcrun simctl list
 
-      - name: Check for iOS 18.2
+      - name: Install iOS 18.2
         run: | 
-          available_runtimes="$(xcrun simctl list runtimes)"
-
-          if echo "$available_runtimes" | grep -q "^iOS 18.2"; then
-            echo "iOS 18.2 runtime is already installed"
-          else
-            echo "iOS 18.2 runtime is not installed"
-            sudo xcodes runtimes install "iOS 18.2"
-          fi
+          sudo xcodes runtimes install "iOS 18.2"
 
       - name: Run Unit Tests with Coverage
         run: |
