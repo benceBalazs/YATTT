@@ -23,6 +23,8 @@ jobs:
         uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: '16.2'
+      - name: List Available Simulators
+        run: xcrun simctl list
 
       - name: Run Unit Tests with Coverage
         run: |
