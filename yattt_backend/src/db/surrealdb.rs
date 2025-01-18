@@ -103,7 +103,7 @@ impl super::repositories::CardRepository for SurrealDbBackend {
         user_id: &str,
     ) -> Result<Option<crate::models::card::Card>, Self::Error> {
         let query = format!(
-            "UPDATE {TABLE_CARD} SET {ENTRY_USER_ID} = {}, {ENTRY_TAG_ID} = '{}', {ENTRY_CARD_NAME} = '{}' WHERE id = {TABLE_CARD}:{}",
+            "UPDATE {TABLE_CARD} SET {ENTRY_USER_ID} = User:{}, {ENTRY_TAG_ID} = '{}', {ENTRY_CARD_NAME} = '{}' WHERE id = {TABLE_CARD}:{}",
             user_id, card.tag_id, card.card_name, card_id
         );
 

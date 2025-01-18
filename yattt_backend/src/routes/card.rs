@@ -99,30 +99,23 @@ pub async fn card_modify_handler(
     Extension(user_data): Extension<Claims>,
     Path(card_id): Path<String>,
     Json(payload): Json<CardRequest>
-) -> Result<String,AppError> {
-    //) -> Result<(StatusCode, String), crate::error::AppError > {
+) -> Result<(StatusCode, Json<Card>), crate::error::AppError > {
 
     let user_id = user_data.user_id;
 
-    let response = state
-        .db
-        .create_card(Card {
-            id: None,
-            user_id: Thing::from((db::db_constants::TABLE_USER.to_string(), user_id)),
-            tag_id: payload.tag_id,
-            card_name: payload.name,
-        })
-        .await?;
-
-    //let response = state.db.update_card(tag_id.clone(),card,)
+    let response = state.db.update_card(&card_id, Card {
+        id: None,
+        user_id: Thing::from((db::db_constants::TABLE_USER.to_string(), user_id.clone())),
+        tag_id: payload.tag_id,
+        card_name: payload.name,
+    },&user_id).await?;
 
 
     let Some(response) = response else {
         return Err(AppError::InternalServerError);
     };
 
-    //Ok((StatusCode::CREATED, Json(response)))
-    Ok("test".to_string())
+    Ok((StatusCode::OK, Json(response)))
 }
 
 #[utoipa::path(
