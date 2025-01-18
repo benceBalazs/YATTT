@@ -17,7 +17,7 @@ path = "src/main.rs"
 
 [dependencies]
 # web framework
-axum = "0.7"
+axum = { version = "0.7", features = ["macros"] }
 hyper = { version = "1.0.1", features = ["full"] }
 tower = "0.5"
 tower-http = { version = "0.6.2", features = ["auth", "validate-request"] }
@@ -26,7 +26,7 @@ tower-http = { version = "0.6.2", features = ["auth", "validate-request"] }
 tokio = { version = "1.17", features = ["full"] }
 
 # API documentation
-utoipa = { version = "5.2.0", features = ["axum_extras"] }
+utoipa = { version = "5.2.0", features = ["axum_extras", "macros"] }
 utoipa-swagger-ui = { version = "8.0.3", features = ["axum"] }
 utoipa-axum = { version = "0.1.2" }
 utoipa-redoc = { version = "5.0.0", features = ["axum"] }

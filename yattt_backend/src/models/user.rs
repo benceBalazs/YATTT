@@ -9,3 +9,8 @@ pub struct User {
     pub username: String,
     pub password: String,
 }
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct UserIdExtractor {
+    pub user_id: Option<Thing>,
+}

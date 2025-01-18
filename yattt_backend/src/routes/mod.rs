@@ -8,7 +8,7 @@ use utoipa::OpenApi;
 use utoipa_axum::router::OpenApiRouter;
 use utoipa_axum::routes;
 use utoipa_scalar::{Scalar, Servable as ScalarServable};
-
+use crate::YatttAppState;
 
 #[derive(utoipa::OpenApi)]
 #[openapi(
@@ -45,22 +45,26 @@ pub fn setup_routes(state: crate::YatttAppState) -> Router {
             ))
             .split_for_parts();
 
+    let (protected_attendance_router, attendance_api) =
+        OpenApiRouter::<crate::YatttAppState>::with_openapi(ApiDoc::openapi())
+            .routes(routes!(crate::routes::attendance::attendance_retrieve_handler))
+            .layer(middleware::from_fn_with_state(
+                state.clone(),
+                crate::routes::auth::authorization_layer,
+            ))
+            .routes(routes!(crate::routes::attendance::attendance_create_handler))
+            .split_for_parts();
+
+
     let merged_router = axum::Router::new()
         .merge(unprotected_root_router)
         .merge(protected_auth_router)
-        .merge(protected_card_router);
+        .merge(protected_card_router)
+        .merge(protected_attendance_router);
 
     root_api.merge(auth_api);
     root_api.merge(card_api);
-
-    // TODO uncomment after adding annotations in attendance.rs
-    // let attendance_router_technical_protected: OpenApiRouter = OpenApiRouter::new()
-    //     .routes(routes!(crate::routes::attendance::attendance_create_handler))
-    //     .layer(ValidateRequestHeaderLayer::bearer(&PYTHON_SERVICE_API_KEY));
-
-    // let attendace_router_user_protected: OpenApiRouter = OpenApiRouter::new()
-    //     .routes(routes!(crate::routes::attendance::attendance_retrieve_handler))
-    //     .layer(middleware::from_fn(crate::routes::auth::authorization_layer));
+    root_api.merge(attendance_api);
 
     // define the `/v1` router
     let v1_routes =

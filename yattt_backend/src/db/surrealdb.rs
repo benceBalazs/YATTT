@@ -1,5 +1,5 @@
 use crate::db::db_constants::*;
-use crate::models::user::User;
+use crate::models::user::{User, UserIdExtractor};
 use crate::routes::auth::SignInData;
 use surrealdb::engine::remote::ws::{Client, Ws};
 use surrealdb::Error as SurrealDbError;
@@ -51,6 +51,14 @@ impl super::repositories::UserRepository for SurrealDbBackend {
 
         Ok(res)
     }
+
+    async fn get_by_tag_id(&self, tag_id: &str) -> Result<Option<UserIdExtractor>, Self::Error> {
+        let query = format!("SELECT {ENTRY_USER_ID} FROM {TABLE_CARD} WHERE {ENTRY_TAG_ID} = '{}'", tag_id);
+        let mut result = self.client.query(query).await?.check()?;
+        let res: Option<UserIdExtractor> = result.take(0)?;
+        Ok(res)
+    }
+
     async fn get_by_username(&self, username: &str) -> Result<Option<User>, Self::Error> {
         let query = format!("SELECT * FROM {TABLE_USER} WHERE {ENTRY_USERNAME} = '{username}'");
         let mut result = self.client.query(query).await?.check()?;
@@ -136,7 +144,7 @@ impl super::repositories::AttendanceRepository for SurrealDbBackend {
     ) -> Result<Option<crate::models::attendance::Attendance>, Self::Error> {
         let query = format!(
             "INSERT INTO {TABLE_ATTENDANCE} ({ENTRY_USER_ID}, {ENTRY_DEVICE_ID}, {ENTRY_CHECK_IN_TIME}, {ENTRY_CHECK_OUT_TIME}, {ENTRY_DURATION}) VALUES ({TABLE_USER}:{}, '{}', d'{}', d'{}', {})",
-            attendance.user, attendance.device_id, attendance.check_in_time, attendance.check_out_time, attendance.duration
+            attendance.user_id.id, attendance.device_id, attendance.check_in_time, attendance.check_out_time, attendance.duration
         );
 
         let mut result = self.client.query(query).await?.check()?;
