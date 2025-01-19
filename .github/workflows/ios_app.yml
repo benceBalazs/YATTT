@@ -48,7 +48,7 @@ jobs:
 
       - name: setup new test phone
         run: | 
-          xcrun simctl create "iPhone 16" "com.apple.CoreSimulator.SimDeviceType.iPhone-15" "com.apple.CoreSimulator.SimRuntime.iOS-17-0"
+          xcrun simctl create "iPhone 15" "com.apple.CoreSimulator.SimDeviceType.iPhone-15" "com.apple.CoreSimulator.SimRuntime.iOS-17-0"
 
       - name: Run Unit Tests with Coverage
         run: |
@@ -56,7 +56,7 @@ jobs:
             -project yattt_ios_app.xcodeproj \
             -scheme yattt_ios_app \
             -sdk iphonesimulator18.2 \
-            -destination "platform=iOS Simulator,name=iPhone 15,OS=17.0" \
+            -destination 'platform=iOS Simulator,name=iPhone 15' \
             -enableCodeCoverage YES
 
             
