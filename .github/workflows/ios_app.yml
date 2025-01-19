@@ -7,6 +7,7 @@ on:
     paths:
       - 'yattt_ios/**'
       - 'yattt_ios_app.xcodeproj/**'
+      - '.github/workflows/ios_app.yml'
   pull_request:
     branches: 
       - main
@@ -31,18 +32,23 @@ jobs:
           xcode-version: '16.2'
           
       - name: List Available Simulators
-        run: xcrun simctl list
+        run: xcrun simctl list devices
 
       - name: Install iOS 18.2
         run: | 
             xcodes runtimes install "iOS 18.2"
+            
       - name: show sdk
         run: | 
           xcodebuild -showsdks   
 
       - name: show sdk
         run: | 
-          xcrun simctl list
+          xcrun simctl list runtimes
+
+      - name: setup new test phone
+        run: | 
+          xcrun simctl create "iPhone 16" "com.apple.CoreSimulator.SimDeviceType.iPhone-16" "com.apple.CoreSimulator.SimRuntime.iOS-18-2"
 
       - name: Run Unit Tests with Coverage
         run: |
@@ -50,7 +56,7 @@ jobs:
             -project yattt_ios_app.xcodeproj \
             -scheme yattt_ios_app \
             -sdk iphonesimulator18.2 \
-            -destination "platform=iOS Simulator,name=iPhone 16,OS=18.2"\
+            -destination "platform=iOS Simulator,name=iPhone 16,OS=18.2" \
             -enableCodeCoverage YES
 
             
