@@ -36,9 +36,13 @@ jobs:
         run: | 
           xcodes runtimes install "iOS 18.1"
 
-      - name: Install iOS 18.1
+      - name: show sdk
         run: | 
           xcodebuild -showsdks   
+
+      - name: show sdk
+        run: | 
+          xcrun simctl list
 
       - name: Run Unit Tests with Coverage
         run: |
