@@ -13,7 +13,7 @@ pub struct CurrentUser {
     pub username: String,
     pub password_hash: String,
 }
-#[axum::debug_handler]
+
 #[utoipa::path(
     post,
     path = "/attendances",

@@ -6,11 +6,11 @@ use surrealdb::Error as SurrealDbError;
 use surrealdb::Surreal;
 
 #[derive(Debug, Clone)]
-pub struct SurrealDbBackend {
-    client: Surreal<Client>,
+pub struct SurrealDbBackend<C: surrealdb::Connection = Client> {
+    client: Surreal<C>,
 }
 
-impl SurrealDbBackend {
+impl SurrealDbBackend<Client> {
     pub async fn new(
         url: &str,
         credentials: surrealdb::opt::auth::Root<'_>,
@@ -29,7 +29,7 @@ impl SurrealDbBackend {
     }
 }
 
-impl super::repositories::UserRepository for SurrealDbBackend {
+impl<C: surrealdb::Connection> super::repositories::UserRepository for SurrealDbBackend<C> {
     type Error = SurrealDbError;
     async fn create_user(&self, user: SignInData) -> Result<Option<User>, Self::Error> {
         // Insert the user into the database
@@ -53,7 +53,10 @@ impl super::repositories::UserRepository for SurrealDbBackend {
     }
 
     async fn get_by_tag_id(&self, tag_id: &str) -> Result<Option<UserIdExtractor>, Self::Error> {
-        let query = format!("SELECT {ENTRY_USER_ID} FROM {TABLE_CARD} WHERE {ENTRY_TAG_ID} = '{}'", tag_id);
+        let query = format!(
+            "SELECT {ENTRY_USER_ID} FROM {TABLE_CARD} WHERE {ENTRY_TAG_ID} = '{}'",
+            tag_id
+        );
         let mut result = self.client.query(query).await?.check()?;
         let res: Option<UserIdExtractor> = result.take(0)?;
         Ok(res)
@@ -69,7 +72,7 @@ impl super::repositories::UserRepository for SurrealDbBackend {
     }
 }
 
-impl super::repositories::CardRepository for SurrealDbBackend {
+impl<C: surrealdb::Connection> super::repositories::CardRepository for SurrealDbBackend<C> {
     type Error = SurrealDbError;
 
     async fn create_card(
@@ -122,11 +125,7 @@ impl super::repositories::CardRepository for SurrealDbBackend {
         Ok(res)
     }
 
-    async fn delete_card(
-        &self,
-        card_id: &str,
-        user_id: &str,
-    ) -> Result<(), Self::Error> {
+    async fn delete_card(&self, card_id: &str, user_id: &str) -> Result<(), Self::Error> {
         let query = format!("DELETE FROM {TABLE_CARD} WHERE id = {TABLE_CARD}:{} AND {ENTRY_USER_ID} = {TABLE_USER}:{};", card_id, user_id);
 
         self.client.query(query).await?.check()?;
@@ -135,7 +134,7 @@ impl super::repositories::CardRepository for SurrealDbBackend {
     }
 }
 
-impl super::repositories::AttendanceRepository for SurrealDbBackend {
+impl<C: surrealdb::Connection> super::repositories::AttendanceRepository for SurrealDbBackend<C> {
     type Error = SurrealDbError;
 
     async fn create_attendance(
@@ -156,9 +155,12 @@ impl super::repositories::AttendanceRepository for SurrealDbBackend {
 
     async fn get_attendances(
         &self,
-        user_id: &str
+        user_id: &str,
     ) -> Result<Vec<crate::models::attendance::Attendance>, Self::Error> {
-        let query = format!("SELECT * FROM {TABLE_ATTENDANCE} WHERE {ENTRY_USER_ID} = {TABLE_USER}:{USER_ID};", USER_ID = user_id);
+        let query = format!(
+            "SELECT * FROM {TABLE_ATTENDANCE} WHERE {ENTRY_USER_ID} = {TABLE_USER}:{USER_ID};",
+            USER_ID = user_id
+        );
 
         let mut result = self.client.query(query).await?.check()?;
 

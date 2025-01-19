@@ -17,7 +17,7 @@ path = "src/main.rs"
 
 [dependencies]
 # web framework
-axum = { version = "0.7", features = ["macros"] }
+axum = { version = "0.7"}
 hyper = { version = "1.0.1", features = ["full"] }
 tower = "0.5"
 tower-http = { version = "0.6.2", features = ["auth", "validate-request"] }
@@ -48,7 +48,7 @@ tracing = "0.1.41"
 chrono = "0.4.39"
 
 # database
-surrealdb = "2.1.3"
+surrealdb = { version = "2.1.3", features = ["kv-mem"] }
 
 # encryption
 bcrypt = "0.16.0"
