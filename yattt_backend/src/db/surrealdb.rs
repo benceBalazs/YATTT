@@ -183,3 +183,264 @@ impl From<SurrealDbError> for crate::error::AppError {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use surrealdb::engine::local::Mem;
+
+    async fn with_db(
+        name: &str,
+    ) -> crate::db::surrealdb::SurrealDbBackend<surrealdb::engine::local::Db> {
+        let db = surrealdb::Surreal::new::<Mem>(()).await.unwrap();
+
+        db.use_ns("test_ns").use_db(name).await.unwrap();
+
+        crate::db::surrealdb::SurrealDbBackend { client: db }
+    }
+
+    mod user_repository {
+        use crate::{
+            db::{
+                repositories::{CardRepository, UserRepository},
+                surrealdb::tests::with_db,
+            },
+            routes::auth::SignInData,
+        };
+
+        #[tokio::test]
+        async fn create_user_returns_a_user() {
+            let db = with_db("create_user_returns_a_user").await;
+
+            let username = "test_user";
+            let password = "test_passwordhash";
+
+            let a = db
+                .create_user(SignInData {
+                    username: username.to_string(),
+                    password: password.to_string(),
+                })
+                .await
+                .unwrap();
+
+            println!("{:?}", a);
+
+            assert!(a.is_some());
+        }
+
+        #[tokio::test]
+        async fn create_user_returns_username_of_the_created_user() {
+            let db = with_db("create_user_returns_username_of_the_created_user").await;
+
+            let username = "test_user";
+            let password = "test_passwordhash";
+
+            let a = db
+                .create_user(SignInData {
+                    username: username.to_string(),
+                    password: password.to_string(),
+                })
+                .await
+                .unwrap()
+                .expect("User should be created");
+
+            assert!(a.username == username);
+        }
+
+        #[tokio::test]
+        async fn create_user_returns_password_of_the_created_user() {
+            let db = with_db("create_user_returns_password_of_the_created_user").await;
+
+            let username = "test_user";
+            let password = "test_passwordhash";
+
+            let a = db
+                .create_user(SignInData {
+                    username: username.to_string(),
+                    password: password.to_string(),
+                })
+                .await
+                .unwrap()
+                .expect("User should be created");
+
+            assert!(a.password == password);
+        }
+
+        #[tokio::test]
+        async fn get_by_id_no_found_user_results_in_none() {
+            let db = with_db("get_by_id_no_found_user_results_in_none").await;
+
+            let a = db.get_by_id("non-existent").await.unwrap();
+
+            assert!(a.is_none());
+        }
+
+        #[tokio::test]
+        async fn get_by_id_returns_a_user() {
+            let db = with_db("get_by_id_returns_a_user").await;
+
+            let res = db
+                .create_user(SignInData {
+                    username: "test_user".to_string(),
+                    password: "test_passwordhash".to_string(),
+                })
+                .await
+                .unwrap()
+                .expect("User should be created");
+
+            let user_id = res.id.expect("User should have an id").id;
+
+            let a = db.get_by_id(user_id.to_string().as_str()).await.unwrap();
+
+            assert!(a.is_some());
+        }
+
+        #[tokio::test]
+        async fn get_by_id_returns_user_with_specified_id() {
+            let db = with_db("get_by_id_returns_user_with_specified_id").await;
+
+            let res = db
+                .create_user(SignInData {
+                    username: "test_user".to_string(),
+                    password: "test_passwordhash".to_string(),
+                })
+                .await
+                .unwrap()
+                .expect("User should be created");
+
+            let user_id = res.id.expect("User should have an id").id;
+
+            let a = db
+                .get_by_id(user_id.to_string().as_str())
+                .await
+                .unwrap()
+                .expect("User should be found");
+
+            assert!(a.id.unwrap() == surrealdb::sql::Thing::from(("User", user_id)));
+        }
+
+        #[tokio::test]
+        async fn get_by_username_no_found_user_results_in_none() {
+            let db = with_db("get_by_username_no_found_user_results_in_none").await;
+
+            let a = db.get_by_username("non-existent").await.unwrap();
+
+            assert!(a.is_none());
+        }
+
+        #[tokio::test]
+        async fn get_by_username_returns_a_user() {
+            let db = with_db("get_by_username_returns_a_user").await;
+
+            let res = db
+                .create_user(SignInData {
+                    username: "test_user".to_string(),
+                    password: "test_passwordhash".to_string(),
+                })
+                .await
+                .unwrap()
+                .expect("User should be created");
+
+            let a = db
+                .get_by_username(&res.username)
+                .await
+                .unwrap();
+
+            assert!(a.is_some());
+        }
+
+        #[tokio::test]
+        async fn get_by_username_returns_user_with_specified_id() {
+            let db = with_db("get_by_username_returns_user_with_specified_id").await;
+
+            let res = db
+                .create_user(SignInData {
+                    username: "test_user".to_string(),
+                    password: "test_passwordhash".to_string(),
+                })
+                .await
+                .unwrap()
+                .expect("User should be created");
+
+            let user_id = res.id.expect("User should have an id").id;
+
+            let a = db
+                .get_by_username(&res.username)
+                .await
+                .unwrap()
+                .expect("User should be found");
+
+            assert!(a.id.unwrap() == surrealdb::sql::Thing::from(("User", user_id)));
+        }
+
+        #[tokio::test]
+        async fn get_by_tag_id_no_found_user_results_in_none() {
+            let db = with_db("get_by_tag_id_no_found_user_results_in_none").await;
+
+            let a = db.get_by_tag_id("non-existent").await.unwrap();
+
+            assert!(a.is_none());
+        }
+
+        #[tokio::test]
+        async fn get_by_tag_id_returns_a_user_id() {
+            let db = with_db("get_by_tag_id_returns_a_user_id").await;
+
+            let res = db
+                .create_user(SignInData {
+                    username: "test_user".to_string(),
+                    password: "test_passwordhash".to_string(),
+                })
+                .await
+                .unwrap()
+                .expect("User should be created");
+
+            let user_id = res.id.expect("User should have an id");
+
+            let tag_id = "test_tag".to_string();
+
+            db
+                .create_card(crate::models::card::Card {
+                    id: None,
+                    user_id,
+                    tag_id: tag_id.clone(),
+                    card_name: "test_card".to_string(),
+                })
+                .await.unwrap();
+
+            let a = db.get_by_tag_id(&tag_id).await.unwrap();
+
+            assert!(a.is_some());
+        }
+
+        #[tokio::test]
+        async fn get_by_tag_id_returns_specific_user_id() {
+            let db = with_db("get_by_tag_id_returns_specific_user_id").await;
+
+            let res = db
+                .create_user(SignInData {
+                    username: "test_user".to_string(),
+                    password: "test_passwordhash".to_string(),
+                })
+                .await
+                .unwrap()
+                .expect("User should be created");
+
+            let user_id = res.id.expect("User should have an id");
+
+            let tag_id = "test_tag".to_string();
+
+            db
+                .create_card(crate::models::card::Card {
+                    id: None,
+                    user_id: user_id.clone(),
+                    tag_id: tag_id.clone(),
+                    card_name: "test_card".to_string(),
+                })
+                .await.unwrap();
+
+            let a = db.get_by_tag_id(&tag_id).await.unwrap();
+
+            assert!(a.expect("User should be found").user_id.unwrap() == user_id);
+        }
+    }
+}
