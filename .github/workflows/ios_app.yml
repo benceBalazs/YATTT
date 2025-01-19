@@ -34,9 +34,9 @@ jobs:
       - name: List Available Simulators
         run: xcrun simctl list --json devices available
 
-      - name: Install iOS 18.2
+      - name: Install iOS 17.0
         run: | 
-            xcodes runtimes install "iOS 18.2"
+            xcodes runtimes install "iOS 17.0"
             
       - name: show sdk
         run: | 
@@ -48,7 +48,7 @@ jobs:
 
       - name: setup new test phone
         run: | 
-          xcrun simctl create "iPhone 16" "com.apple.CoreSimulator.SimDeviceType.iPhone-16" "com.apple.CoreSimulator.SimRuntime.iOS-18-1"
+          xcrun simctl create "iPhone 16" "com.apple.CoreSimulator.SimDeviceType.iPhone-15" "com.apple.CoreSimulator.SimRuntime.iOS-17.0"
 
       - name: Run Unit Tests with Coverage
         run: |
@@ -56,7 +56,7 @@ jobs:
             -project yattt_ios_app.xcodeproj \
             -scheme yattt_ios_app \
             -sdk iphonesimulator18.2 \
-            -destination "platform=iOS Simulator,name=iPhone 16,OS=18.1" \
+            -destination "platform=iOS Simulator,name=iPhone 15,OS=17.0" \
             -enableCodeCoverage YES
 
             
