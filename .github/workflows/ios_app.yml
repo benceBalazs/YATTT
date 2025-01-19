@@ -48,7 +48,7 @@ jobs:
 
       - name: setup new test phone
         run: | 
-          xcrun simctl create "iPhone 16" "com.apple.CoreSimulator.SimDeviceType.iPhone-15" "com.apple.CoreSimulator.SimRuntime.iOS-17.0"
+          xcrun simctl create "iPhone 16" "com.apple.CoreSimulator.SimDeviceType.iPhone-15" "com.apple.CoreSimulator.SimRuntime.iOS-17-0"
 
       - name: Run Unit Tests with Coverage
         run: |
