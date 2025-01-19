@@ -32,10 +32,6 @@ jobs:
       - name: List Available Simulators
         run: xcrun simctl list
 
-      - name: Install iOS 18.1
-        run: | 
-          xcodes runtimes install "iOS 18.1"
-
       - name: show sdk
         run: | 
           xcodebuild -showsdks   
