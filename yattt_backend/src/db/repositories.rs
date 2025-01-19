@@ -1,3 +1,4 @@
+use std::format;
 use crate::models::user::{User, UserIdExtractor};
 
 #[allow(async_fn_in_trait)]
@@ -44,4 +45,8 @@ pub trait AttendanceRepository {
         &self,
         user_id: &str
     ) -> Result<Vec<crate::models::attendance::Attendance>, Self::Error>;
+    async fn get_lectures_by_device_id(
+        &self,
+        device_id: &str
+    ) -> Result<Vec<crate::models::lecture::Lecture>, Self::Error>;
 }

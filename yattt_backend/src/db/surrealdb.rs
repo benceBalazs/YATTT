@@ -142,9 +142,11 @@ impl<C: surrealdb::Connection> super::repositories::AttendanceRepository for Sur
         attendance: crate::models::attendance::Attendance,
     ) -> Result<Option<crate::models::attendance::Attendance>, Self::Error> {
         let query = format!(
-            "INSERT INTO {TABLE_ATTENDANCE} ({ENTRY_USER_ID}, {ENTRY_DEVICE_ID}, {ENTRY_CHECK_IN_TIME}, {ENTRY_CHECK_OUT_TIME}, {ENTRY_DURATION}) VALUES ({TABLE_USER}:{}, '{}', d'{}', d'{}', {})",
-            attendance.user_id.id, attendance.device_id, attendance.check_in_time, attendance.check_out_time, attendance.duration
+            "INSERT INTO {TABLE_ATTENDANCE} ({ENTRY_USER_ID}, {ENTRY_TAG_ID} ,{ENTRY_DEVICE_ID}, {ENTRY_CHECK_IN_TIME}, {ENTRY_CHECK_OUT_TIME}, {ENTRY_DURATION}) VALUES ({TABLE_USER}:{}, '{}', '{}', d'{}', d'{}', {})",
+            attendance.user_id.id, attendance.tag_id ,attendance.device_id, attendance.check_in_time, attendance.check_out_time, attendance.duration
         );
+
+        println!("{:?}", query);
 
         let mut result = self.client.query(query).await?.check()?;
 
@@ -165,6 +167,24 @@ impl<C: surrealdb::Connection> super::repositories::AttendanceRepository for Sur
         let mut result = self.client.query(query).await?.check()?;
 
         let res: Vec<crate::models::attendance::Attendance> = result.take(0)?;
+
+        Ok(res)
+    }
+
+    async fn get_lectures_by_device_id(
+        &self,
+        device_id: &str
+    ) -> Result<Vec<crate::models::lecture::Lecture>, Self::Error> {
+        let query = format!(
+            "SELECT * FROM {TABLE_LECTURE} WHERE {ENTRY_DEVICE_ID} = '{}';",
+            device_id
+        );
+
+        println!("{:?}", query);
+
+        let mut result = self.client.query(query).await?.check()?;
+
+        let res: Vec<crate::models::lecture::Lecture> = result.take(0)?;
 
         Ok(res)
     }
