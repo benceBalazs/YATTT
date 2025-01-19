@@ -29,9 +29,13 @@ jobs:
         uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: '16.2'
+          
       - name: List Available Simulators
         run: xcrun simctl list
 
+      - name: Install iOS 18.1
+        run: | 
+            xcodes runtimes install "iOS 18.1"
       - name: show sdk
         run: | 
           xcodebuild -showsdks   
@@ -45,8 +49,8 @@ jobs:
           xcodebuild test \
             -project yattt_ios_app.xcodeproj \
             -scheme yattt_ios_app \
-            -sdk iphonesimulator18.2 \
-            -destination "platform=iOS Simulator,name=iPhone 14,OS=18.2"\
+            -sdk iphonesimulator18.1 \
+            -destination "platform=iOS Simulator,name=iPhone 16,OS=18.1"\
             -enableCodeCoverage YES
 
             
