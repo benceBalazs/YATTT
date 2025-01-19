@@ -410,6 +410,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"yattt_ios/yattt_ios_app/Preview Content\"";
+				DEVELOPMENT_TEAM = 8S9K4PF7D7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "yattt-ios-app-Info.plist";
@@ -440,6 +441,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"yattt_ios_app/Preview Content\" \"yattt_ios/yattt_ios_app/Preview Content\"";
+				DEVELOPMENT_TEAM = 8S9K4PF7D7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "yattt-ios-app-Info.plist";

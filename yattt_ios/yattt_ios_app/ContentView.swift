@@ -115,6 +115,7 @@ struct HomeView: View {
             return
         }
         //debug
+        //Test
         print("Tag ID: \(defaultTagId), Device ID: \(defaultDeviceId)")
         print("Device ID:", defaultDeviceId)
         
