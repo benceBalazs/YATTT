@@ -1,6 +1,9 @@
 <div class="menu">
   <header>YATTT - yet another time tracking tool</header>
-  <mat-icon class="settingsIcon">settings</mat-icon>
+  <button mat-icon-button (click)="toggleTheme()">
+    <mat-icon>{{ isDarkMode ? 'wb_sunny' : 'nights_stay' }}</mat-icon>
+  </button>
+
 </div>
 
 <h2>Overview</h2>

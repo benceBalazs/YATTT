@@ -11,6 +11,7 @@ import {
 } from '@angular/material/table';
 import {MatSort, MatSortHeader, Sort} from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';
+import {ThemeService} from '../theme.service';
 
 @Component({
   selector: 'app-home',
@@ -20,12 +21,8 @@ import {MatPaginator} from '@angular/material/paginator';
     MatHeaderCell,
     MatHeaderRow,
     MatRow,
-    MatCellDef,
     MatCell,
     MatColumnDef,
-    MatHeaderCellDef,
-    MatHeaderRowDef,
-    MatRowDef,
     MatSort,
     MatSortHeader,
     MatPaginator,
@@ -34,6 +31,17 @@ import {MatPaginator} from '@angular/material/paginator';
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements AfterViewInit {
+  isDarkMode: boolean;
+
+  constructor(private themeService: ThemeService) {
+    this.isDarkMode = this.themeService.isDarkMode();
+  }
+
+  toggleTheme() {
+    this.isDarkMode = !this.isDarkMode;
+    this.themeService.setDarkMode(this.isDarkMode);
+  }
+
   displayedColumns: string[] = ['checkIn', 'checkOut', 'duration', 'card', 'course'];
 
   // Use MatTableDataSource to enable sorting and pagination
