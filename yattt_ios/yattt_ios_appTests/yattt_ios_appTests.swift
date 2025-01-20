@@ -49,7 +49,7 @@ final class yattt_ios_appTests:XCTestCase {
      // Write your test here and use APIs like `#expect(...)` to check expected conditions.
      }*/
     
-    /*var sut: Api! // System Under Test
+    var sut: Api! // System Under Test
     var session: URLSession!
     
     override func setUp() {
@@ -64,7 +64,7 @@ final class yattt_ios_appTests:XCTestCase {
         sut = nil
         super.tearDown()
     }
-    */
+    
     func testCreateRequest() {
         let body = ["data": data, "deviceId": deviceId]
         
@@ -105,7 +105,6 @@ final class yattt_ios_appTests:XCTestCase {
         XCTAssertEqual(decod, expectedBody)
     }
     //Test API
-    /*
     func testSendData_Success() {
         
         let expectedResponse = "Success response"
@@ -114,7 +113,7 @@ final class yattt_ios_appTests:XCTestCase {
         
         let expectation = self.expectation(description: "API Success Call")
         
-        sut.sendData(rfcData: "testData", deviceId: "testDeviceId") { result in
+        sut.sendData(tagData: "testData", deviceId: "testDeviceId") { result in
         
             switch result {
             case .success(let response):
@@ -127,6 +126,7 @@ final class yattt_ios_appTests:XCTestCase {
         
         waitForExpectations(timeout: 1, handler: nil)
     }
+    
     func testSendData_Failure() {
         
         let error = NSError(domain: "TestError", code: 500, userInfo: nil)
@@ -135,7 +135,7 @@ final class yattt_ios_appTests:XCTestCase {
         
         let expectation = self.expectation(description: "API Failure Call")
         
-        sut.sendData(rfcData: "testData", deviceId: "testDeviceId") { result in
+        sut.sendData(tagData: "testData", deviceId: "testDeviceId") { result in
 
             switch result {
             case .success:
@@ -147,6 +147,6 @@ final class yattt_ios_appTests:XCTestCase {
         }
         
         waitForExpectations(timeout: 1, handler: nil)
-    }*/
+    }
     
 }

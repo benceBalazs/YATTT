@@ -38,11 +38,11 @@ struct ContentView: View {
 struct HomeView: View {
     @State private var responseMessage: String = ""
     @State private var defaultTagId: String = "E16EE47D"
-    //@State private var tagId: String = ""
+
     @State private var defaultDeviceId: String = "065CA9D0-7703-48A2-8FC1"
     @State private var isDefaultTagId: Bool = true
     @State private var isDefaultDeviceId: Bool = true
-    //@State private var deviceId: String = ""
+
     var body: some View {
         VStack {
             Text("Reader")
@@ -104,18 +104,11 @@ struct HomeView: View {
     
     // Send Data to API
     private func sendDataToApi(tag_id: String, device_id: String) {
-        // get the deviceId
-        /*guard let deviceId = UIDevice.current.identifierForVendor?.uuidString else {
-         responseMessage = "Error: Unable to fetch device ID"
-         return
-         }*/
         
         guard !defaultTagId.isEmpty, !defaultDeviceId.isEmpty else {
             responseMessage = "Error: Please enter Tag ID and Device ID!"
             return
         }
-        //debug
-        //Test
         print("Tag ID: \(defaultTagId), Device ID: \(defaultDeviceId)")
         print("Device ID:", defaultDeviceId)
         

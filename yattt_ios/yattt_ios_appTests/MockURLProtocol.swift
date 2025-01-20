@@ -1,3 +1,12 @@
+//
+//  MockURLProtocol.swift
+//  yattt_ios_app
+//
+//  Created by Laura likar on 20.01.25.
+//
+import Foundation
+
+
 //Mocking
 class MockURLProtocol: URLProtocol {
     static var responseData: Data?
