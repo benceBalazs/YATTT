@@ -11,7 +11,6 @@ import {
 } from '@angular/material/table';
 import {MatSort, MatSortHeader, MatSortModule, Sort} from '@angular/material/sort';
 import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
-import {ThemeService} from '../theme.service';
 import {DataApiService} from '../data-api.service';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
@@ -28,15 +27,8 @@ import {HttpClient} from '@angular/common/http';
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements AfterViewInit {
-  isDarkMode: boolean;
 
-  constructor(private themeService: ThemeService, private dataApiService: DataApiService, private router: Router, private http: HttpClient) {
-    this.isDarkMode = this.themeService.isDarkMode();
-  }
-
-  toggleTheme() {
-    this.isDarkMode = !this.isDarkMode;
-    this.themeService.setDarkMode(this.isDarkMode);
+  constructor(private dataApiService: DataApiService, private router: Router, private http: HttpClient) {
   }
 
   displayedColumns: string[] = ['check_in_time', 'check_out_time', 'duration', 'card_name', 'lecture_name'];
