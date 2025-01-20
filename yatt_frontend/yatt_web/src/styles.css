@@ -26,7 +26,7 @@ h2{
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   z-index: 1000;
 }
 
@@ -89,3 +89,28 @@ body.dark-mode .navbar-links a.active-link {
   color: #ffd700;
 }
 
+table, .mat-table {
+  margin-top: 20px;
+  width: 100%; /* Optional: To make tables responsive */
+}
+
+th, .mat-header-cell {
+  background-color: rgb(77, 113, 17) !important; /* Use !important to override Material styles */
+  color: white !important;
+  text-align: left;
+  padding: 10px !important;
+}
+
+td, .mat-cell {
+  padding: 10px !important;
+  border-bottom: 1px solid #ddd !important;
+}
+
+tr:nth-child(even), .mat-row:nth-child(even) {
+  background-color: #efefef !important;
+}
+
+tr:hover, .mat-row:hover {
+  background-color: #e6f7d4 !important;
+  transition: background-color 0.3s ease;
+}

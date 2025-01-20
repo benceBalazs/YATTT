@@ -1,0 +1,40 @@
+<div class="container">
+  <h2>Cards Management</h2>
+  <button (click)="openAddModal()">Add Card</button>
+  <table>
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Tag ID</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let card of cards">
+      <td>{{ card.name }}</td>
+      <td>{{ card.tag_id }}</td>
+      <td>
+        <button (click)="openEditModal(card)">Edit</button>
+        <button (click)="deleteCard(card.tag_id)">Delete</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal -->
+<div class="modal" *ngIf="showModal">
+  <div class="modal-content">
+    <span class="close" (click)="closeModal()">×</span>
+    <h3>{{ isEdit ? 'Edit Card' : 'Add Card' }}</h3>
+    <form (ngSubmit)="saveCard()">
+      <label for="name">Name:</label>
+      <input id="name" [(ngModel)]="cardForm.name" name="name" required />
+      <label for="tag_id">Tag ID:</label>
+      <input id="tag_id" [(ngModel)]="cardForm.tag_id" name="tag_id" required [readonly]="isEdit" />
+      <button type="submit">{{ isEdit ? 'Update' : 'Add' }}</button>
+    </form>
+  </div>
+</div>
+
+

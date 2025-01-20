@@ -28,4 +28,19 @@ export class DataApiService {
   register(body: any): Observable<any> {
     return this.http.post<Observable<any>>(this.baseUrl + 'register', body);
   }
+
+  getCards(): Observable<any> {
+    return this.http.get<Observable<any>>(this.baseUrl + 'cards');
+  }
+  addCard(card: { tag_id: string; name: string }): Observable<any> {
+    return this.http.post(this.baseUrl + 'cards', card);
+  }
+
+  updateCard(tag_id: string, card: { tag_id: string; name: string }): Observable<any> {
+    return this.http.put(this.baseUrl + 'cards', card);
+  }
+
+  deleteCard(tag_id: string): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/cards/${tag_id}`);
+  }
 }
