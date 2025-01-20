@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {MatIcon} from '@angular/material/icon';
+import {MatIcon, MatIconModule} from '@angular/material/icon';
 import {
   MatCell,
   MatCellDef,
@@ -7,10 +7,10 @@ import {
   MatHeaderCell, MatHeaderCellDef,
   MatHeaderRow, MatHeaderRowDef,
   MatRow, MatRowDef,
-  MatTable, MatTableDataSource
+  MatTable, MatTableDataSource, MatTableModule
 } from '@angular/material/table';
-import {MatSort, MatSortHeader, Sort} from '@angular/material/sort';
-import {MatPaginator} from '@angular/material/paginator';
+import {MatSort, MatSortHeader, MatSortModule, Sort} from '@angular/material/sort';
+import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
 import {ThemeService} from '../theme.service';
 import {DataApiService} from '../data-api.service';
 import {Router} from '@angular/router';
@@ -19,17 +19,11 @@ import {HttpClient} from '@angular/common/http';
 @Component({
   selector: 'app-home',
   imports: [
-    MatIcon,
-    MatTable,
-    MatHeaderCell,
-    MatHeaderRow,
-    MatRow,
-    MatCell,
-    MatColumnDef,
-    MatSort,
-    MatSortHeader,
-    MatPaginator,
-  ],
+  MatTableModule,
+  MatSortModule,
+  MatPaginatorModule,
+  MatIconModule
+],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
