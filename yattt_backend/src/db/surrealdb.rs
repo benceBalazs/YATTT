@@ -146,8 +146,6 @@ impl<C: surrealdb::Connection> super::repositories::AttendanceRepository for Sur
             attendance.user_id.id, attendance.tag_id ,attendance.device_id, attendance.check_in_time, attendance.check_out_time, attendance.duration
         );
 
-        println!("{:?}", query);
-
         let mut result = self.client.query(query).await?.check()?;
 
         let res: Option<crate::models::attendance::Attendance> = result.take(0)?;
@@ -164,7 +162,11 @@ impl<C: surrealdb::Connection> super::repositories::AttendanceRepository for Sur
             USER_ID = user_id
         );
 
+        print!("{}", query);
+
         let mut result = self.client.query(query).await?.check()?;
+
+        print!("{:?}", result);
 
         let res: Vec<crate::models::attendance::Attendance> = result.take(0)?;
 

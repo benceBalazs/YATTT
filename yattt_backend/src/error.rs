@@ -9,7 +9,8 @@ pub enum AppError {
     NotFound,
     BadRequest,
     InternalServerError,
-    Unauthorized
+    Unauthorized,
+    Generic(String)
 }
 
 impl axum::response::IntoResponse for AppError {
@@ -26,6 +27,7 @@ impl axum::response::IntoResponse for AppError {
                 "Internal server error".to_string(),
             ),
             AppError::Unauthorized => (hyper::StatusCode::UNAUTHORIZED, "Not Authorized".to_string()),
+            AppError::Generic(message) => (hyper::StatusCode::BAD_REQUEST, format!("Error: {}", message))
         };
         let error_response = ApiError {
             message: error_message,

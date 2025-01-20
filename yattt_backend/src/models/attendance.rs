@@ -15,7 +15,7 @@ pub struct Attendance {
     pub duration: f64,
 }
 
-#[derive(Debug, Serialize, Deserialize, ToSchema, IntoParams)]
+#[derive(Debug, Serialize, Deserialize, ToSchema, IntoParams, Clone)]
 pub struct AttendanceRequest {
     pub tag_id: String,
     pub device_id: String,

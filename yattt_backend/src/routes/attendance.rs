@@ -33,7 +33,7 @@ pub async fn attendance_create_handler(
     State(state): State<crate::YatttAppState>,
     headers: HeaderMap,
     Json(payload): Json<AttendanceRequest>,
-) -> Result<(StatusCode, Json<Attendance>), AppError> {
+) -> Result<(StatusCode), AppError> {
 
     let Some(auth_header) = headers.get("Authorization") else {
         return Err(AppError::BadRequest)
@@ -60,21 +60,51 @@ pub async fn attendance_create_handler(
         return Err(AppError::NotFound)
     };
 
-    let response_attendance = state.db.create_attendance(Attendance {
-        id: None,
-        tag_id: payload.tag_id,
-        user_id: user_thing.user_id.unwrap(),
-        device_id: payload.device_id,
-        check_in_time: payload.check_in_time,
-        check_out_time: payload.check_out_time,
-        duration: payload.duration,
-    }).await?;
+    let mut lecture_result = state.db.get_lectures_by_device_id(&payload.device_id).await?;
 
-    let Some(attendance) = response_attendance else {
-            return Err(AppError::InternalServerError)
-    };
+    if {lecture_result.is_empty()} {
+        return Err(AppError::NotFound);
+    }
 
-    Ok((StatusCode::CREATED, Json(attendance)))
+    let mut response_attendance: Attendance;
+
+    for lecture in lecture_result.iter() {
+
+        let mut lecture_check_in_time = lecture.start_time;
+        let mut lecture_check_out_time = lecture.end_time;
+
+        let user_check_in_time = DateTime::<Utc>::from_str(&payload.check_in_time).unwrap();
+        let user_check_out_time = DateTime::<Utc>::from_str(&payload.check_out_time).unwrap();
+
+        if { user_check_out_time.lt(&lecture.end_time) } {
+            lecture_check_out_time = user_check_out_time;
+        }
+
+        if { lecture.start_time.lt(&user_check_in_time)
+            && lecture.end_time.gt(&user_check_in_time) } {
+            lecture_check_in_time = user_check_in_time;
+
+            let response_attendance_inner = state.db.create_attendance(Attendance {
+                id: None,
+                tag_id: payload.tag_id.clone(),
+                user_id: user_thing.user_id.clone().unwrap(),
+                device_id: payload.device_id.clone(),
+                check_in_time: payload.check_in_time.clone(),
+                check_out_time: payload.check_out_time.clone(),
+                duration: payload.duration, // calc duration
+            }).await?;
+
+            let Some(_response_attendance_inner) = response_attendance_inner else {
+                return Err(AppError::BadRequest)
+            };
+
+        } else {
+            return Err(AppError::Generic("No Lecture at the given check in time frame".to_string()))
+        }
+
+    }
+
+    Ok(StatusCode::OK)
 }
 
 #[utoipa::path(
@@ -135,6 +165,8 @@ pub async fn attendance_retrieve_handler(
                         && lecture.end_time.gt(&user_check_in_time) } {
                         lecture_check_in_time = user_check_in_time;
 
+                        print!("Looping {:?}", user_attendances);
+
                         user_attendances.push(AttendanceResponse {
                             card_name: user_card.card_name.to_string(),
                             lecture_name: lecture.lv_name.to_string(),
@@ -149,6 +181,8 @@ pub async fn attendance_retrieve_handler(
             }
         }
     }
+
+    print!("{:?}", user_attendances);
 
     Ok((StatusCode::OK, Json(user_attendances)))
 }
