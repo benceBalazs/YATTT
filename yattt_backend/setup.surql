@@ -16,6 +16,7 @@ DEFINE INDEX idx_unique_username ON User FIELDS username UNIQUE; -- Enforce uniq
 DEFINE TABLE Attendance SCHEMAFULL;
 DEFINE FIELD user_id ON Attendance TYPE record<User>; -- Reference to User
 DEFINE FIELD device_id ON Attendance TYPE string;
+DEFINE FIELD tag_id ON Attendance TYPE string;
 DEFINE FIELD check_in_time ON Attendance TYPE datetime;
 DEFINE FIELD check_out_time ON Attendance TYPE datetime;
 DEFINE FIELD duration ON Attendance TYPE float;
