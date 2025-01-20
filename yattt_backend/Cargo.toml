@@ -20,7 +20,7 @@ path = "src/main.rs"
 axum = { version = "0.7"}
 hyper = { version = "1.0.1", features = ["full"] }
 tower = "0.5"
-tower-http = { version = "0.6.2", features = ["auth", "validate-request"] }
+tower-http = { version = "0.6.2", features = ["auth", "validate-request","cors"] }
 
 # async runtime
 tokio = { version = "1.17", features = ["full"] }
