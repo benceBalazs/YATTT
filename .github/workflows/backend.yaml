@@ -3,10 +3,10 @@ name: Test the YATTT Backend Service
 on:
   push:
     paths:
-      - 'yatt_backend/**'
+      - 'yattt_backend/**'
   pull_request:
     paths:
-      - 'yatt_backend/**'
+      - 'yattt_backend/**'
   workflow_dispatch:
     inputs:
       logLevel:
@@ -39,7 +39,7 @@ jobs:
 
       - name: Run unit & integration tests
         run: |
-          cd yatt_backend
+          cd yattt_backend
           chmod +x test.sh
           ./test.sh
 
@@ -58,7 +58,7 @@ jobs:
 
       - name: Compile and build the project
         run: |
-          cd yatt_backend
+          cd yattt_backend
           cargo build --release
 
       - name: Build & Save Docker image
@@ -85,6 +85,6 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./yatt_backend/yatt_backend_service.tar.gz
-          asset_name: yatt_backend_service.tar.gz
+          asset_path: ./yattt_backend/yattt_backend_service.tar.gz
+          asset_name: yattt_backend_service.tar.gz
           asset_content_type: application/gzip
