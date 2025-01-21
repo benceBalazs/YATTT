@@ -62,7 +62,10 @@ jobs:
           cargo build --release
 
       - name: Build & Save Docker image
-        run: ./docker_action_setup.sh
+        run: |
+          cd yattt_backend
+          chmod +x ./docker_action_setup.sh
+          ./docker_action_setup.sh
 
       - name: Get current date
         id: date
