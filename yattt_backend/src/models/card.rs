@@ -13,5 +13,5 @@ pub struct Card {
 #[derive(Debug, Serialize, Deserialize, IntoParams, ToSchema)]
 pub struct CardRequest {
     pub tag_id: String,
-    pub name: String,
+    pub card_name: String,
 }

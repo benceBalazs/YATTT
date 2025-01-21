@@ -43,7 +43,7 @@ pub async fn card_create_handler(
             id: None,
             user_id: Thing::from((db::db_constants::TABLE_USER.to_string(), user_id)),
             tag_id: payload.tag_id,
-            card_name: payload.name,
+            card_name: payload.card_name,
         })
         .await?;
 
@@ -107,7 +107,7 @@ pub async fn card_modify_handler(
         id: None,
         user_id: Thing::from((db::db_constants::TABLE_USER.to_string(), user_id.clone())),
         tag_id: payload.tag_id,
-        card_name: payload.name,
+        card_name: payload.card_name,
     },&user_id).await?;
 
 
