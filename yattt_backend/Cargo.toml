@@ -1,6 +1,73 @@
 [package]
 name = "yattt_backend"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 
+[features]
+default = []
+test = []
+
+[lib]
+name = "yattt_backend"
+path = "src/lib.rs"
+
+[[bin]]
+name = "yattt_backend_bin"
+path = "src/main.rs"
+
 [dependencies]
+# web framework
+axum = { version = "0.7"}
+hyper = { version = "1.0.1", features = ["full"] }
+tower = "0.5"
+tower-http = { version = "0.6.2", features = ["auth", "validate-request","cors"] }
+
+# async runtime
+tokio = { version = "1.17", features = ["full"] }
+
+# API documentation
+utoipa = { version = "5.2.0", features = ["axum_extras", "macros"] }
+utoipa-swagger-ui = { version = "8.0.3", features = ["axum"] }
+utoipa-axum = { version = "0.1.2" }
+utoipa-redoc = { version = "5.0.0", features = ["axum"] }
+utoipa-rapidoc = { version = "5.0.0", features = ["axum"] }
+utoipa-scalar = { version = "0.2.0", features = ["axum"] }
+
+# serialization deserialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# environment variables
+dotenvy = "0.15.7"
+
+# logging
+tracing-subscriber = { version = "0.3.19", features = ["env-filter"] }
+tracing = "0.1.41"
+
+# time handling utility
+chrono = "0.4.39"
+
+# database
+surrealdb = { version = "2.1.3", features = ["kv-mem"] }
+
+# encryption
+bcrypt = "0.16.0"
+jsonwebtoken = "9.3.0"
+
+# error handling 
+thiserror = "2.0.6"
+serial_test = "3.2.0"
+
+
+[profile.release]
+lto = true
+strip = true
+opt-level = 3
+panic = 'abort'
+codegen-units = 1
+
+[dev-dependencies]
+pretty_assertions = "1.4.1"
+regex = "1.11.1"
+reqwest = { version = "0.12.9", features = ["json"] }
+rstest = "0.23.0"
