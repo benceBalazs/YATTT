@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DataApiService} from '../../data-api.service';
+import { DataApiService} from '../../services/data-api.service';
 import { Chart, registerables } from 'chart.js';
 
 Chart.register(...registerables);

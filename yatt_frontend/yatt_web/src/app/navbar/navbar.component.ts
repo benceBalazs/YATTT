@@ -1,28 +1,31 @@
-import { Component } from '@angular/core';
-import {MatIcon} from "@angular/material/icon";
-import {ThemeService} from '../theme.service';
-import {DataApiService} from '../data-api.service';
-import {Router, RouterOutlet} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
+import { ThemeService } from '../../services/theme.service';
 import {NgIf} from '@angular/common';
 import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
 
 @Component({
   selector: 'app-navbar',
+  templateUrl: './navbar.component.html',
+  styleUrls: ['./navbar.component.css'],
   imports: [
-    MatIcon,
     NgIf,
     MatButton,
     MatIconButton,
-  ],
-  templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.css'
+    MatIcon
+  ]
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
   isDarkMode: boolean;
-  username: string | null = '';
+  username: string | null = null;
 
-  constructor(private themeService: ThemeService, private dataApiService: DataApiService, private router: Router, private http: HttpClient) {
+  constructor(
+    private themeService: ThemeService,
+    private authService: AuthService,
+    private router: Router
+  ) {
     this.isDarkMode = this.themeService.isDarkMode();
   }
 
@@ -32,16 +35,17 @@ export class NavbarComponent {
   }
 
   ngOnInit(): void {
-    if (typeof window !== 'undefined' && localStorage) {
-      this.username = localStorage.getItem('username');
-    }
+    // Subscribe to user state
+    this.authService.user$.subscribe((user) => {
+      this.username = user; // Update dynamically
+    });
+
+    // Optionally initialize from localStorage (for page refreshes)
+    this.username = this.authService.getUser();
   }
 
   logout(): void {
-    if (typeof window !== 'undefined' && localStorage) {
-      localStorage.clear(); // Clear all user data
-      this.router.navigate(['/login']);
-    }
+    this.authService.clearUser(); // Clear user state
+    this.router.navigate(['/login']); // Redirect to login page
   }
-
 }

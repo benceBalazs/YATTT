@@ -21,7 +21,7 @@ import {
   Sort,
 } from '@angular/material/sort';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { DataApiService } from '../data-api.service';
+import { DataApiService } from '../../services/data-api.service';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { DatePipe } from '@angular/common';

@@ -14,6 +14,7 @@ import {NgIf} from '@angular/common';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  title = 'yattt_web';
   isLoginRoute = false;
 
   constructor(private router: Router) {}

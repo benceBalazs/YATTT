@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DataApiService } from '../data-api.service';
+import { DataApiService } from '../../services/data-api.service';
 import { Card, CardWithId } from '../project.model';
 import {FormsModule} from '@angular/forms';
 import {NgForOf, NgIf} from '@angular/common';
