@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataApiService } from '../data-api.service';
-import { Card } from '../project.model';
+import { Card, CardWithId } from '../project.model';
 import {FormsModule} from '@angular/forms';
 import {NgForOf, NgIf} from '@angular/common';
 
@@ -15,8 +15,8 @@ import {NgForOf, NgIf} from '@angular/common';
   ]
 })
 export class CardsComponent implements OnInit {
-  cards: Card[] = [];
-  cardForm: Card = { name: '', tag_id: '' };
+  cards: CardWithId[] = [];
+  cardForm: CardWithId = { card_name: '', tag_id: '' };
   showModal = false;
   isEdit = false;
 
@@ -28,17 +28,17 @@ export class CardsComponent implements OnInit {
 
   fetchCards(): void {
     this.dataApiService.getCards().subscribe((cards) => {
-      this.cards = cards;
+      this.cards = cards.cards;
     });
   }
 
   openAddModal(): void {
     this.isEdit = false;
-    this.cardForm = { name: '', tag_id: this.generateTagId() };
+    this.cardForm = { card_name: '', tag_id: this.generateTagId() };
     this.showModal = true;
   }
 
-  openEditModal(card: Card): void {
+  openEditModal(card: CardWithId): void {
     this.isEdit = true;
     this.cardForm = { ...card };
     this.showModal = true;
@@ -50,7 +50,7 @@ export class CardsComponent implements OnInit {
 
   saveCard(): void {
     if (this.isEdit) {
-      this.dataApiService.updateCard(this.cardForm.tag_id, this.cardForm).subscribe(() => {
+      this.dataApiService.updateCard(this.cardForm.id!.id.String, this.cardForm).subscribe(() => {
         this.fetchCards();
         this.closeModal();
       });
@@ -62,8 +62,8 @@ export class CardsComponent implements OnInit {
     }
   }
 
-  deleteCard(tag_id: string): void {
-    this.dataApiService.deleteCard(tag_id).subscribe(() => {
+  deleteCard(card: CardWithId): void {
+    this.dataApiService.deleteCard(card.id!.id.String).subscribe(() => {
       this.fetchCards();
     });
   }

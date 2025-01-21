@@ -9,5 +9,18 @@ export class Project {
 
 export interface Card {
   tag_id: string;
-  name: string;
+  card_name: string;
 }
+
+export type RecordId = {
+  id?: {
+    tb: string;
+    id: {
+      "String": string;
+    }
+  }
+}
+
+export type CardWithId = Card & RecordId;
+
+export type GetCardResponse = { cards: CardWithId[]};

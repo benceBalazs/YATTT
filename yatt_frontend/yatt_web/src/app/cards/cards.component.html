@@ -11,11 +11,11 @@
     </thead>
     <tbody>
     <tr *ngFor="let card of cards">
-      <td>{{ card.name }}</td>
+      <td>{{ card.card_name }}</td>
       <td>{{ card.tag_id }}</td>
       <td>
         <button (click)="openEditModal(card)">Edit</button>
-        <button (click)="deleteCard(card.tag_id)">Delete</button>
+        <button (click)="deleteCard(card)">Delete</button>
       </td>
     </tr>
     </tbody>
@@ -29,12 +29,10 @@
     <h3>{{ isEdit ? 'Edit Card' : 'Add Card' }}</h3>
     <form (ngSubmit)="saveCard()">
       <label for="name">Name:</label>
-      <input id="name" [(ngModel)]="cardForm.name" name="name" required />
+      <input id="name" [(ngModel)]="cardForm.card_name" name="name" required />
       <label for="tag_id">Tag ID:</label>
       <input id="tag_id" [(ngModel)]="cardForm.tag_id" name="tag_id" required [readonly]="isEdit" />
       <button type="submit">{{ isEdit ? 'Update' : 'Add' }}</button>
     </form>
   </div>
 </div>
-
-
