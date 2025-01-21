@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DataApiService } from '../data-api.service';
 import { Card } from '../project.model';
 import {FormsModule} from '@angular/forms';
-import {NgIf} from '@angular/common';
+import {NgForOf, NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-cards',
@@ -10,7 +10,8 @@ import {NgIf} from '@angular/common';
   styleUrls: ['./cards.component.css'],
   imports: [
     FormsModule,
-    NgIf
+    NgIf,
+    NgForOf
   ]
 })
 export class CardsComponent implements OnInit {

@@ -1,9 +1,14 @@
 <nav class="navbar">
-    <ul class="navbar-links">
-      <li><a href="/home">Home</a></li>
-      <li><a href="/cards">Card Management</a></li>
-      <li><a href="/dashboard">Dashboard</a></li>
-    </ul>
+  <ul class="navbar-links">
+    <li><a href="/home">Home</a></li>
+    <li><a href="/cards">Card Management</a></li>
+    <li><a href="/dashboard">Dashboard</a></li>
+  </ul>
+
+  <div class="user-section">
+    <span *ngIf="username">Welcome, {{ username }}</span>
+    <button mat-button *ngIf="username" (click)="logout()">Log Out</button>
+  </div>
 
   <div class="theme-toggle">
     <button mat-icon-button (click)="toggleTheme()">

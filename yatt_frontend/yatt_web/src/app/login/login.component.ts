@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {FormGroup, FormBuilder, Validators, ReactiveFormsModule} from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import { Router } from '@angular/router';
+import { DataApiService} from '../data-api.service';
 import {NgIf} from '@angular/common';
 
 @Component({
@@ -14,49 +14,65 @@ import {NgIf} from '@angular/common';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  public loginForm!: FormGroup;
-  public errorMessage: string = '';
+  loginForm: FormGroup;
+  errorMessage: string = '';
 
   constructor(
-    private formBuilder: FormBuilder,
-    private http: HttpClient,
+    private fb: FormBuilder,
+    private apiService: DataApiService,
     private router: Router
-  ) { }
-
-  ngOnInit(): void {
-    // Initialize form with validation rules
-    this.loginForm = this.formBuilder.group({
-      username: ['', [Validators.required]],
-      password: ['', [Validators.required]]
+  ) {
+    this.loginForm = this.fb.group({
+      username: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(8)]]
     });
   }
 
-  signIn() {
-    if (this.loginForm.invalid) {
-      this.errorMessage = 'Please fill all fields correctly!';
+  ngOnInit(): void {}
+
+  signIn(): void {
+    const { username, password } = this.loginForm.value;
+
+    this.apiService.login(username, password).subscribe({
+      next: (response) => {
+        localStorage.setItem('access_token', response.access_token);
+        localStorage.setItem('username', username); // Save username for the navbar
+        this.router.navigate(['/home']); // Redirect to home
+      },
+      error: (err) => {
+        if (err.status === 400 || err.status === 401) {
+          this.errorMessage = 'Invalid username or password';
+        } else {
+          this.errorMessage = 'An unexpected error occurred. Please try again.';
+        }
+      }
+    });
+  }
+
+
+  signUp(): void {
+    const { username, password } = this.loginForm.value;
+
+    if (password.length < 8) {
+      this.errorMessage = 'Password must be at least 8 characters long'; // Display error for short password
       return;
     }
 
-    const credentials = {
-      username: this.loginForm.value.username,
-      password: this.loginForm.value.password
-    };
-
-    this.http.post<any>('http://localhost:3000/auth/login', credentials)
-      .subscribe({
-        next: (response) => {
-          alert('Login Successful!');
-          localStorage.setItem('token', response.token); // Store the token locally
-          this.router.navigate(['/home']);
-        },
-        error: (err) => {
-          this.errorMessage = 'Invalid username or password';
-          console.error('Login error', err);
+    this.apiService.register(username, password).subscribe({
+      next: (response) => {
+        localStorage.setItem('access_token', response.access_token);
+        localStorage.setItem('username', username); // Save username for the navbar
+        this.router.navigate(['/home']); // Redirect to home
+      },
+      error: (err) => {
+        if (err.status === 400) {
+          this.errorMessage = 'Registration failed. Please try again.';
+        } else {
+          this.errorMessage = 'An unexpected error occurred. Please try again.';
         }
-      });
+      }
+    });
   }
 
-  signUp(){
 
-  }
 }

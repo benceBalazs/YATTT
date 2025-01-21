@@ -56,11 +56,6 @@
   border-bottom-color: #C3E956;
 }
 
-.errorMessage{
-  color: red;
-  margin-top: 20px;
-}
-
 button{
   background: #fff;
   font-size: 14px;
@@ -88,5 +83,12 @@ button:hover {
 button:disabled{
   background: rgba(255, 255, 255, 0.42);
 }
+
+.errorMessage {
+  color: red;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
 
 

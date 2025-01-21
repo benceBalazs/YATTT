@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +8,27 @@ import {Observable} from 'rxjs';
 
 export class DataApiService {
   private baseUrl = 'http://localhost:8080/api/v1/';
+
   constructor(private http: HttpClient) {}
+
+  login(username: string, password: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/login`, { username, password });
+  }
+
+  register(username: string, password: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/register`, { username, password });
+  }
+
+  refreshToken(): Observable<any> {
+    const token = localStorage.getItem('access_token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.post(`${this.baseUrl}`, {}, { headers });
+  }
+
+  getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('access_token');
+    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  }
 
   getAttendances(): Observable<any> {
     const headers = {
@@ -19,14 +39,6 @@ export class DataApiService {
     return this.http.get<Observable<any>>(this.baseUrl + 'attendances', {
       headers,
     });
-  }
-
-  getAuth(): Observable<any> {
-    return this.http.get<Observable<any>>(this.baseUrl + 'auth');
-  }
-
-  register(body: any): Observable<any> {
-    return this.http.post<Observable<any>>(this.baseUrl + 'register', body);
   }
 
   getCards(): Observable<any> {
