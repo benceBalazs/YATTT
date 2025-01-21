@@ -21,14 +21,12 @@ on:
           - warning
           - debug
 
-permissions:
-  contents: read
-  pull-requests: write
+permissions: write-all
 
 jobs:
   test:
     name: Test backend
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout code
@@ -40,7 +38,7 @@ jobs:
           toolchain: stable
 
       - name: Cargo Cache
-        uses: actions/cache@v1
+        uses: actions/cache@v4
         with:
           path: ~/.cargo
           key: ${{ runner.os }}-cargo-${{ hashFiles('Cargo.toml') }}
@@ -49,7 +47,7 @@ jobs:
             ${{ runner.os }}-cargo
 
       - name: Cargo Target Cache
-        uses: actions/cache@v1
+        uses: actions/cache@v4
         with:
           path: target
           key: ${{ runner.os }}-cargo-target-${{ hashFiles('Cargo.toml') }}
@@ -65,7 +63,7 @@ jobs:
 
   dockerize:
     name: Create Docker Image
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout code
