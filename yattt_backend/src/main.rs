@@ -50,10 +50,8 @@ pub async fn main() -> Result<(), Error> {
         password: &yattt_backend::DB_PASSWORD,
     };
 
-    let mut db_backend;
-
     #[cfg(not(feature = "test"))]
-    db_backend = SurrealDbBackend::new(
+    let db_backend = SurrealDbBackend::new(
         &yattt_backend::DATABASE_URL,
         credentials,
         yattt_backend::db::db_constants::NAMESPACE,
@@ -67,7 +65,7 @@ pub async fn main() -> Result<(), Error> {
     #[cfg(feature = "test")]
     db.use_ns("test_ns").use_db("Testing DB").await.unwrap();
     #[cfg(feature = "test")]
-    db_backend = crate::db::surrealdb::SurrealDbBackend { client: db };
+    let db_backend = crate::db::surrealdb::SurrealDbBackend { client: db };
 
     let app_state = AppState::<yattt_backend::YatttBackend> {
         db: std::sync::Arc::new(db_backend),
