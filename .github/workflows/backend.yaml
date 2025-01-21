@@ -4,9 +4,11 @@ on:
   push:
     paths:
       - 'yattt_backend/**'
+      - '.github/workflows/backend.yaml'
   pull_request:
     paths:
       - 'yattt_backend/**'
+      - '.github/workflows/backend.yaml'
   workflow_dispatch:
     inputs:
       logLevel:
