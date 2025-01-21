@@ -17,7 +17,7 @@ lazy_env_var!(
 );
 lazy_env_var!(DB_USERNAME, "DB_USERNAME", "root".to_string());
 lazy_env_var!(DB_PASSWORD, "DB_PASSWORD", "root".to_string());
-lazy_env_var!(DATABASE_URL, "DATABASE_URL", "127.0.0.1:8000".to_string());
+lazy_env_var!(DATABASE_URL, "DATABASE_URL", "localhost:8000".to_string());
 lazy_env_var!(JWT_SECRET, "JWT_SECRET", "superrandomdefaultsecret".to_string());
 
 pub const YATTT_TAG: &str = "YATTT";
