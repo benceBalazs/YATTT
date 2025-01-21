@@ -26,6 +26,7 @@ DEFINE TABLE Card SCHEMAFULL;
 DEFINE FIELD user_id ON Card TYPE record<User>; -- Reference to User
 DEFINE FIELD tag_id ON Card TYPE string;
 DEFINE FIELD card_name ON Card TYPE string;
+DEFINE INDEX idx_unique_tag_id ON Card FIELDS tag_id UNIQUE;
 
 -- Create the Lecture table
 DEFINE TABLE Lecture SCHEMAFULL;
