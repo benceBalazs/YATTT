@@ -2,14 +2,17 @@ use crate::db::repositories::{AttendanceRepository, CardRepository, UserReposito
 use crate::error::AppError;
 use crate::jwt::Claims;
 use crate::models::attendance::{Attendance, AttendanceRequest, AttendanceResponse};
+use crate::models::card::Card;
 use crate::models::lecture::Lecture;
-use crate::{PYTHON_SERVICE_API_KEY};
-use axum::extract::{State};
+use crate::{db, PYTHON_SERVICE_API_KEY};
+use axum::extract::{Path, Request, State};
 use axum::http::HeaderMap;
-use axum::{Extension, Json};
-use chrono::{DateTime, Utc};
+use axum::{http, Extension, Json};
+use chrono::{Date, DateTime, Utc};
 use hyper::StatusCode;
+use serde::de;
 use std::str::FromStr;
+use surrealdb::sql::Kind::Datetime;
 
 static SECONDS_IN_AN_HOUR: f64 = 3600.0;
 

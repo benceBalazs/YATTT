@@ -4,7 +4,7 @@ use surrealdb::sql::Thing;
 use utoipa::{IntoParams, IntoResponses, ToSchema};
 
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug,PartialEq, Serialize, Deserialize)]
 pub struct Attendance {
     pub id: Option<Thing>, // SurrealDB will generate a record ID
     pub tag_id: String,
