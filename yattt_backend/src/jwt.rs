@@ -43,4 +43,16 @@ impl TokenEncoder for JWTEncoder {
     }
 }
 
+pub struct TestJWTEncoder {}
+
+impl TokenEncoder for TestJWTEncoder {
+    fn encode_jwt(user_id: String) -> Option<String> {
+        Some(user_id)
+    }
+
+    fn decode_jwt(token: String) -> Option<Claims> {
+        Some(Claims { exp: Utc::now().timestamp() as usize, iat: Utc::now().timestamp() as usize, user_id: token })
+    }
+}
+
 

@@ -17,10 +17,10 @@ FROM debian:bookworm-slim
 WORKDIR /app
 
 # Copy the compiled binary from the builder stage
-COPY --from=builder /app/target/release/yattt_backend .
+COPY --from=builder /app/target/release/yattt_backend_bin .
 
 # Expose port
 EXPOSE 8080
 
 # Set the startup command
-CMD ["./yattt_backend"]
+CMD ["./yattt_backend_bin"]

@@ -7,7 +7,7 @@ use surrealdb::Surreal;
 
 #[derive(Debug, Clone)]
 pub struct SurrealDbBackend<C: surrealdb::Connection = Client> {
-    client: Surreal<C>,
+    pub client: Surreal<C>,
 }
 
 impl SurrealDbBackend<Client> {

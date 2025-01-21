@@ -37,6 +37,24 @@ jobs:
         with:
           toolchain: stable
 
+      - name: Cargo Cache
+        uses: actions/cache@v1
+        with:
+        path: ~/.cargo
+        key: ${{ runner.os }}-cargo-${{ hashFiles('Cargo.toml') }}
+        restore-keys: |
+          ${{ runner.os }}-cargo-${{ hashFiles('Cargo.toml') }}
+          ${{ runner.os }}-cargo
+
+      - name: Cargo Target Cache
+        uses: actions/cache@v1
+        with:
+        path: target
+        key: ${{ runner.os }}-cargo-target-${{ hashFiles('Cargo.toml') }}
+        restore-keys: |
+          ${{ runner.os }}-cargo-target-${{ hashFiles('Cargo.toml') }}
+          ${{ runner.os }}-cargo-target
+
       - name: Run unit & integration tests
         run: |
           cd yattt_backend
@@ -55,11 +73,6 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-
-      - name: Compile and build the project
-        run: |
-          cd yattt_backend
-          cargo build --release
 
       - name: Build & Save Docker image
         run: |

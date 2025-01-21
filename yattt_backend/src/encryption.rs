@@ -15,6 +15,7 @@ impl From<BcryptError> for AppError {
 #[derive(Clone)]
 pub struct BcryptPasswordEncrypter;
 
+
 impl PasswordEncrypter for BcryptPasswordEncrypter {
     fn hash_password(password: &str) -> Option<String> {
         bcrypt::hash(password, bcrypt::DEFAULT_COST).ok()
@@ -22,5 +23,18 @@ impl PasswordEncrypter for BcryptPasswordEncrypter {
 
     fn verify_password(password: &str, hash: &str) -> bool {
         bcrypt::verify(password, hash).is_ok()
+    }
+}
+
+#[derive(Clone)]
+pub struct TestPasswordEncrypter;
+
+impl PasswordEncrypter for TestPasswordEncrypter {
+    fn hash_password(password: &str) -> Option<String> {
+        Some(password.to_string())
+    }
+
+    fn verify_password(password: &str, hash: &str) -> bool {
+        password.eq(hash)
     }
 }

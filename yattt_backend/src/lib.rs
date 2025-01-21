@@ -26,8 +26,14 @@ pub const APPLICATION_PORT: u16 = 8080;
 pub const DOCS_ROOT_ROUTE: &str = "/docs";
 
 pub type YatttAppState = AppState<YatttBackend>;
+#[cfg(not(feature = "test"))]
 pub type YatttEncrypter = crate::encryption::BcryptPasswordEncrypter;
+#[cfg(feature = "test")]
+pub type YatttEncrypter = crate::encryption::TestPasswordEncrypter;
+#[cfg(not(feature = "test"))]
 pub type YatttEncoder = crate::jwt::JWTEncoder;
+#[cfg(feature = "test")]
+pub type YatttEncoder = crate::jwt::TestJWTEncoder;
 
 pub trait Backend {
     type Db: db::repositories::UserRepository + db::repositories::CardRepository + db::repositories::AttendanceRepository;

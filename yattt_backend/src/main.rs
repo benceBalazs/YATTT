@@ -3,10 +3,11 @@ mod test_modules;
 
 use std::io::Error;
 use std::net::{Ipv4Addr, SocketAddr};
+use surrealdb::engine::local::Mem;
 use surrealdb::opt::auth::Root as DatabaseCredentials;
 use tokio::net::TcpListener;
 use yattt_backend::db::surrealdb::SurrealDbBackend;
-use yattt_backend::AppState;
+use yattt_backend::{ db, AppState};
 
 fn register_logger() {
     use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
@@ -44,16 +45,15 @@ pub async fn main() -> Result<(), Error> {
 
     register_logger();
 
-    // surrealdb::connect(&yattt_backend::DATABASE_URL)
-    //     .await
-    //     .expect("Failed to connect to SurrealDB");
-
     let credentials = DatabaseCredentials {
         username: &yattt_backend::DB_USERNAME,
         password: &yattt_backend::DB_PASSWORD,
     };
 
-    let db_backend = SurrealDbBackend::new(
+    let mut db_backend;
+
+    #[cfg(not(feature = "test"))]
+    db_backend = SurrealDbBackend::new(
         &yattt_backend::DATABASE_URL,
         credentials,
         yattt_backend::db::db_constants::NAMESPACE,
@@ -62,13 +62,13 @@ pub async fn main() -> Result<(), Error> {
     .await
     .expect("Failed to initialize SurrealDB");
 
-    // #[cfg(feature = "test")]
-    // let app_state = AppState {
-    //     db: Arc::new(db_backend),
-    //     encrypter: crate::test_modules::TestEncrypter,
-    // };
+    #[cfg(feature = "test")]
+    let db = surrealdb::Surreal::new::<Mem>(()).await.unwrap();
+    #[cfg(feature = "test")]
+    db.use_ns("test_ns").use_db("Testing DB").await.unwrap();
+    #[cfg(feature = "test")]
+    db_backend = crate::db::surrealdb::SurrealDbBackend { client: db };
 
-    // #[cfg(not(feature = "test"))]
     let app_state = AppState::<yattt_backend::YatttBackend> {
         db: std::sync::Arc::new(db_backend),
     };
