@@ -5,7 +5,7 @@ pub mod root;
 
 use crate::YatttAppState;
 use axum::{middleware, Extension, Router};
-use hyper::{header::{AUTHORIZATION, CONTENT_TYPE}, Method};
+use hyper::{header::{ACCEPT, AUTHORIZATION, CONTENT_TYPE}, Method};
 use tower_http::cors::{Any, CorsLayer};
 use utoipa::OpenApi;
 use utoipa_axum::router::OpenApiRouter;
@@ -92,6 +92,7 @@ pub fn setup_routes(state: crate::YatttAppState) -> Router {
         ]).allow_headers([
             AUTHORIZATION, // Explicitly allow the Authorization header
             CONTENT_TYPE,  // Allow other headers like Content-Type if needed
+            ACCEPT,
         ]),
     );
     axum::Router::new().nest("/api", api_version_routes)
