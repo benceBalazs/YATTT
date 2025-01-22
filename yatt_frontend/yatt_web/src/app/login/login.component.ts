@@ -16,7 +16,8 @@ import {NgIf} from '@angular/common';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
-  errorMessage: string = '';
+  errorMessageSignIn: string = '';
+  errorMessageRegister: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -43,7 +44,7 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/home']); // Redirect to home
       },
       error: (err) => {
-        this.errorMessage =
+        this.errorMessageSignIn =
           err.status === 400 || err.status === 401
             ? 'Invalid username or password'
             : 'An unexpected error occurred. Please try again.';
@@ -51,7 +52,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  signUp(): void {
+  register(): void {
     const { username, password } = this.loginForm.value;
 
     this.apiService.register(username, password).subscribe({
@@ -61,7 +62,7 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/home']); // Redirect to home
       },
       error: (err) => {
-        this.errorMessage =
+        this.errorMessageRegister =
           err.status === 400
             ? 'Registration failed. Please try again.'
             : 'An unexpected error occurred. Please try again.';

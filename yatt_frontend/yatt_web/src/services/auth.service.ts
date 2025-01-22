@@ -15,8 +15,11 @@ export class AuthService {
   }
 
   // Get the current user
-  getUser(): string | null {
-    return this.userSubject.value || localStorage.getItem('username');
+  getUser(): any {
+    if (typeof window !== 'undefined' && localStorage) { //check if localStorage is defined
+      return JSON.parse(localStorage.getItem('user') || '{}');
+    }
+    return null;
   }
 
   // Clear user on logout

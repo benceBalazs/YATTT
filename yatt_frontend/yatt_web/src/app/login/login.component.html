@@ -16,8 +16,8 @@
             <div *ngIf="loginForm.controls['password'].invalid"></div>
           </div>
           <button type="submit" [disabled]="loginForm.invalid">Log in</button>
-          <div *ngIf="errorMessage">
-            <p class="errorMessage">{{ errorMessage }}</p>
+          <div *ngIf="errorMessageSignIn">
+            <p class="errorMessage">{{ errorMessageSignIn }}</p>
           </div>
         </form>
       </div>
@@ -26,16 +26,19 @@
       <div class="screen__content screen__content--signin">
         <h1>New Here?</h1>
         <h4>Sign Up</h4>
-        <form [formGroup]="loginForm" (ngSubmit)="signUp()">
+        <form [formGroup]="loginForm" (ngSubmit)="register()">
           <div class="login__field">
             <input formControlName="username" type="text" placeholder="Enter your username" class="login__input">
           </div>
           <div class="login__field">
-            <input formControlName="password" type="password" placeholder="Create a password" class="login__input">
+            <input formControlName="password" type="password" placeholder="Create a password" class="login__input" required minlength="8">
           </div>
-          <button type="submit" [disabled]="loginForm.invalid">Sign Up</button>
-          <div *ngIf="errorMessage">
-            <p class="errorMessage">{{ errorMessage }}</p>
+          <div *ngIf="loginForm.controls['password'].hasError('minlength')">
+            <p class="errorMessage">Password must be at least 8 characters long.</p>
+          </div>
+          <button type="submit" [disabled]="loginForm.invalid">Register</button>
+          <div *ngIf="errorMessageRegister">
+            <p class="errorMessage">{{ errorMessageRegister }}</p>
           </div>
         </form>
       </div>
