@@ -22,6 +22,7 @@ pub const DB_DATABASE: &str = db_constants::DATABASE;
 
 pub const TOKEN_REGEX: &str = r"^(?:[\w-]*\.){2}[\w-]*$";
 pub const REGISTER_URL: &str = "http://127.0.0.1:8080/api/v1/auth/register";
+pub const CARD_URL: &str = "http://127.0.0.1:8080/api/v1/cards";
 
 pub async fn database() -> Surreal<SurrealClient> {
     // Connect to the server
