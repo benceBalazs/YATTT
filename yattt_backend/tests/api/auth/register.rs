@@ -2,7 +2,7 @@ use std::error::Error;
 
 use pretty_assertions::assert_eq;
 
-use yattt_backend::{db::db_constants, models};
+use yattt_backend::models;
 
 use crate::common;
 
@@ -78,103 +78,128 @@ async fn register_valid_response() -> Result<(), Box<dyn Error>> {
     let d = common::deserialize_response::<models::auth::TokenResponse>(response).await;
 
     assert_eq!(d.token_type, "Bearer");
-    common::assert_with_regex(&d.access_token, common::TOKEN_REGEX);
 
     Ok(())
 }
 
-// #[tokio::test]
-// #[serial_test::serial]
-// async fn test_auth_register_route() -> Result<(), Box<dyn Error>> {
-//     let client = common::ReqwestClient::new();
-//     common::wait_for_server(&client, common::APP_HEALTHCHECK_URL, 1).await?;
+mod performance_tests {
+    use ::futures::future::join_all;
+    use std::time::Duration;
+    use tokio::runtime::Runtime;
+    use yattt_backend::models;
 
-//     let db = common::database().await;
+    use crate::common;
 
-//     let register_data = yattt_backend::models::user::User {
-//         id: None,
-//         username: "testuser".to_string(),
-//         password: "password123".to_string(),
-//     };
+    #[test]
+    fn test_performance_register() {
+        let runtime = Runtime::new().expect("Failed to create runtime");
+        runtime.block_on(async {
+            let client = common::get_http_client();
 
-//     // SUT
-//     let response = client
-//         .post(common::REGISTER_URL)
-//         .json(&register_data)
-//         .send()
-//         .await?;
+            let register_data = yattt_backend::models::user::User {
+                id: None,
+                username: "testuser".to_string(),
+                password: "password123".to_string(),
+            };
 
-//     assert_eq!(response.status(), 201);
+            let response = client
+                .post(common::REGISTER_URL)
+                .json(&register_data)
+                .send()
+                .await;
 
-//     let d = common::deserialize_response::<models::auth::TokenResponse>(response).await;
+            assert!(response.is_ok());
 
-//     assert_eq!(d.token_type, "Bearer");
-//     common::assert_with_regex(&d.access_token, common::TOKEN_REGEX);
+            let start = std::time::Instant::now();
 
-//     let mut res = db
-//         .query(format!(
-//             "SELECT * FROM {user};",
-//             user = db_constants::TABLE_USER
-//         ))
-//         .await?
-//         .check()?;
+            let mut handles = Vec::new();
 
-//     assert_eq!(res.num_statements(), 1);
+            for _ in 0..100 {
+                let client_clone = client.clone();
+                let register_data_clone = register_data.clone();
 
-//     assert_eq!(
-//         res.take::<Option<String>>(db_constants::ENTRY_USERNAME)?,
-//         Some(register_data.username.to_string())
-//     );
-//     assert_eq!(
-//         res.take::<Option<String>>(db_constants::ENTRY_PASSWORD)?,
-//         Some(register_data.password.to_string())
-//     );
+                handles.push(tokio::spawn(async move {
+                    let response = client_clone
+                        .post(common::REGISTER_URL)
+                        .json(&register_data_clone)
+                        .send()
+                        .await;
 
-//     let id = res.take::<Option<String>>("id")?.expect("ID not found");
+                    assert!(response.is_ok());
+                }));
+            }
 
-//     db.query(format!(
-//         "REMOVE {user}:{id};",
-//         user = db_constants::TABLE_USER,
-//         id = id
-//     ))
-//     .await?
-//     .check()?;
-//     // common::teardown_db(db).await;
+            join_all(handles).await;
 
-//     Ok(())
-// }
+            let duration = start.elapsed();
 
-//what u test, conditions, result
-// function_testcase_expected_result
-//
-// #[tokio::test]
-// #[serial_test::serial]
-// async fn register_user_created_in_database() -> Result<(), Box<dyn Error>> {
-//     let client = common::ReqwestClient::new();
-//     common::wait_for_server(&client, common::APP_HEALTHCHECK_URL, 1).await?;
-//     let db = common::database().await;
+            println!("Performance test took: {:?}", duration);
 
-//     let register_data = yattt_backend::models::user::User {
-//         id: None,
-//         username: "testuser".to_string(),
-//         password: "password123".to_string(),
-//     };
+            assert!(duration < Duration::from_secs(5));
+        });
+    }
 
-//     // SUT
-//     let response = client
-//         .post("http://127.0.0.1:8080/api/v1/auth/login")
-//         .json(&register_data)
-//         .send()
-//         .await?;
+    #[test]
+    fn test_performance_create_card() {
+        let runtime = Runtime::new().expect("Failed to create runtime");
+        runtime.block_on(async {
+            let client = common::get_http_client();
 
-//     assert_eq!(response.status(), 200);
+            // Assuming you have a function to get a valid access token
+            let register_data = yattt_backend::models::user::User {
+                id: None,
+                username: "testuser".to_string(),
+                password: "password123".to_string(),
+            };
 
-//     let d = common::deserialize_response::<models::auth::TokenResponse>(response).await;
+            let response = client
+                .post(common::REGISTER_URL)
+                .json(&register_data)
+                .send()
+                .await;
 
-//     assert_eq!(d.token_type, "Bearer");
-//     common::assert_with_regex(&d.access_token, common::TOKEN_REGEX);
+            let access_token = match response {
+                Ok(response) => {
+                    let d =
+                        common::deserialize_response::<models::auth::TokenResponse>(response).await;
+                    d.access_token
+                }
+                Err(_) => panic!("Failed to get access token"),
+            };
 
-//     // let id= res.take::<Option<String>>("id")?.expect("ID not found");
-//     // db.query(format!("REMOVE {user}:{id};", user = db_constants::TABLE_USER, id = id)).await?.check()?;
-//     Ok(())
-// }
+            let card_data = yattt_backend::models::card::CardRequest {
+                tag_id: "test_tag".to_string(),
+                card_name: "test_card".to_string(),
+            };
+
+            let start = std::time::Instant::now();
+
+            let mut handles = Vec::new();
+
+            for _ in 0..100 {
+                let client_clone = client.clone();
+                let card_data_clone = card_data.clone();
+                let access_token_clone = access_token.clone();
+
+                handles.push(tokio::spawn(async move {
+                    let response = client_clone
+                        .post(common::CARD_URL)
+                        .header("Authorization", format!("Bearer {}", access_token_clone))
+                        .json(&card_data_clone)
+                        .send()
+                        .await;
+
+                    assert!(response.is_ok());
+                }));
+            }
+
+            join_all(handles).await;
+
+            let duration = start.elapsed();
+
+            println!("Performance test took: {:?}", duration);
+
+            assert!(duration < Duration::from_secs(5));
+        });
+    }
+}

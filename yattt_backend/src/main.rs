@@ -1,8 +1,6 @@
-// #[cfg(feature = "test")]
-mod test_modules;
-
 use std::io::Error;
 use std::net::{Ipv4Addr, SocketAddr};
+
 use surrealdb::opt::auth::Root as DatabaseCredentials;
 use tokio::net::TcpListener;
 use yattt_backend::db::surrealdb::SurrealDbBackend;
@@ -37,6 +35,24 @@ async fn run_app(app: axum::Router, address: SocketAddr) -> Result<(), Error> {
     axum::serve(listener, app.into_make_service()).await
 }
 
+#[cfg(feature = "test")]
+async fn setup_test_backend() -> AppState<yattt_backend::YatttTestBackend> {
+    use surrealdb::engine::local::Mem;
+
+    let db = surrealdb::Surreal::new::<Mem>(()).await.expect("Failed to setup test database");
+
+    db.use_ns("test_ns").use_db("Testing DB").await.expect("Failed to sign-in into test database");
+
+    db.query("INSERT INTO Lecture (lv_name, start_time, end_time, duration, device_id) VALUES
+    ('TestLecture', d'2024-12-11T15:15:00Z', d'2024-12-11T16:45:00Z', 1.5, 'lectureReader');").await.expect("Failed to insert test data");
+
+    let db_backend = SurrealDbBackend { client: db };
+
+    AppState::<yattt_backend::YatttTestBackend> {
+        db: std::sync::Arc::new(db_backend),
+    }
+}
+
 #[tokio::main]
 pub async fn main() -> Result<(), Error> {
     // load the env variables from .env
@@ -44,15 +60,12 @@ pub async fn main() -> Result<(), Error> {
 
     register_logger();
 
-    // surrealdb::connect(&yattt_backend::DATABASE_URL)
-    //     .await
-    //     .expect("Failed to connect to SurrealDB");
-
     let credentials = DatabaseCredentials {
         username: &yattt_backend::DB_USERNAME,
         password: &yattt_backend::DB_PASSWORD,
     };
 
+    #[cfg(not(feature = "test"))]
     let db_backend = SurrealDbBackend::new(
         &yattt_backend::DATABASE_URL,
         credentials,
@@ -62,13 +75,10 @@ pub async fn main() -> Result<(), Error> {
     .await
     .expect("Failed to initialize SurrealDB");
 
-    // #[cfg(feature = "test")]
-    // let app_state = AppState {
-    //     db: Arc::new(db_backend),
-    //     encrypter: crate::test_modules::TestEncrypter,
-    // };
+    #[cfg(feature = "test")]
+    let app_state = setup_test_backend().await;
 
-    // #[cfg(not(feature = "test"))]
+    #[cfg(not(feature = "test"))]
     let app_state = AppState::<yattt_backend::YatttBackend> {
         db: std::sync::Arc::new(db_backend),
     };

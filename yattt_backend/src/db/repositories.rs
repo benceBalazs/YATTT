@@ -1,4 +1,3 @@
-use std::format;
 use crate::models::user::{User, UserIdExtractor};
 
 #[allow(async_fn_in_trait)]

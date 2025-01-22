@@ -4,9 +4,11 @@ on:
   push:
     paths:
       - 'yattt_backend/**'
+      - '.github/workflows/backend.yaml'
   pull_request:
     paths:
       - 'yattt_backend/**'
+      - '.github/workflows/backend.yaml'
   workflow_dispatch:
     inputs:
       logLevel:
@@ -19,14 +21,12 @@ on:
           - warning
           - debug
 
-permissions:
-  contents: read
-  pull-requests: write
+permissions: write-all
 
 jobs:
   test:
     name: Test backend
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout code
@@ -37,54 +37,26 @@ jobs:
         with:
           toolchain: stable
 
+      - name: Cargo Cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo
+          key: ${{ runner.os }}-cargo-${{ hashFiles('Cargo.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-${{ hashFiles('Cargo.toml') }}
+            ${{ runner.os }}-cargo
+
+      - name: Cargo Target Cache
+        uses: actions/cache@v4
+        with:
+          path: target
+          key: ${{ runner.os }}-cargo-target-${{ hashFiles('Cargo.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-target-${{ hashFiles('Cargo.toml') }}
+            ${{ runner.os }}-cargo-target
+
       - name: Run unit & integration tests
         run: |
           cd yattt_backend
           chmod +x test.sh
           ./test.sh
-
-  dockerize:
-    name: Create Docker Image
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-
-      - name: Compile and build the project
-        run: |
-          cd yattt_backend
-          cargo build --release
-
-      - name: Build & Save Docker image
-        run: ./docker_action_setup.sh
-
-      - name: Get current date
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
-
-      - name: release
-        uses: actions/create-release@v1
-        id: create_release
-        with:
-          draft: false
-          prerelease: false
-          release_name: nightly-release-${{ steps.date.outputs.date }}
-          tag_name: nightly-tag-${{ steps.date.outputs.date }}
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-
-      - name: upload artifact
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./yattt_backend/yattt_backend_service.tar.gz
-          asset_name: yattt_backend_service.tar.gz
-          asset_content_type: application/gzip

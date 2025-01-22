@@ -3,8 +3,8 @@ use crate::error::AppError;
 use crate::jwt::Claims;
 use crate::models::attendance::{Attendance, AttendanceRequest, AttendanceResponse};
 use crate::models::lecture::Lecture;
-use crate::{PYTHON_SERVICE_API_KEY};
-use axum::extract::{State};
+use crate::PYTHON_SERVICE_API_KEY;
+use axum::extract::State;
 use axum::http::HeaderMap;
 use axum::{Extension, Json};
 use chrono::{DateTime, Utc};
@@ -34,9 +34,7 @@ fn get_attended_lecture(
         .collect::<Vec<_>>();
 
     // a lecture should be found
-    let Some(lecture) = valid_lectures.first() else {
-        return None;
-    };
+    let lecture = valid_lectures.first()?;
 
     // when user checkout earlier than lecture end => use checkout time
     let end_time = if user_check_out_time.lt(&lecture.end_time) {

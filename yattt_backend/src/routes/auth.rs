@@ -2,7 +2,7 @@ use crate::encryption::PasswordEncrypter;
 use crate::error::AppError;
 use crate::jwt::{Claims, TokenEncoder};
 use crate::models::auth::TokenResponse;
-use crate::{db::repositories::UserRepository, models::user};
+use crate::db::repositories::UserRepository;
 use crate::{YatttAppState, YatttEncrypter};
 use axum::{
     body::Body,
@@ -12,8 +12,6 @@ use axum::{
     response::IntoResponse,
     Extension,
 };
-use chrono::{Duration, Utc};
-use jsonwebtoken::{DecodingKey, EncodingKey, Header, Validation};
 use serde::Deserialize;
 use serde_json::json;
 use utoipa::{IntoParams, ToSchema};
