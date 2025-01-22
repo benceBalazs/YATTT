@@ -26,3 +26,6 @@ A web-based interface built with Angular:
 ### `yattt_app/` and `yattt_ios/` as Scanner platforms
 The Android client, written in Kotlin:
 - Implements card scanning functionalities.
+
+---
+![image](https://github.com/user-attachments/assets/a390b1c9-1e1e-4f9e-ba5d-771777b44f50)
