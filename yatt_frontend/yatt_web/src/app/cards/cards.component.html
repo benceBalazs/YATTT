@@ -1,0 +1,48 @@
+<div class="container">
+  <h2>Cards Management</h2>
+  <button (click)="openAddModal()">Add Card</button>
+
+  <table mat-table matSort matSortDirection="asc" matSortActive="card_name" matSortDisableClear [dataSource]="dataSource" class="table">
+
+    <ng-container matColumnDef="card_name">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Card</th>
+      <td mat-cell *matCellDef="let element">{{element.card_name}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="tag_id">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Tag ID</th>
+      <td mat-cell *matCellDef="let element">{{ element.tag_id }}</td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let element">
+        <button (click)="openEditModal(element)">Edit</button>
+        <button (click)="deleteCard(element)">Delete</button>
+      </td>
+    </ng-container>
+
+    <!-- Header and Row Definitions -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+
+</div>
+
+<!-- Modal -->
+<div class="modal" *ngIf="showModal">
+  <div class="modal-content">
+    <span class="close" (click)="closeModal()">×</span>
+    <h3>{{ isEdit ? 'Edit Card' : 'Add Card' }}</h3>
+    <form (ngSubmit)="saveCard()">
+      <label for="name">Name:</label>
+      <input id="name" [(ngModel)]="cardForm.card_name" name="name" required />
+      <label for="tag_id">Tag ID:</label>
+      <input id="tag_id" [(ngModel)]="cardForm.tag_id" name="tag_id" required [readonly]="isEdit" />
+      <button type="submit">{{ isEdit ? 'Update' : 'Add' }}</button>
+    </form>
+  </div>
+</div>

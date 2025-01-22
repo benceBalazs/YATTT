@@ -1,0 +1,582 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		B572C2DD2D0778F700B8C96E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B572C2C42D0778F600B8C96E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B572C2CB2D0778F600B8C96E;
+			remoteInfo = yattt_ios_app;
+		};
+		B572C2E72D0778F700B8C96E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B572C2C42D0778F600B8C96E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B572C2CB2D0778F600B8C96E;
+			remoteInfo = yattt_ios_app;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		B52C95242D283766001B6187 /* yattt_ios_app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = yattt_ios_app.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B52C95252D283766001B6187 /* yattt_ios_appTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = yattt_ios_appTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B52C95262D283766001B6187 /* yattt_ios_appUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = yattt_ios_appUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B52C95402D284E4B001B6187 /* yattt-ios-app-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "yattt-ios-app-Info.plist"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		B572C3372D077B8C00B8C96E /* Exceptions for "yattt_ios" folder in "yattt_ios_app" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				yattt_ios_appTests/yattt_ios_appTests.swift,
+				yattt_ios_appUITests/yattt_ios_appUITests.swift,
+				yattt_ios_appUITests/yattt_ios_appUITestsLaunchTests.swift,
+			);
+			target = B572C2CB2D0778F600B8C96E /* yattt_ios_app */;
+		};
+		B572C3382D077B8C00B8C96E /* Exceptions for "yattt_ios" folder in "yattt_ios_appTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				yattt_ios_appTests/yattt_ios_appTests.swift,
+			);
+			target = B572C2DB2D0778F700B8C96E /* yattt_ios_appTests */;
+		};
+		B572C3392D077B8C00B8C96E /* Exceptions for "yattt_ios" folder in "yattt_ios_appUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				yattt_ios_appUITests/yattt_ios_appUITests.swift,
+				yattt_ios_appUITests/yattt_ios_appUITestsLaunchTests.swift,
+			);
+			target = B572C2E52D0778F700B8C96E /* yattt_ios_appUITests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		B572C2F92D07791100B8C96E /* yattt_ios */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B572C3372D077B8C00B8C96E /* Exceptions for "yattt_ios" folder in "yattt_ios_app" target */,
+				B572C3382D077B8C00B8C96E /* Exceptions for "yattt_ios" folder in "yattt_ios_appTests" target */,
+				B572C3392D077B8C00B8C96E /* Exceptions for "yattt_ios" folder in "yattt_ios_appUITests" target */,
+			);
+			path = yattt_ios;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B572C2C92D0778F600B8C96E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B572C2D92D0778F700B8C96E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B572C2E32D0778F700B8C96E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B572C2C32D0778F600B8C96E = {
+			isa = PBXGroup;
+			children = (
+				B52C95402D284E4B001B6187 /* yattt-ios-app-Info.plist */,
+				B572C2F92D07791100B8C96E /* yattt_ios */,
+				B52C95242D283766001B6187 /* yattt_ios_app.app */,
+				B52C95252D283766001B6187 /* yattt_ios_appTests.xctest */,
+				B52C95262D283766001B6187 /* yattt_ios_appUITests.xctest */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B572C2CB2D0778F600B8C96E /* yattt_ios_app */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B572C2F02D0778F700B8C96E /* Build configuration list for PBXNativeTarget "yattt_ios_app" */;
+			buildPhases = (
+				B572C2C82D0778F600B8C96E /* Sources */,
+				B572C2C92D0778F600B8C96E /* Frameworks */,
+				B572C2CA2D0778F600B8C96E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				B572C2F92D07791100B8C96E /* yattt_ios */,
+			);
+			name = yattt_ios_app;
+			packageProductDependencies = (
+			);
+			productName = yattt_ios_app;
+			productReference = B52C95242D283766001B6187 /* yattt_ios_app.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B572C2DB2D0778F700B8C96E /* yattt_ios_appTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B572C2F32D0778F700B8C96E /* Build configuration list for PBXNativeTarget "yattt_ios_appTests" */;
+			buildPhases = (
+				B572C2D82D0778F700B8C96E /* Sources */,
+				B572C2D92D0778F700B8C96E /* Frameworks */,
+				B572C2DA2D0778F700B8C96E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B572C2DE2D0778F700B8C96E /* PBXTargetDependency */,
+			);
+			name = yattt_ios_appTests;
+			packageProductDependencies = (
+			);
+			productName = yattt_ios_appTests;
+			productReference = B52C95252D283766001B6187 /* yattt_ios_appTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		B572C2E52D0778F700B8C96E /* yattt_ios_appUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B572C2F62D0778F700B8C96E /* Build configuration list for PBXNativeTarget "yattt_ios_appUITests" */;
+			buildPhases = (
+				B572C2E22D0778F700B8C96E /* Sources */,
+				B572C2E32D0778F700B8C96E /* Frameworks */,
+				B572C2E42D0778F700B8C96E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B572C2E82D0778F700B8C96E /* PBXTargetDependency */,
+			);
+			name = yattt_ios_appUITests;
+			packageProductDependencies = (
+			);
+			productName = yattt_ios_appUITests;
+			productReference = B52C95262D283766001B6187 /* yattt_ios_appUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B572C2C42D0778F600B8C96E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1610;
+				LastUpgradeCheck = 1610;
+				TargetAttributes = {
+					B572C2CB2D0778F600B8C96E = {
+						CreatedOnToolsVersion = 16.1;
+					};
+					B572C2DB2D0778F700B8C96E = {
+						CreatedOnToolsVersion = 16.1;
+						TestTargetID = B572C2CB2D0778F600B8C96E;
+					};
+					B572C2E52D0778F700B8C96E = {
+						CreatedOnToolsVersion = 16.1;
+						TestTargetID = B572C2CB2D0778F600B8C96E;
+					};
+				};
+			};
+			buildConfigurationList = B572C2C72D0778F600B8C96E /* Build configuration list for PBXProject "yattt_ios_app" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = B572C2C32D0778F600B8C96E;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = B572C2C32D0778F600B8C96E;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B572C2CB2D0778F600B8C96E /* yattt_ios_app */,
+				B572C2DB2D0778F700B8C96E /* yattt_ios_appTests */,
+				B572C2E52D0778F700B8C96E /* yattt_ios_appUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B572C2CA2D0778F600B8C96E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B572C2DA2D0778F700B8C96E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B572C2E42D0778F700B8C96E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B572C2C82D0778F600B8C96E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B572C2D82D0778F700B8C96E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B572C2E22D0778F700B8C96E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B572C2DE2D0778F700B8C96E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B572C2CB2D0778F600B8C96E /* yattt_ios_app */;
+			targetProxy = B572C2DD2D0778F700B8C96E /* PBXContainerItemProxy */;
+		};
+		B572C2E82D0778F700B8C96E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B572C2CB2D0778F600B8C96E /* yattt_ios_app */;
+			targetProxy = B572C2E72D0778F700B8C96E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		B572C2EE2D0778F700B8C96E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				NEW_SETTING = "";
+				NEW_SETTING1 = "";
+				"NEW_SETTING1[arch=*]" = "";
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		B572C2EF2D0778F700B8C96E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				NEW_SETTING = "";
+				NEW_SETTING1 = YES;
+				"NEW_SETTING1[arch=*]" = "";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B572C2F12D0778F700B8C96E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"yattt_ios/yattt_ios_app/Preview Content\"";
+				DEVELOPMENT_TEAM = 8S9K4PF7D7;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "yattt-ios-app-Info.plist";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				NEW_SETTING = "";
+				PRODUCT_BUNDLE_IDENTIFIER = "ersteEinheit.yattt-ios-app";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B572C2F22D0778F700B8C96E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"yattt_ios_app/Preview Content\" \"yattt_ios/yattt_ios_app/Preview Content\"";
+				DEVELOPMENT_TEAM = 8S9K4PF7D7;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "yattt-ios-app-Info.plist";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				NEW_SETTING = "";
+				"NEW_SETTING1[arch=*]" = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "ersteEinheit.yattt-ios-app";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B572C2F42D0778F700B8C96E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8S9K4PF7D7;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "ersteEinheit.yattt-ios-appTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/yattt_ios_app.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/yattt_ios_app";
+			};
+			name = Debug;
+		};
+		B572C2F52D0778F700B8C96E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8S9K4PF7D7;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "ersteEinheit.yattt-ios-appTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/yattt_ios_app.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/yattt_ios_app";
+			};
+			name = Release;
+		};
+		B572C2F72D0778F700B8C96E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8S9K4PF7D7;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "ersteEinheit.yattt-ios-appUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = yattt_ios_app;
+			};
+			name = Debug;
+		};
+		B572C2F82D0778F700B8C96E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8S9K4PF7D7;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "ersteEinheit.yattt-ios-appUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = yattt_ios_app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B572C2C72D0778F600B8C96E /* Build configuration list for PBXProject "yattt_ios_app" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B572C2EE2D0778F700B8C96E /* Debug */,
+				B572C2EF2D0778F700B8C96E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B572C2F02D0778F700B8C96E /* Build configuration list for PBXNativeTarget "yattt_ios_app" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B572C2F12D0778F700B8C96E /* Debug */,
+				B572C2F22D0778F700B8C96E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B572C2F32D0778F700B8C96E /* Build configuration list for PBXNativeTarget "yattt_ios_appTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B572C2F42D0778F700B8C96E /* Debug */,
+				B572C2F52D0778F700B8C96E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B572C2F62D0778F700B8C96E /* Build configuration list for PBXNativeTarget "yattt_ios_appUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B572C2F72D0778F700B8C96E /* Debug */,
+				B572C2F82D0778F700B8C96E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B572C2C42D0778F600B8C96E /* Project object */;
+}

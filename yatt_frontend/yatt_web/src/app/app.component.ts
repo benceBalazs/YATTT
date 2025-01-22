@@ -1,12 +1,31 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import {Router, NavigationEnd, RouterOutlet} from '@angular/router';
+import {NavbarComponent} from './navbar/navbar.component';
+import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  imports: [
+    NavbarComponent,
+    RouterOutlet,
+    NgIf
+  ],
+  styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  title = 'yatt_web';
+export class AppComponent implements OnInit {
+  title = 'yattt_web';
+  isLoginRoute = false;
+
+  constructor(private router: Router) {}
+
+  ngOnInit() {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        console.log('Current URL:', event.url);
+        this.isLoginRoute = event.url === '/login';
+        console.log('isLoginRoute:', this.isLoginRoute);
+      }
+    });
+  }
 }
