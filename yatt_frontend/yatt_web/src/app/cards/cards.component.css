@@ -50,7 +50,6 @@ form {
   color: #ff0000; /* Highlight color when hovering */
 }
 
-
 button{
   background: #fff;
   font-size: 14px;
@@ -77,4 +76,6 @@ button:hover {
 button:disabled{
   background: rgba(255, 255, 255, 0.42);
 }
+
+
 

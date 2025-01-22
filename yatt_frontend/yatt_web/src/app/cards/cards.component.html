@@ -1,25 +1,35 @@
 <div class="container">
   <h2>Cards Management</h2>
   <button (click)="openAddModal()">Add Card</button>
-  <table>
-    <thead>
-    <tr>
-      <th>Name</th>
-      <th>Tag ID</th>
-      <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let card of cards">
-      <td>{{ card.card_name }}</td>
-      <td>{{ card.tag_id }}</td>
-      <td>
-        <button (click)="openEditModal(card)">Edit</button>
-        <button (click)="deleteCard(card)">Delete</button>
+
+  <table mat-table matSort matSortDirection="asc" matSortActive="card_name" matSortDisableClear [dataSource]="dataSource" class="table">
+
+    <ng-container matColumnDef="card_name">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Card</th>
+      <td mat-cell *matCellDef="let element">{{element.card_name}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="tag_id">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Tag ID</th>
+      <td mat-cell *matCellDef="let element">{{ element.tag_id }}</td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let element">
+        <button (click)="openEditModal(element)">Edit</button>
+        <button (click)="deleteCard(element)">Delete</button>
       </td>
-    </tr>
-    </tbody>
+    </ng-container>
+
+    <!-- Header and Row Definitions -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+
 </div>
 
 <!-- Modal -->
