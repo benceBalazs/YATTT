@@ -1,62 +1,77 @@
 import { Component, OnInit } from '@angular/core';
-import {FormGroup, FormBuilder, Validators, ReactiveFormsModule} from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import { Router } from '@angular/router';
+import { DataApiService } from '../../services/data-api.service';
+import { AuthService } from '../../services/auth.service';
 import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css'],
   imports: [
     ReactiveFormsModule,
     NgIf
-  ],
-  styleUrls: ['./login.component.css']
+  ]
 })
 export class LoginComponent implements OnInit {
-  public loginForm!: FormGroup;
-  public errorMessage: string = '';
+  loginForm: FormGroup;
+  registerForm: FormGroup
+  errorMessageSignIn: string = '';
+  errorMessageRegister: string = '';
 
   constructor(
-    private formBuilder: FormBuilder,
-    private http: HttpClient,
-    private router: Router
-  ) { }
-
-  ngOnInit(): void {
-    // Initialize form with validation rules
-    this.loginForm = this.formBuilder.group({
-      username: ['', [Validators.required]],
-      password: ['', [Validators.required]]
+    private fb: FormBuilder,
+    private apiService: DataApiService,
+    private router: Router,
+    private authService: AuthService // Inject AuthService here
+  ) {
+    this.loginForm = this.fb.group({
+      username: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(8)]],
+    });
+    this.registerForm = this.fb.group({
+      username: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(8)]],
     });
   }
 
-  signIn() {
-    if (this.loginForm.invalid) {
-      this.errorMessage = 'Please fill all fields correctly!';
-      return;
-    }
+  ngOnInit(): void {}
 
-    const credentials = {
-      username: this.loginForm.value.username,
-      password: this.loginForm.value.password
-    };
+  signIn(): void {
+    const { username, password } = this.loginForm.value;
 
-    this.http.post<any>('http://localhost:3000/auth/login', credentials)
-      .subscribe({
-        next: (response) => {
-          alert('Login Successful!');
-          localStorage.setItem('token', response.token); // Store the token locally
-          this.router.navigate(['/home']);
-        },
-        error: (err) => {
-          this.errorMessage = 'Invalid username or password';
-          console.error('Login error', err);
-        }
-      });
+    this.apiService.login(username, password).subscribe({
+      next: (response) => {
+        // Store token and update AuthService
+        localStorage.setItem('access_token', response.access_token);
+        this.authService.setUser(username); // Update the user state
+        this.router.navigate(['/home']); // Redirect to home
+      },
+      error: (err) => {
+        this.errorMessageSignIn =
+          err.status === 400 || err.status === 401
+            ? 'Invalid username or password'
+            : 'An unexpected error occurred. Please try again.';
+      },
+    });
   }
 
-  signUp(){
+  register(): void {
+    const { username, password } = this.registerForm.value;
 
+    this.apiService.register(username, password).subscribe({
+      next: (response) => {
+        localStorage.setItem('access_token', response.access_token);
+        this.authService.setUser(username); // Update the user state
+        this.router.navigate(['/home']); // Redirect to home
+      },
+      error: (err) => {
+        this.errorMessageRegister =
+          err.status === 400
+            ? 'Registration failed. Please try again.'
+            : 'An unexpected error occurred. Please try again.';
+      },
+    });
   }
 }

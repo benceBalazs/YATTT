@@ -3,7 +3,72 @@ body {
   font-family: Avenir, Helvetica, Arial, sans-serif;
 }
 
+h2{
+  margin-top:70px;
+}
+
 ::placeholder {
   color: white;
 }
 
+.dark-theme {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+}
+
+.theme-toggle button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 1.5rem;
+  padding: 5px;
+}
+
+body.dark-mode {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+body.dark-mode .navbar {
+  background-color: #333;
+}
+
+body.dark-mode .navbar-links a {
+  color: #ffffff;
+}
+
+body.dark-mode .navbar-links a.active-link {
+  color: #ffd700;
+}
+
+table, .mat-table {
+  margin-top: 20px;
+  width: 100%; /* Optional: To make tables responsive */
+}
+
+th, .mat-header-cell {
+  background-color: rgb(77, 113, 17) !important; /* Use !important to override Material styles */
+  color: white !important;
+  text-align: left;
+  padding: 10px !important;
+}
+
+td, .mat-cell {
+  padding: 10px !important;
+  border-bottom: 1px solid #ddd !important;
+}
+
+tr:nth-child(even), .mat-row:nth-child(even) {
+  background-color: #efefef !important;
+}
+
+tr:hover, .mat-row:hover {
+  background-color: #e6f7d4 !important;
+  transition: background-color 0.3s ease;
+}
