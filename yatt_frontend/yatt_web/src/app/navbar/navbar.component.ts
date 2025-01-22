@@ -37,11 +37,13 @@ export class NavbarComponent implements OnInit {
   ngOnInit(): void {
     // Subscribe to user state
     this.authService.user$.subscribe((user) => {
+      console.log("Subscribed to user state:", user);
       this.username = user; // Update dynamically
     });
 
     // Optionally initialize from localStorage (for page refreshes)
     this.username = this.authService.getUser();
+    console.log("localstorage", this.authService.getUser());
   }
 
   logout(): void {

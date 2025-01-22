@@ -17,7 +17,7 @@ export class AuthService {
   // Get the current user
   getUser(): any {
     if (typeof window !== 'undefined' && localStorage) { //check if localStorage is defined
-      return JSON.parse(localStorage.getItem('user') || '{}');
+      return localStorage.getItem('username');
     }
     return null;
   }

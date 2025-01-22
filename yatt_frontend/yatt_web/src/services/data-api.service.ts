@@ -8,6 +8,9 @@ import { Card, CardWithId, GetCardResponse, RecordId } from '../app/project.mode
 })
 
 export class DataApiService {
+  getAuthToken() {
+    throw new Error('Method not implemented.');
+  }
   private baseUrl = 'http://localhost:8080/api/v1';
 
   constructor(private http: HttpClient) {}

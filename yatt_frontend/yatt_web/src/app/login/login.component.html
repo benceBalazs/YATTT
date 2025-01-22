@@ -26,17 +26,17 @@
       <div class="screen__content screen__content--signin">
         <h1>New Here?</h1>
         <h4>Sign Up</h4>
-        <form [formGroup]="loginForm" (ngSubmit)="register()">
+        <form [formGroup]="registerForm" (ngSubmit)="register()">
           <div class="login__field">
             <input formControlName="username" type="text" placeholder="Enter your username" class="login__input">
           </div>
           <div class="login__field">
             <input formControlName="password" type="password" placeholder="Create a password" class="login__input" required minlength="8">
           </div>
-          <div *ngIf="loginForm.controls['password'].hasError('minlength')">
+          <div *ngIf="registerForm.controls['password'].hasError('minlength')">
             <p class="errorMessage">Password must be at least 8 characters long.</p>
           </div>
-          <button type="submit" [disabled]="loginForm.invalid">Register</button>
+          <button type="submit" [disabled]="registerForm.invalid">Register</button>
           <div *ngIf="errorMessageRegister">
             <p class="errorMessage">{{ errorMessageRegister }}</p>
           </div>

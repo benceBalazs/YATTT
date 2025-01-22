@@ -16,6 +16,7 @@ import {NgIf} from '@angular/common';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
+  registerForm: FormGroup
   errorMessageSignIn: string = '';
   errorMessageRegister: string = '';
 
@@ -26,6 +27,10 @@ export class LoginComponent implements OnInit {
     private authService: AuthService // Inject AuthService here
   ) {
     this.loginForm = this.fb.group({
+      username: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(8)]],
+    });
+    this.registerForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(8)]],
     });
@@ -53,7 +58,7 @@ export class LoginComponent implements OnInit {
   }
 
   register(): void {
-    const { username, password } = this.loginForm.value;
+    const { username, password } = this.registerForm.value;
 
     this.apiService.register(username, password).subscribe({
       next: (response) => {
