@@ -36,7 +36,7 @@ async fn run_app(app: axum::Router, address: SocketAddr) -> Result<(), Error> {
 }
 
 #[cfg(feature = "test")]
-async fn setup_test_db() -> SurrealDbBackend<surrealdb::engine::local::Db> {
+async fn setup_test_backend() -> AppState<yattt_backend::YatttTestBackend> {
     use surrealdb::engine::local::Mem;
 
     let db = surrealdb::Surreal::new::<Mem>(()).await.expect("Failed to setup test database");
@@ -46,7 +46,11 @@ async fn setup_test_db() -> SurrealDbBackend<surrealdb::engine::local::Db> {
     db.query("INSERT INTO Lecture (lv_name, start_time, end_time, duration, device_id) VALUES
     ('TestLecture', d'2024-12-11T15:15:00Z', d'2024-12-11T16:45:00Z', 1.5, 'lectureReader');").await.expect("Failed to insert test data");
 
-    SurrealDbBackend { client: db }
+    let db_backend = SurrealDbBackend { client: db };
+
+    AppState::<yattt_backend::YatttTestBackend> {
+        db: std::sync::Arc::new(db_backend),
+    }
 }
 
 #[tokio::main]
@@ -72,8 +76,9 @@ pub async fn main() -> Result<(), Error> {
     .expect("Failed to initialize SurrealDB");
 
     #[cfg(feature = "test")]
-    let db_backend = setup_test_db();
+    let app_state = setup_test_backend().await;
 
+    #[cfg(not(feature = "test"))]
     let app_state = AppState::<yattt_backend::YatttBackend> {
         db: std::sync::Arc::new(db_backend),
     };

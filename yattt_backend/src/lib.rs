@@ -25,11 +25,16 @@ pub const API_VERSION: &str = "v1";
 pub const APPLICATION_PORT: u16 = 8080;
 pub const DOCS_ROOT_ROUTE: &str = "/docs";
 
+#[cfg(not(feature = "test"))]
 pub type YatttAppState = AppState<YatttBackend>;
+#[cfg(feature = "test")]
+pub type YatttAppState = AppState<YatttTestBackend>;
+
 #[cfg(not(feature = "test"))]
 pub type YatttEncrypter = crate::encryption::BcryptPasswordEncrypter;
 #[cfg(feature = "test")]
 pub type YatttEncrypter = crate::encryption::TestPasswordEncrypter;
+
 #[cfg(not(feature = "test"))]
 pub type YatttEncoder = crate::jwt::JWTEncoder;
 #[cfg(feature = "test")]
@@ -45,6 +50,17 @@ pub struct YatttBackend;
 impl Backend for YatttBackend {
     type Db = db::surrealdb::SurrealDbBackend;
 }
+
+
+#[cfg(feature = "test")]
+#[derive(Clone)]
+pub struct YatttTestBackend;
+
+#[cfg(feature = "test")]
+impl Backend for YatttTestBackend {
+    type Db = db::surrealdb::SurrealDbBackend<surrealdb::engine::local::Db>;
+}
+
 
 #[derive(Clone)]
 pub struct AppState<B: Backend> {

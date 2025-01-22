@@ -10,7 +10,7 @@ pub struct Card {
     pub card_name: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, IntoParams, ToSchema)]
+#[derive(Debug, Clone, Serialize, Deserialize, IntoParams, ToSchema)]
 pub struct CardRequest {
     pub tag_id: String,
     pub card_name: String,
