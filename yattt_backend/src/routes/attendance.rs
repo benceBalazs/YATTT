@@ -2,17 +2,14 @@ use crate::db::repositories::{AttendanceRepository, CardRepository, UserReposito
 use crate::error::AppError;
 use crate::jwt::Claims;
 use crate::models::attendance::{Attendance, AttendanceRequest, AttendanceResponse};
-use crate::models::card::Card;
 use crate::models::lecture::Lecture;
-use crate::{db, PYTHON_SERVICE_API_KEY};
-use axum::extract::{Path, Request, State};
+use crate::PYTHON_SERVICE_API_KEY;
+use axum::extract::State;
 use axum::http::HeaderMap;
-use axum::{http, Extension, Json};
-use chrono::{Date, DateTime, Utc};
+use axum::{Extension, Json};
+use chrono::{DateTime, Utc};
 use hyper::StatusCode;
-use serde::de;
 use std::str::FromStr;
-use surrealdb::sql::Kind::Datetime;
 
 static SECONDS_IN_AN_HOUR: f64 = 3600.0;
 
@@ -37,9 +34,7 @@ fn get_attended_lecture(
         .collect::<Vec<_>>();
 
     // a lecture should be found
-    let Some(lecture) = valid_lectures.first() else {
-        return None;
-    };
+    let lecture = valid_lectures.first()?;
 
     // when user checkout earlier than lecture end => use checkout time
     let end_time = if user_check_out_time.lt(&lecture.end_time) {

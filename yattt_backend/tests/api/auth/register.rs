@@ -2,7 +2,7 @@ use std::error::Error;
 
 use pretty_assertions::assert_eq;
 
-use yattt_backend::{db::db_constants, models};
+use yattt_backend::models;
 
 use crate::common;
 

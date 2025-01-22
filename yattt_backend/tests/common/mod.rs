@@ -1,16 +1,9 @@
-
 pub use surrealdb::engine::remote::ws::Client as SurrealClient;
 use surrealdb::{engine::remote::ws::Ws, opt::auth::Root, Surreal};
 
-use surrealdb::Response;
-use yattt_backend::{
-    db::db_constants,
-    models::{
-        self,
-        user::{self, User},
-    },
-};
+use yattt_backend::db::db_constants;
 
+#[allow(dead_code)]
 pub const APP_HEALTHCHECK_URL: &str = "http://127.0.0.1:8080/api/v1";
 
 pub const DB_ADDRESS: &str = "127.0.0.1";
@@ -20,10 +13,12 @@ pub const DB_PASSWORD: &str = "root";
 pub const DB_NAMESPACE: &str = db_constants::NAMESPACE;
 pub const DB_DATABASE: &str = db_constants::DATABASE;
 
+#[allow(dead_code)]
 pub const TOKEN_REGEX: &str = r"^(?:[\w-]*\.){2}[\w-]*$";
 pub const REGISTER_URL: &str = "http://127.0.0.1:8080/api/v1/auth/register";
 pub const CARD_URL: &str = "http://127.0.0.1:8080/api/v1/cards";
 
+#[allow(dead_code)]
 pub async fn database() -> Surreal<SurrealClient> {
     // Connect to the server
     let db = Surreal::new::<Ws>(format!("{DB_ADDRESS}:{DB_PORT}"))
@@ -54,6 +49,7 @@ pub fn get_http_client() -> ReqwestClient {
 
 use tokio::time::{sleep, Duration};
 
+#[allow(dead_code)]
 pub async fn wait_for_server(
     client: &ReqwestClient,
     url: &str,
@@ -88,11 +84,12 @@ pub async fn deserialize_response<T: serde::de::DeserializeOwned>(
     res.expect("Failed to deserialize response")
 }
 
+#[allow(dead_code)]
 pub async fn teardown_db(db: surrealdb::Surreal<surrealdb::engine::remote::ws::Client>) {
     let res = db.query("REMOVE DATABASE test;").await;
     assert!(Result::is_ok(&res));
 }
-
+#[allow(dead_code)]
 pub fn assert_with_regex(property: &str, re: &str) {
     assert!(regex::Regex::new(re).unwrap().is_match(property));
 }

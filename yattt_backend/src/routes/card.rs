@@ -6,7 +6,6 @@ use axum::{
 use hyper::StatusCode;
 use serde::{Deserialize, Serialize};
 use surrealdb::sql::Thing;
-use crate::db::repositories::UserRepository;
 use crate::jwt::Claims;
 
 #[derive(Serialize, Deserialize)]

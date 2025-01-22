@@ -3,14 +3,13 @@ pub mod auth;
 pub mod card;
 pub mod root;
 
-use crate::YatttAppState;
-use axum::{middleware, Extension, Router};
+use axum::{middleware, Router};
 use hyper::{header::{ACCEPT, AUTHORIZATION, CONTENT_TYPE}, Method};
 use tower_http::cors::{Any, CorsLayer};
 use utoipa::OpenApi;
 use utoipa_axum::router::OpenApiRouter;
 use utoipa_axum::routes;
-use utoipa_scalar::{Scalar, Servable as ScalarServable};
+use utoipa_scalar::Servable as ScalarServable;
 
 #[derive(utoipa::OpenApi)]
 #[openapi(

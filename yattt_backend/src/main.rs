@@ -4,7 +4,7 @@ use std::net::{Ipv4Addr, SocketAddr};
 use surrealdb::opt::auth::Root as DatabaseCredentials;
 use tokio::net::TcpListener;
 use yattt_backend::db::surrealdb::SurrealDbBackend;
-use yattt_backend::{db, AppState};
+use yattt_backend::AppState;
 
 fn register_logger() {
     use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};

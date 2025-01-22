@@ -34,12 +34,11 @@ impl TokenEncoder for JWTEncoder {
     }
     
     fn decode_jwt(token: String) -> Option<Claims> {
-        let result = jsonwebtoken::decode(
+        jsonwebtoken::decode(
             &token,
             &jsonwebtoken::DecodingKey::from_secret(crate::JWT_SECRET.as_bytes()),
             &jsonwebtoken::Validation::default(),
-        ).ok()?.claims;
-        result
+        ).ok()?.claims
     }
 }
 
