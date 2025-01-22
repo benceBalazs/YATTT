@@ -5,14 +5,20 @@
     <li><a href="/dashboard">Dashboard</a></li>
   </ul>
 
-  <div class="user-section">
-    <span *ngIf="username">Welcome, {{ username }}</span>
-    <button mat-button *ngIf="username" (click)="logout()">Log Out</button>
+  <div class="rightSideNavbar">
+
+
+    <div class="user-section">
+      <span *ngIf="username">Welcome, {{ username }}</span>
+      <button mat-button *ngIf="username" (click)="logout()">Log Out</button>
+    </div>
+
+    <div class="theme-toggle">
+      <button mat-icon-button (click)="toggleTheme()">
+        <mat-icon>{{ isDarkMode ? 'wb_sunny' : 'nights_stay' }}</mat-icon>
+      </button>
+    </div>
+
   </div>
 
-  <div class="theme-toggle">
-    <button mat-icon-button (click)="toggleTheme()">
-      <mat-icon>{{ isDarkMode ? 'wb_sunny' : 'nights_stay' }}</mat-icon>
-    </button>
-  </div>
 </nav>

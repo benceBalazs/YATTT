@@ -16,48 +16,6 @@ h2{
   color: #ffffff;
 }
 
-.navbar {
-  background-color: rgb(77, 113, 17);
-  color: white;
-  font-size: 20px;
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-}
-
-.navbar-links {
-  display: flex;
-  gap: 16px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.navbar-links li {
-  margin: 0;
-}
-
-.navbar-links a {
-  text-decoration: none;
-  color: white;
-  font-size: 1rem;
-  transition: color 0.3s;
-}
-
-.navbar-links a.active-link {
-  font-weight: bold;
-  color: #ffd700;
-}
-
-.navbar-links a:hover {
-  color: #e5e5e5;
-}
-
 .theme-toggle {
   display: flex;
   align-items: center;

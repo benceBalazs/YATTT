@@ -1,8 +1,14 @@
 .user-section {
-  display: flex;
-  align-items: center;
+  display: flex; /* Align items horizontally */
+  align-items: center; /* Align items vertically */
+  margin-left: 1rem;
   gap: 10px;
   color: white;
+  font-size: 1rem; /* Consistent font size */
+}
+
+.user-section span {
+  font-size: inherit; /* Ensure text uses the same size as parent */
 }
 
 .user-section button {
@@ -10,9 +16,72 @@
   border: none;
   color: white;
   cursor: pointer;
-  font-size: 14px;
+  font-size: inherit; /* Match the font size of .user-section */
+  padding: 0; /* Remove unnecessary padding */
+  margin: 0; /* Remove unnecessary margin */
+  display: flex;
+  align-items: center; /* Vertically align button text */
 }
 
-.user-section button:hover {
-  text-decoration: underline;
+.user-section button.mat-button {
+  font-size: inherit;
+  background: none;
+  border: none;
+  color: white;
+  padding: 0;
+  margin: 0;
 }
+
+
+.rightSideNavbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center; /* Ensure everything aligns vertically */
+  gap: 16px; /* Add spacing between elements if needed */
+}
+
+
+.navbar {
+  background-color: rgb(77, 113, 17);
+  color: white;
+  font-size: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 16px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-links li {
+  margin: 0;
+}
+
+.navbar-links a {
+  text-decoration: none;
+  color: white;
+  font-size: 1rem;
+  transition: color 0.3s;
+}
+
+.navbar-links a.active-link {
+  font-weight: bold;
+  color: #ffd700;
+}
+
+.navbar-links a:hover {
+  color: #e5e5e5;
+}
+
+
