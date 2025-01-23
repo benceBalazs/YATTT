@@ -18,6 +18,9 @@ permissions:
 jobs:
   test-backend:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: yattt_data
     steps:
       - name: Checkout
         uses: actions/checkout@v4
