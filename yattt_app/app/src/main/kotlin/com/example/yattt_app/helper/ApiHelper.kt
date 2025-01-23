@@ -10,6 +10,9 @@ import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Date
 
 fun sendTokenInfo(activity: Activity, view: View, tagId: String, deviceId: String) {
     val tagInfo = TagInfo(tagId, deviceId)
@@ -19,27 +22,19 @@ fun sendTokenInfo(activity: Activity, view: View, tagId: String, deviceId: Strin
     call.enqueue(object : Callback<ResponseModel> {
         override fun onResponse(call: Call<ResponseModel>, response: Response<ResponseModel>) {
             if (response.isSuccessful) {
-                val status = response.body()?.status
+                val status = response.body()?.message
                 when (status) {
                     "SCANNED_IN" -> showSnackbar(
                         activity,
                         view,
-                        "Data sent successfully",
+                        "You are scanned in now for $deviceId",
                         view.context.getColor(android.R.color.holo_green_light)
                     )
-
-                    "ALREADY" -> showSnackbar(
+                    "SCANNED_OUT" -> showSnackbar(
                         activity,
                         view,
-                        "Tag already submitted",
-                        view.context.getColor(android.R.color.holo_orange_light)
-                    )
-
-                    "NOT_ALLOWED" -> showSnackbar(
-                        activity,
-                        view,
-                        "Submission not allowed",
-                        view.context.getColor(android.R.color.holo_red_light)
+                        getScannedOutMessage(deviceId),
+                        view.context.getColor(android.R.color.holo_blue_light)
                     )
 
                     else -> showSnackbar(
@@ -64,9 +59,17 @@ fun sendTokenInfo(activity: Activity, view: View, tagId: String, deviceId: Strin
     })
 }
 
+private fun getScannedOutMessage(deviceId: String): String {
+    val currentDateTime = LocalDateTime.now()
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+    val formattedDateTime = currentDateTime.format(formatter)
+
+    return "You were scanned out for $deviceId at $formattedDateTime"
+}
+
 private fun showSnackbar(activity: Activity, view: View, message: String, color: Int) {
     activity.runOnUiThread {
-        Snackbar.make(view, message, Snackbar.LENGTH_LONG)
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG * 7)
             .setBackgroundTint(color)
             .show()
     }

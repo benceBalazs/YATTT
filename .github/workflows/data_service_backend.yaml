@@ -1,0 +1,50 @@
+name: Build, Test and Deploy the YATT Data Service Backend
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'yattt_data/backend/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'yattt_data/backend/**'
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  test-backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: yattt_data
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "0.4.15"
+          enable-cache: true
+      - run: docker compose down -v --remove-orphans
+      - run: docker compose up -d db
+      - name: Migrate DB
+        run: uv run bash scripts/prestart.sh
+        working-directory: yattt_data/backend
+      - name: Run tests
+        run: uv run bash scripts/tests-start.sh "Coverage for ${{ github.sha }}"
+        working-directory: yattt_data/backend
+      - run: docker compose down -v --remove-orphans
+      - name: Store coverage files
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-html
+          path:  /home/runner/work/YATTT/YATTT/yattt_data/backend/htmlcov
+          include-hidden-files: true
