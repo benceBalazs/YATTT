@@ -3,7 +3,7 @@ from sqlmodel import Session
 from app import crud
 from app.tests.utils.utils import random_lower_string
 
-from backend.app.models import AuthToken, AuthTokenCreate
+from app.models import AuthToken, AuthTokenCreate
 
 
 def create_random_auth_token(db: Session) -> AuthToken:
