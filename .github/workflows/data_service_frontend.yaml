@@ -69,9 +69,9 @@ jobs:
           version: "0.4.15"
           enable-cache: true
       - run: uv sync
-        working-directory: backend
+        working-directory: yattt_data/backend
       - run: npm ci
-        working-directory: frontend
+        working-directory: yattt_data/frontend
       - run: uv run bash scripts/generate-client.sh
         env:
           VIRTUAL_ENV: backend/.venv
@@ -106,7 +106,7 @@ jobs:
           node-version: 20
       - name: Install dependencies
         run: npm ci
-        working-directory: frontend
+        working-directory: yattt_data/frontend
       - name: Download blob reports from GitHub Actions Artifacts
         uses: actions/download-artifact@v4
         with:
@@ -115,7 +115,7 @@ jobs:
           merge-multiple: true
       - name: Merge into HTML Report
         run: npx playwright merge-reports --reporter html ./all-blob-reports
-        working-directory: frontend
+        working-directory: yattt_data/frontend
       - name: Upload HTML report
         uses: actions/upload-artifact@v4
         with:
