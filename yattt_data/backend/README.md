@@ -1,5 +1,4 @@
 # FastAPI Project - Backend
-
 ## Requirements
 
 * [Docker](https://www.docker.com/).
