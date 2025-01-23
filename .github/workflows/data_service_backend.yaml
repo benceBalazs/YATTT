@@ -18,9 +18,6 @@ permissions:
 jobs:
   test-backend:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: yattt_data
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -37,10 +34,10 @@ jobs:
       - run: docker compose up -d db
       - name: Migrate DB
         run: uv run bash scripts/prestart.sh
-        working-directory: backend
+        working-directory: yattt_data/backend
       - name: Run tests
         run: uv run bash scripts/tests-start.sh "Coverage for ${{ github.sha }}"
-        working-directory: backend
+        working-directory: yattt_data/backend
       - run: docker compose down -v --remove-orphans
       - name: Store coverage files
         uses: actions/upload-artifact@v4
