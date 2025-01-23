@@ -5,8 +5,7 @@ from sqlmodel import Session
 
 from app.core.config import settings
 
-from backend.app.tests.utils.auth_token import create_random_auth_token
-
+from ...utils.auth_token import create_random_auth_token
 
 def test_create_auth_token(
     client: TestClient, superuser_token_headers: dict[str, str]
