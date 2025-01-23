@@ -30,11 +30,11 @@ jobs:
         with:
           filters: |
             changed:
-              - backend/**
-              - frontend/**
+              - yattt_data/backend/**
+              - yattt_data/frontend/**
               - .env
               - docker-compose*.yml
-              - .github/workflows/playwright.yml
+              - .github/workflows/data_service_frontend.yml
 
   test-playwright:
     needs:
