@@ -42,7 +42,7 @@ def read_auth_tokens(
 
 
 @router.get("/{id}", response_model=AuthTokenPublic)
-def read_auth_token(session: SessionDep, current_user: CurrentUser, id: uuid.UUID) -> Any:
+def read_auth_token(session: SessionDep, current_user: CurrentUser, id: int) -> Any:
     """
     Get auth token by ID.
     """
@@ -73,7 +73,7 @@ def update_auth_token(
     *,
     session: SessionDep,
     current_user: CurrentUser,
-    id: uuid.UUID,
+    id: int,
     item_in: AuthTokenUpdate,
 ) -> Any:
     """
@@ -94,7 +94,7 @@ def update_auth_token(
 
 @router.delete("/{id}")
 def delete_auth_token(
-    session: SessionDep, current_user: CurrentUser, id: uuid.UUID
+    session: SessionDep, current_user: CurrentUser, id: int
 ) -> Message:
     """
     Delete an item.
