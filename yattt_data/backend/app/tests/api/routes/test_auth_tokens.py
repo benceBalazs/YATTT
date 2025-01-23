@@ -1,9 +1,12 @@
 import random
+from datetime import datetime, timezone
+import requests_mock
 
 from app.core.config import settings
 from fastapi.testclient import TestClient
 from sqlmodel import Session
 
+from app.models import AuthToken
 from ...utils.auth_token import create_random_auth_token
 
 
@@ -161,3 +164,39 @@ def test_delete_auth_token_not_enough_permissions(
     assert response.status_code == 400
     content = response.json()
     assert content["detail"] == "Not enough permissions"
+
+
+def test_scan_out(client, db: Session):
+    test_data = {
+        "tag_id": "testTag",
+        "device_id": "testDevice"
+    }
+
+    auth_token = AuthToken(tag_id="testTag", device_id="testDevice", scanned_in=datetime.now(timezone.utc))
+    db.add(auth_token)
+    db.commit()
+
+    with requests_mock.Mocker() as mock_post:
+        mock_url = settings.YATTT_BACKEND_URL + "/attendances"
+        mock_post.post(mock_url, status_code=200, json={"status": "success"})
+
+        response = client.post(f"{settings.API_V1_STR}/auth-tokens/scan", json=test_data)
+
+        assert response.status_code == 200
+        content = response.json()
+        assert content["message"] == "SCANNED_OUT"
+
+
+def test_scan_in(client, db: Session):
+    test_data = {
+        "tag_id": "newTag",
+        "device_id": "newDevice"
+    }
+
+    with requests_mock.Mocker() as mock_post:
+        mock_url = settings.YATTT_BACKEND_URL + "/attendances"
+        mock_post.post(mock_url, status_code=200, json={"status": "success"})
+        response = client.post(f"{settings.API_V1_STR}/auth-tokens/scan", json=test_data)
+        assert response.status_code == 200
+        content = response.json()
+        assert content["message"] == "SCANNED_IN"

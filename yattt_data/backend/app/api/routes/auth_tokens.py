@@ -1,4 +1,4 @@
-import uuid
+import requests
 from datetime import datetime, timezone
 from typing import Any
 
@@ -7,6 +7,7 @@ from sqlmodel import func, select
 
 from app.api.deps import CurrentUser, SessionDep
 
+from ...core.config import settings
 from ...models import AuthTokensPublic, AuthToken, AuthTokenPublic, AuthTokenCreate, AuthTokenUpdate, AuthTokenScanned, Message
 
 router = APIRouter()
@@ -132,6 +133,23 @@ def scan(session: SessionDep, tag_info: AuthTokenScanned) -> Message:
         try:
             session.add(db_auth_token)
             session.commit()
+
+            data = {
+                "tag_id": tag_info.tag_id,
+                "device_id": tag_info.device_id,
+                "check_in_time": db_auth_token.scanned_in.isoformat(),
+                "check_out_time": db_auth_token.scanned_out.isoformat(),
+                "duration": (db_auth_token.scanned_out - db_auth_token.scanned_in).total_seconds()
+            }
+
+            response = requests.post(
+                settings.YATTT_BACKEND_URL + "/attendances",
+                json=data,
+                headers={"Authorization": "Bearer "+settings.YATTT_BACKEND_KEY}
+            )
+            response.raise_for_status()
+
+
         except Exception as e:
             session.rollback()
             print(f"Error updating database: {e}")
