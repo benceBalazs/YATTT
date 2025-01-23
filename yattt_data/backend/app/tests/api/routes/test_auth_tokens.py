@@ -1,3 +1,5 @@
+import random
+
 from app.core.config import settings
 from fastapi.testclient import TestClient
 from sqlmodel import Session
@@ -42,7 +44,7 @@ def test_read_auth_token_not_found(
     client: TestClient, superuser_token_headers: dict[str, str]
 ) -> None:
     response = client.get(
-        f"{settings.API_V1_STR}/auth-tokens/1",
+        f"{settings.API_V1_STR}/auth-tokens/{random.randint(1000, 9999)}",
         headers=superuser_token_headers,
     )
     assert response.status_code == 404
@@ -99,7 +101,7 @@ def test_update_auth_token_not_found(
 ) -> None:
     data = {"tag_id": "TagId", "device_id": "DeviceId"}
     response = client.put(
-        f"{settings.API_V1_STR}/auth-tokens/2",
+        f"{settings.API_V1_STR}/auth-tokens/{random.randint(1000, 9999)}",
         headers=superuser_token_headers,
         json=data,
     )
@@ -140,7 +142,7 @@ def test_delete_auth_token_not_found(
     client: TestClient, superuser_token_headers: dict[str, str]
 ) -> None:
     response = client.delete(
-        f"{settings.API_V1_STR}/auth-tokens/3",
+        f"{settings.API_V1_STR}/auth-tokens/{random.randint(1000, 9999)}",
         headers=superuser_token_headers,
     )
     assert response.status_code == 404
