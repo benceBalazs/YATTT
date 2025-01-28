@@ -9,64 +9,98 @@ Chart.register(...registerables);
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
+
 export class DashboardComponent implements OnInit {
-  attendances: any[] = [];
-  chart: any;
+  attendanceChart: any;
+  cardUsageChart: any;
 
-  constructor(private dataApiService: DataApiService) {}
+  constructor(private dataService: DataApiService) {}
 
-  ngOnInit(): void {
-    this.fetchAttendances();
+  ngOnInit() {
+    this.loadAttendanceData();
+    this.loadCardUsageData();
   }
 
-  fetchAttendances(): void {
-    this.dataApiService.getAttendances().subscribe(
-      (data) => {
-        this.attendances = data;
-        this.createChart();
-      },
-      (error) => {
-        console.error('Error fetching attendances:', error);
-      }
-    );
+  loadAttendanceData() {
+    this.dataService.getAttendances().subscribe((response: any) => {
+      const datesMap = new Map<string, number>();
+
+      response.forEach((record: any) => {
+        const date = new Date(record.check_in_time).toLocaleDateString();
+        datesMap.set(date, (datesMap.get(date) || 0) + 1);
+      });
+
+      const labels = Array.from(datesMap.keys());
+      const values = Array.from(datesMap.values());
+
+      this.createAttendanceChart(labels, values);
+    });
   }
 
-  createChart(): void {
-    const lectureNames = this.attendances.map((a: any) => a.lecture_name);
-    const durations = this.attendances.map((a: any) => a.duration);
+  createAttendanceChart(labels: string[], values: number[]) {
+    if (this.attendanceChart) this.attendanceChart.destroy();
 
-    this.chart = new Chart('attendanceChart', {
+    this.attendanceChart = new Chart("attendanceChart", {
       type: 'bar',
       data: {
-        labels: lectureNames,
-        datasets: [
-          {
-            label: 'Lecture Duration (hours)',
-            data: durations,
-            backgroundColor: 'rgba(75, 192, 192, 0.6)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1,
-          },
-        ],
+        labels: labels,
+        datasets: [{
+          label: 'Number of Attendances',
+          data: values,
+          backgroundColor: 'rgba(75, 192, 192, 0.6)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        }]
       },
       options: {
         responsive: true,
         scales: {
           y: {
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Duration (hours)',
-            },
-          },
-          x: {
-            title: {
-              display: true,
-              text: 'Lecture Names',
-            },
-          },
-        },
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  }
+
+  loadCardUsageData() {
+    this.dataService.getCards().subscribe((response: any) => {
+      const cardMap = new Map<string, number>();
+
+      response.cards.forEach((card: any) => {
+        cardMap.set(card.name, (cardMap.get(card.name) || 0) + 1);
+      });
+
+      const labels = Array.from(cardMap.keys());
+      const values = Array.from(cardMap.values());
+
+      this.createCardUsageChart(labels, values);
+    });
+  }
+
+  createCardUsageChart(labels: string[], values: number[]) {
+    if (this.cardUsageChart) this.cardUsageChart.destroy();
+
+    this.cardUsageChart = new Chart("cardUsageChart", {
+      type: 'pie',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Card Usage',
+          data: values,
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.6)',
+            'rgba(54, 162, 235, 0.6)',
+            'rgba(255, 206, 86, 0.6)',
+            'rgba(75, 192, 192, 0.6)'
+          ],
+          borderColor: '#fff',
+          borderWidth: 1
+        }]
       },
+      options: {
+        responsive: true
+      }
     });
   }
 }
