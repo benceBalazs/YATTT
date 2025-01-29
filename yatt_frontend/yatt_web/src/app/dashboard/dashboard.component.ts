@@ -64,10 +64,10 @@ export class DashboardComponent implements OnInit {
   }
 
   loadCardUsageData() {
-    this.dataService.getCards().subscribe((response: any) => {
+    this.dataService.getAttendances().subscribe((response: any) => {
       const cardMap = new Map<string, number>();
 
-      response.cards.forEach((card: any) => {
+      response.forEach((card: any) => {
         cardMap.set(card.name, (cardMap.get(card.name) || 0) + 1);
       });
 
