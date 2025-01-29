@@ -1,0 +1,30 @@
+name: Playwright Tests
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+    - name: Install dependencies
+      run: npm ci
+      working-directory: yatt_frontend/yatt_web/
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+      working-directory: yatt_frontend/yatt_web/
+    - name: Run Playwright tests
+      run: npx playwright test
+      working-directory: yatt_frontend/yatt_web/
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: yatt_frontend/yatt_web/playwright-report/
+        retention-days: 30

@@ -1,5 +1,14 @@
-.chart-container {
+.chartsContainer {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: row;
+}
+
+.attendanceChart{
+  height: 20rem;
+  width: 50%;
+}
+
+.cardChart{
+  height: 20rem;
+  width: 50%;
 }
